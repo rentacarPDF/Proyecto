@@ -1,0 +1,165 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+/*
+uncomment to add a logo (in an ../images directory relative to this file)
+*/
+#header {
+    height: 80px;
+    width: 180px;
+    background-image: url("../images/logo.png width="80'" height=80");
+	background-repeat: no-repeat;
+	color:rgb(246,116,0);
+	
+}
+
+
+
+#header h1 {
+
+	color:rgb(246,116,0);
+}
+
+
+
+a#header{
+ text-decoration: underline;	
+}
+
+
+
+.bookmarkedPagesPanel {
+
+	display:none;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList {
+   display:none;
+
+}
+
+.bookmarkedPagesPanel .bookmarkedPageItem {
+    display:none;
+}
+
+.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle {
+  display:none;
+}
+
+.bookmarkedPagesPanel span.bookmarkedPageImageAndTitle:hover {
+    display:none;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
+    display:none;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList span.bookmarkedPageTitle {
+display:none;
+}
+
+.bookmarkedPagesPanel span.bookmarkedPageTitle {
+display:none;
+}
+
+.bookmarkedPagesPanel .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
+display:none;
+}
+
+.bookmarkedPagesPanel .clearBookmarks {
+display:none;
+}
+
+.bookmarkedPagesPanel .clearBookmarks {
+display:none;
+}
+
+.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageImageAndTitle,
+.bookmarkedPagesPanel .currentBookmark span.bookmarkedPageTitle {
+    display:none;
+}
+
+
+.showPanelTab {
+	display:none;
+}
+
+#bookmarkedPagesSlidingDiv {
+	display:none;
+}
+#bookmarkedPagesSlidingDiv .content {
+   display:none;
+}
+
+
+.bookmarkDepth0 {
+    display:none;
+}
+.bookmarkDepth1 {
+    display:none;
+}
+.bookmarkDepth2 {
+   display:none;
+}
+.bookmarkDepth3 {
+    display:none;
+}
+.bookmarkDepth4 {
+    display:none;
+}
+.bookmarkDepth5 {
+    display:none;
+}
+
+.clearBookmarkPlaceHolder {
+display:none;
+}
+
+.clearBookmark,
+.clearBookmarks {
+   display:none;
+}
+
+.clearBookmarks span {
+	display:none;
+}
+
+.bookMarkedPageItem{
+	display:none;
+	
+}
+
+
+.bookMarkedPageImage{
+	display:none;
+	
+}
+
+.bookMarkedPageTitle{
+	display:none;
+	
+}
+
+div#links.a {
+	
+	color:rgb(246,116,0);	
+}
+
+
+

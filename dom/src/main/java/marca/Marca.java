@@ -12,7 +12,7 @@ import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
+
 
 import com.google.common.base.Objects;
 
@@ -26,7 +26,6 @@ import javax.jdo.annotations.VersionStrategy;
 							value="SELECT FROM dom.utilidades.Marca WHERE ownedBy == :ownedBy")})
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("MARCA")
-@Auditable
 @AutoComplete(repository=MarcaServicio.class, action="autoComplete")
 
 
@@ -76,7 +75,8 @@ public class Marca {
    		this.activo=activo; 
    	}   	
    	public void remove(){
-   		setActivo(false);   		
+   		setActivo(false);   
+   		container.warnUser("Se elimino el registro");
    	}   	
    	//}}
 		
@@ -111,7 +111,7 @@ public class Marca {
 	// }}
 	
 	// {{ injected: DomainObjectContainer
-    @SuppressWarnings("unused")
+    
     private DomainObjectContainer container;
     
     public void setDomainObjectContainer(final DomainObjectContainer container){
@@ -119,3 +119,4 @@ public class Marca {
     }
     // }}  	
 }
+

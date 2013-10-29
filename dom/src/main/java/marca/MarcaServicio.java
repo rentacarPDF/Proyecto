@@ -6,9 +6,6 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
-
-
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 
@@ -21,8 +18,8 @@ import autos.Auto;
 @Named("Marca")
 public class MarcaServicio extends AbstractFactoryAndRepository {
 
-	//{{ Marcas
-	@MemberOrder(sequence = "1") // Carga de Marca	
+	//{{ Carga de Marcas
+	@MemberOrder(sequence = "1")
 	public Marca CargarMarca(@Named("Marca") String marca) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
@@ -45,8 +42,10 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 		return aux;
 	}
 	// }}	
-	@MemberOrder(sequence = "2") // Listado de Marca 
-	public List<Marca> ListaMarcas() {
+	
+	// {{ Listado de Marcas 
+	@MemberOrder(sequence = "2") 
+	public List<Marca> listadoMarcas() {
 	     return allMatches(Marca.class, new Filter<Marca>() {
 	     @Override
 	     public boolean accept(final Marca t) {
@@ -56,15 +55,19 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	}
 	// }}
 	
-	// {{ Listado de Autos filtrado por Marcas
-	@NotInServiceMenu
-	public List<Auto> AutosPorMarca(final Marca lista) {
+	// {{ Listado de Autos filtrado por Marcas	
+	@MemberOrder(sequence = "3")
+	public List<Auto> listadoAutosPorMarca(final Marca lista) {
 		return allMatches(Auto.class, new Filter<Auto>() {
 		@Override
 		public boolean accept(Auto t){
 		return  lista.equals(t.getMarca())&& t.getActivo();
 		}
 	  });
+	}
+	public List<Marca> choices0ListadoAutosPorMarca(){
+		List<Marca> items=listadoMarcas();
+		return items;
 	}
 	// }}
 	
@@ -74,7 +77,7 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 		return allMatches(Marca.class, new Filter<Marca>() {
 		@Override
 		public boolean accept(final Marca t) {		
-		return ownedByCurrentUser(t) && t.getNombre().contains(marcas); 
+		return t.getActivo() && t.getNombre().contains(marcas) ; 
 		}
 	  });				
 	}

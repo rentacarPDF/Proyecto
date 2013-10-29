@@ -1,44 +1,34 @@
 package autos;
 
 
-import java.awt.Container;
 import java.util.Date;
-
-import javax.jdo.annotations.ForeignKey;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.AutoComplete;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.EqualByContent;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.apache.isis.applib.annotation.Named;
 
+import categoria.Categoria;
 import com.google.common.base.Objects;
-
 import marca.Marca;
-import marca.MarcaServicio;
-
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Queries({
-@javax.jdo.annotations.Query(name="listado_autos", language="JDOQL",value="SELECT FROM dom.autos.Auto WHERE activo== :true "),
-@javax.jdo.annotations.Query(name="findAutos", language="JDOQL",value="SELECT FROM dom.autos.Auto WHERE patente == :patente ")})
+@javax.jdo.annotations.Query(name="listado_autos", language="JDOQL",value="SELECT FROM autos.Auto WHERE activo==true"),
+@javax.jdo.annotations.Query(name="findAutos", language="JDOQL",value="SELECT FROM autos.Auto WHERE patente == :patente ")})
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 
 @ObjectType("AUTO")
-@Auditable
-@AutoComplete(repository=MarcaServicio.class, action="autoComplete")
+@AutoComplete(repository=AutoServicio.class, action="autoComplete")
 
 
 public class Auto {
@@ -126,6 +116,20 @@ public class Auto {
         this.ano = ano; 
     }   
     // }}  
+    
+	// {{ Categoria
+	@Persistent
+	private Categoria categoria;
+	@DescribedAs("La categoria del vehiculo.")
+	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@MemberOrder(sequence="5")	
+	public Categoria getCategoria() {
+		return categoria;
+	}	
+	public void setCategoria(final Categoria categoria)	{		
+		this.categoria=categoria;
+	}	
+	// }}
     
     // {{ Color
     private String color;
@@ -231,15 +235,12 @@ public class Auto {
    	public void setActivo(boolean activo){
    		this.activo=activo; 
    	}	
-    // }}
-   	   	
+    // }}   	   	
    	//{{ Remove   	
    	public void remove(){
    		setActivo(false);
    	}   	
-   	//}}
-   	
-   	
+   	//}}   	
    	
    	// {{ Filtro
    	public static Filter<Auto> thoseOwnedBy(final String currentUser){
@@ -251,8 +252,7 @@ public class Auto {
             }
         };
     }
-   	// }}
-   	
+   	// }}   	
         
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")

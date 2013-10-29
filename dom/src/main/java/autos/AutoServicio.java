@@ -1,24 +1,18 @@
 package autos;
 
-import java.awt.Container;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.util.TitleBuffer;
 
-
+import categoria.Categoria;
 import com.google.common.base.Objects;
-
-
 import autos.Auto;
 import autos.Auto.Estado;
 import autos.Auto.Seguro;
@@ -29,14 +23,14 @@ import marca.Marca;
 @Named("Flota")
 public class AutoServicio extends AbstractFactoryAndRepository {
 	
-	// {{ 
-	@MemberOrder(sequence = "1") // Carga de Autos
-	public Auto CargarAuto(
-			
+	// {{ Carga de Autos
+	@MemberOrder(sequence = "1") 
+	public Auto CargarAuto(			
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca, 
 		@Named("Modelo") String modelo, 
 		@Named("Año") int ano,
+		@Named("Categoria") Categoria categ,
 		@Named("Color") String color,
 		@Named("Kilometraje") int kms,
 		@Named("Capacidad Baul (lt)") int baul,
@@ -46,15 +40,10 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@Named("Compañía de Seguro")Seguro seguro) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
-		return elAuto(patente,marca,modelo,ano,color,kms,baul,combustible,estado,fechaCompra,seguro,activo, ownedBy);
+		return elAuto(patente,marca,modelo,ano,categ,color,kms,baul,combustible,estado,fechaCompra,seguro,activo, ownedBy);
 			     
 	}
 	// }}
-	
-
-	
-	
-	
 	
 	// {{
 	@Hidden // for use by fixtures
@@ -63,6 +52,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		final Marca marca, 
 		final String modelo,
 		final int ano,
+		final Categoria categ, 
 		final String color,
 		final int kms, 
 		final int baul,
@@ -90,6 +80,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 			auto.setMarca(marca);
 			auto.setModelo(modelo);
 			auto.setAno(ano);
+			auto.setCategoria(categ);
 			auto.setColor(color);
 			auto.setKilometraje(kms);
 			auto.setCapacidadBaul(baul);
@@ -104,28 +95,55 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		
 		}
 		else {
-			auto = null;
-//			 
-				getContainer().warnUser("YA SE ENCUENTRA ESTE AUTO");
-				System.out.println("YA SE ENCUENTRA ESTE AUTO");
-		}
-		
+			auto = null;		 
+			getContainer().warnUser("YA SE ENCUENTRA ESTE AUTO");
+		}		
 		return auto;
     }
- 
-	
-	// {{ complete (action)
+	// }}
+	public List<Marca> choices1CargarAuto(){
+		List<Marca> items = listaMarcasActivas();		
+		return items;
+	}
+    protected List<Marca> listaMarcasActivas() {
+        return allMatches(Marca.class, new Filter<Marca>() {
+            @Override
+            public boolean accept(final Marca t) {            	          	
+                return t.getActivo();            	          	
+            }
+        });
+    }
+    // }}
+	public List<Categoria> choices4CargarAuto(){
+		List<Categoria> items = listaCategoriasActivas();		
+		return items;
+	}
+    protected List<Categoria> listaCategoriasActivas() {
+        return allMatches(Categoria.class, new Filter<Categoria>() {
+            @Override
+            public boolean accept(final Categoria t) {            	          	
+                return t.getActivo();            	          	
+            }
+        });
+    }
+    // }}	
+		
+	// {{ Listado de Autos Activos
     @ActionSemantics(Of.SAFE)
-	@MemberOrder(sequence = "2") // Listado de Autos
-    public List<Auto> AutosActivos() {
-        List<Auto> items = doComplete();
+	@MemberOrder(sequence = "2") 
+    public List<Auto> listadoAutosActivos(){
+    	return allMatches(QueryDefault.create(Auto.class,"listado_autos"));
+    }
+    /*
+    public List<Auto> listadoAutosActivos() {
+        List<Auto> items = listadoActivos();
         if(items.isEmpty()) {
-            getContainer().informUser("No hay autos activos :-(");
+            getContainer().informUser("No hay autos activos ");
         }
         return items;
     }
 
-    protected List<Auto> doComplete() {
+    protected List<Auto> listadoActivos() {
         return allMatches(Auto.class, new Filter<Auto>() {
             @Override
             public boolean accept(final Auto t) {
@@ -133,19 +151,50 @@ public class AutoServicio extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}	
-	
     // }}
-    @MemberOrder(sequence = "3") // Busqueda de Autos
-    public List<Auto> busquedaAutos(@Named("Patente")final String description) {    	
+    */
+    // {{  Listado de Autos Libres
+	@MemberOrder(sequence = "2") 
+    public List<Auto> listadoAutosLibres() {
+        List<Auto> items = listadoLibres();
+        if(items.isEmpty()) {
+            getContainer().informUser("No hay autos Libres ");
+        }
+        return items;
+    }
+    protected List<Auto> listadoLibres() {
+        return allMatches(Auto.class, new Filter<Auto>() {
+            @Override
+            public boolean accept(final Auto t) {            	
+                return t.getActivo() && t.getEstado().equals(Estado.LIBRE);
+            }
+        });
+    }    
+    // }}    
+  
+	// {{ Busqueda de Autos por Categoria	
+    @MemberOrder(sequence = "3")  
+    public List<Auto> busquedaAutosPorCategoria(@Named("Categoria")final Categoria description) {    	
         return allMatches(Auto.class, new Filter<Auto>() {
             @Override
             public boolean accept(final Auto t) {
-                return  t.getPatente().contains(description) && t.getActivo();  
+                return  t.getCategoria().equals(description) && t.getActivo();  
             }
         });
     }
     // }}
+    
+	// {{  
+	@Hidden    
+	public List<Auto> autoComplete(final String auto) {
+		return allMatches(Auto.class, new Filter<Auto>() {
+		@Override
+		public boolean accept(final Auto t) {		
+			return t.getPatente().contains(auto) && t.getActivo() && t.getEstado().equals(Estado.LIBRE);
+		}
+	  });				
+	}
+	// }}	
     
 	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Auto t) {
@@ -154,7 +203,5 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
 	}
-	// }}
-	
-	
+	// }}		
 }

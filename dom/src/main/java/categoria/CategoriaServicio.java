@@ -2,25 +2,28 @@ package categoria;
 
 import java.util.List;
 
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.filter.Filter;
 
+import autos.Auto;
+
 import com.google.common.base.Objects;
-
-
 import categoria.Categoria.Caja;
 import categoria.Categoria.Traccion;
 
 
-@Named("Categorias")
+@Named("Categoria")
 public class CategoriaServicio extends AbstractFactoryAndRepository {
 	
-	/*@MemberOrder(sequence="1")
+	// {{ Carga de Categorias
+	@MemberOrder(sequence="1")
 	public Categoria CargarCategoria(
 			@Named("Categoria")String categoria,
 			@Named("Cantidad de puertas")int cantPuert,
@@ -32,7 +35,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		final String ownedBy = currentUserName();
 		final boolean activo= true;
 		return laCategoria(categoria,cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
-	}*/
+	}
 	
 	@Hidden
 	public Categoria laCategoria(
@@ -46,7 +49,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		boolean activo)
 		{
 			final Categoria categoria= newTransientInstance(Categoria.class);
-			categoria.setCategoria(cat);
+			categoria.setNombre(cat);
 			categoria.setCantPuertas(cantPuert);
 			categoria.setCantPlazas(cantPlaz);
 			categoria.setCaja(caja);
@@ -57,19 +60,20 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			persist(categoria);
 			return categoria;
 		}
+	// }}
 	
-	// {{ complete (action)
+	// {{ Listado de Categorias Activas
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
-    protected List<Categoria> CategoriaActivos() {
-        List<Categoria> items = doComplete();
+    @NotInServiceMenu
+    public List<Categoria> CategoriaActivos() {
+        List<Categoria> items = listaCategorias();
         if(items.isEmpty()) {
             getContainer().informUser("No hay categorias activas :-(");
         }
         return items;
     }
-
-    protected List<Categoria> doComplete() {
+    protected List<Categoria> listaCategorias() {
         return allMatches(Categoria.class, new Filter<Categoria>() {
             @Override
             public boolean accept(final Categoria t) {
@@ -78,8 +82,36 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
         });
     }
     // }}	
+    
+	// {{ Listado de Autos filtrado por Categoria
+    @MemberOrder(sequence="3") 
+	public List<Auto> listadoAutosPorCategoria(final Categoria lista) {
+		return allMatches(Auto.class, new Filter<Auto>() {
+		@Override
+		public boolean accept(Auto t){
+		return  lista.equals(t.getCategoria())&& t.getActivo();
+		}
+	  });
+	}
+    public List<Categoria> choices0ListadoAutosPorCategoria(){
+    	List<Categoria> items = listaCategorias();
+    	return items;
+    }    
+	// }} 
+    	
+	// {{ 
+	@Hidden    
+	public List<Categoria> autoComplete(final String cat) {
+		return allMatches(Categoria.class, new Filter<Categoria>() {
+		@Override
+		public boolean accept(final Categoria t) {		
+		return  t.getNombre().contains(cat) && t.getActivo(); 
+		}
+	  });				
+	}
+	// }}    
 		
-	// {{ helpers
+	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Categoria t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());
 	}

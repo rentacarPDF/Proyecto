@@ -9,7 +9,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -18,7 +17,6 @@ import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 @javax.jdo.annotations.Query(name="listado_localidades", language="JDQL",
 							value="SELECT  FROM dom.localidad.Localidad WHERE  ACTIVO==:true")})
 @ObjectType("LOCALIDAD")
-@Auditable
 
 
 public class Localidad {

@@ -1,47 +1,224 @@
 package alquiler;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
+
 import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.util.TitleBuffer;
+
+import org.apache.isis.applib.annotation.Where;
+
 import org.apache.isis.applib.annotation.MemberGroups;
 
-import autos.Auto;
-import categoria.Categoria;
 import cliente.Cliente;
 
+import disponibles.AutoPorFecha;
 
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
-@javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
+
+
+@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.APPLICATION)
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
-@MemberGroups({"Cliente", "Categoria","Auto","Medio de Pago", "Fecha de Alquiler"})
+@MemberGroups({"Estado","Datos del Alquiler","Autos"})
+@javax.jdo.annotations.Query(name="traerAlquileres", language="JDOQL",value="SELECT FROM alquiler.Alquiler2 order by numero asc")
 @AutoComplete(repository=AlquilerServicio.class, action="autoComplete")
-
-
+@Audited 
 @ObjectType("ALQUILER")
+
+
 public class Alquiler {
+    
+	public static enum EstadoAlquiler{
+		RESERVADO, EN_PROCESO, FINALIZADO;
+	}
 	
 	public static enum TipoPago{
 		EFECTIVO, CHEQUE, TARJETA_CREDITO, TARJETA_DEBITO;
 	}
 	
-	@Named("Alquiler")
-	// {{ Identification on the UI	
-	public String title() {
-		final TitleBuffer buf = new TitleBuffer();
-		buf.append("ALQUILER");	       
-		return buf.toString();	
+	//{{Titulo
+    public String title(){
+            return getEstado().toString();        
+    }
+    //}}
+    
+    //{{Numero de la reserva
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long numero;
+    @Disabled
+    @Named("Nro Alquiler")
+    @MemberOrder(name="Datos del Alquiler",sequence="1")
+    public Long getNumero() {
+            return numero;
+    }    
+    public void setNumero(final Long numero) {
+            this.numero = numero;
+    }
+    //}}
+    
+    private String nombreEstado;    
+    @Named("Estado")
+    @NotPersisted
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Estado",sequence="1")
+    public String getNombreEstado() {
+            nombreEstado = getEstado().toString();
+            return nombreEstado;
+    }    
+    private EstadoAlquiler estado;    
+    @Hidden
+    public EstadoAlquiler getEstado() {
+            return estado;
+    }
+    public void setEstado(final EstadoAlquiler estado) {
+            this.estado = estado;
+    }
+    //}}
+    
+    //{{Fecha en la que se realiza la reserva
+    @Named("Fecha")
+    @MemberOrder(name="Datos del Alquiler",sequence="2")
+    public String getFechaString() {
+            if(getFecha() != null) {
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    return formato.format(getFecha());
+            }
+            return null;
+    }    
+    private Date fecha;
+    @Hidden
+    public Date getFecha() {
+            return fecha;
+    }
+    public void setFecha(final Date fecha) {
+            this.fecha = fecha;
+    }
+    //}}
+
+	// {{ Precio 
+	private float precio;
+    @Named("Precio")
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos del Alquiler",sequence="3")
+	public float getPrecioAlquiler(){
+		return precio;
 	}
+	public void setPrecioAlquiler(final float precio){
+		this.precio=precio;
+	}	
 	// }}
 	
+	// {{ Tipo de Pago
+	private TipoPago tipoPago;
+    @Named("Tipo de Pago")
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos del Alquiler",sequence="4")
+	public TipoPago getTipoPago() {
+		return tipoPago;
+	}
+	public void setTipoPago(final TipoPago tipoPago) {
+		this.tipoPago = tipoPago;
+	}
+	// }}	
+	
+	// {{ Numero de Recibo
+	private int recibo;
+    @Named("Nro Recibo")
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos del Alquiler",sequence="5")
+	public int getNumeroRecibo() {
+		return recibo;
+	}
+	public void setNumeroRecibo(final int recibo) {
+		this.recibo = recibo;
+	}
+	// }}	
+	
+	// {{ Lista de Autos 
+	@Persistent(mappedBy="alquiler")	
+	private List<AutoPorFecha> autos = new ArrayList<AutoPorFecha>();
+    public List<AutoPorFecha> getAutos() {
+        return autos;
+    }
+    public void setAutos(List<AutoPorFecha> listaAutos) {
+    	this.autos = listaAutos;
+    }
+    @Named("Borrar")
+    @MemberOrder(name="Autos",sequence="1")
+    public Alquiler removeFromAutos(final AutoPorFecha auto) {
+            autos.remove(auto);
+            container.removeIfNotAlready(auto);
+            return this;
+    }
+    @Hidden
+    public void addToAutos(AutoPorFecha auto) {
+     if(auto == null || autos.contains(auto)) {
+             return;
+     }
+     auto.setAlquiler(this);
+     autos.add(auto);
+    }
+    // }}
+    
+	// {{ Cliente		
+	private Cliente clienteId;
+	@DescribedAs("Numero de CUIL/CUIT")
+	@Disabled
+	@Named("CUIL/CUIT")
+	@MemberOrder(name="Cliente",sequence="1")	
+	public Cliente getClienteId() {
+		return clienteId;
+	}	
+	public void setClienteId(final Cliente clienteId)	{		
+		this.clienteId=clienteId;
+	}	
+	// }}
+	
+	// {{ Nombre Cliente
+	private String nombre;
+	@Disabled
+	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Nombre")
+	@MemberOrder(name="Cliente",sequence="2")	
+	public String getNombreCliente() {
+		return nombre;
+	}
+	public void setNombreCliente(String nombre) {
+		this.nombre = nombre;
+	}
+	// }}
+
+	// {{ Apellido Cliente
+	private String apellido;
+	@Disabled
+	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Apellido")
+	@MemberOrder(name="Cliente",sequence="3")	
+	public String getApellidoCliente() {
+		return apellido;
+	}
+	public void setApellidoCliente(String apellido) {
+		this.apellido = apellido;
+	}
+	// }}
+    	
 	// {{ {{ OwnedBy (property)	
 	private String ownedBy;
 	@Hidden 
@@ -52,140 +229,15 @@ public class Alquiler {
 	    this.ownedBy = ownedBy;	
 	}	
 	// }}
-	
-	// {{ Categoria	
-	private Categoria categoria;
-	@DescribedAs("La categoria del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Categoria",sequence="1")	
-	public Categoria getCategoria() {
-		return categoria;
-	}	
-	public void setCategoria(final Categoria categoria)	{		
-		this.categoria=categoria;
-	}	
-	// }}
-	
-	// {{ Auto	
-	private Auto auto;
-	@DescribedAs("El vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Auto",sequence="1")	
-	public Auto getAuto() {
-		return auto;
-	}	
-	public void setAuto(final Auto auto)	{		
-		this.auto=auto;
-	}	
-	// }}
-	
-	// {{ Cliente		
-	private Cliente clienteId;
-	@DescribedAs("Numero de CUIL/CUIT")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Cliente",sequence="2")	
-	public Cliente getClienteId() {
-		return clienteId;
-	}	
-	public void setClienteId(final Cliente clienteId)	{		
-		this.clienteId=clienteId;
-	}	
-	// }}
-	
-	// {{ Tipo de Pago
-	private TipoPago tipoPago;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Medio de Pago",sequence="1")	
-	public TipoPago getTipoPago() {
-		return tipoPago;
-	}
-	public void setTipoPago(final TipoPago tipoPago) {
-		this.tipoPago = tipoPago;
-	}
-	// }}	
-	
-	// {{ Precio 
-	private float precio;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Medio de Pago",sequence="2")	
-	public float getPrecioAlquiler(){
-		return precio;
-	}
-	public void setPrecioAlquiler(final float precio){
-		this.precio=precio;
-	}
-	// }}
-	
-	// {{ Numero de Recibo
-	private int recibo;
-	
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-	@MemberOrder(name="Medio de Pago",sequence="3")
-	public int getNumeroRecibo() {
-		return recibo;
-	}
-	public void setNumeroRecibo(final int recibo) {
-		this.recibo = recibo;
-	}
-	// }}	
-	
-  	// {{ Fecha de Alquiler del vehiculo
-    private Date fechaAlq;
-    @DescribedAs("Señala la fecha de alquiler del vehiculo.")
-    @MemberOrder(name="Fecha de Alquiler",sequence="1")
-    public Date getFechaAlquiler() {
-        return fechaAlq; 
-    }
-    public void setFechaAlquiler(final Date fechaAlq) {
-        this.fechaAlq= fechaAlq; 
-    }    
-    public void clearFechaAlquiler() {
-        setFechaAlquiler(null); 
-    }  
-    // }}
-	
-  	// {{ Fecha de Devolucion del vehiculo
-    private Date fechaDev;
-    @DescribedAs("Señala la fecha de devolución del vehiculo.")
-    @MemberOrder(name="Fecha de Alquiler",sequence="2")
-    public Date getFechaDevolucion() {
-        return fechaDev; 
-    }
-    public void setFechaDevolucion(final Date fechaDev) {
-        this.fechaDev= fechaDev; 
-    }    
-    public void clearFechaDevolucion() {
-        setFechaAlquiler(null); 
-    }  
-    // }}
     
-    // {{ Campo Activo
-   	private boolean activo;
-   	@Hidden
-   	@DescribedAs("Activo")
-   	@MemberOrder(sequence="12")
-   	public boolean getActivo() {
-   		return activo; 
-   	}   	
-   	public void setActivo(boolean activo){
-   		this.activo=activo; 
-   	}	
-    // }}
-   	   	
-   	//{{ Remove   	
-   	public void remove(){
-   		setActivo(false);
-   	}   	
-   	//}}
-	
     // {{ injected: DomainObjectContainer
-    @SuppressWarnings("unused")
     private DomainObjectContainer container;
     
     public void setDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
        
     }
-    // }}	
+    // }}    
 }
+
 

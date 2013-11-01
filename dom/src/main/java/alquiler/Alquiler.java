@@ -22,13 +22,10 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
-
 import org.apache.isis.applib.annotation.Where;
-
 import org.apache.isis.applib.annotation.MemberGroups;
 
 import cliente.Cliente;
-
 import disponibles.AutoPorFecha;
 
 
@@ -229,6 +226,44 @@ public class Alquiler {
 	    this.ownedBy = ownedBy;	
 	}	
 	// }}
+	
+	@MemberOrder(name="Estado",sequence="2")
+	public Alquiler enProceso(){
+		setEstado(EstadoAlquiler.EN_PROCESO);
+		return this;
+	}
+    public String disableEnProceso() {
+        if(getEstado() == EstadoAlquiler.RESERVADO) {
+                return null;
+        }
+        else {
+                if(getEstado() == EstadoAlquiler.EN_PROCESO) {
+                        return "El Alquiler ya se encuentra EN PROCESO";
+                }
+                else {
+                        return "Tiene que estar RESERVADO para pasar a EN PROCESO";
+                }
+        }
+    }
+    
+	@MemberOrder(name="Estado",sequence="3")
+	public Alquiler finalizado(){
+		setEstado(EstadoAlquiler.FINALIZADO);
+		return this;
+	}
+    public String disableFinalizado() {
+        if(getEstado() == EstadoAlquiler.FINALIZADO) {
+                return null;
+        }
+        else {
+                if(getEstado() == EstadoAlquiler.FINALIZADO) {
+                        return "El Alquiler ya se encuentra FINALIZADO";
+                }
+                else {
+                        return "Tiene que estar EN PROCESO para pasar FINALIZAR";
+                }
+        }
+    }
     
     // {{ injected: DomainObjectContainer
     private DomainObjectContainer container;

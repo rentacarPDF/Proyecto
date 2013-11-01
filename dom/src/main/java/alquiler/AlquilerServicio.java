@@ -13,6 +13,7 @@ import cliente.Cliente;
 import disponibles.AutoPorFecha;
 import disponibles.Disponible;
 
+@Named("Alquileres")
 public class AlquilerServicio extends AbstractFactoryAndRepository{
 
     @Named("Alquilar")

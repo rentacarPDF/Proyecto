@@ -1,36 +1,39 @@
 package disponibles;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
-import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
 
-import alquiler.Alquiler;
 import categoria.Categoria;
+import alquiler.Alquiler;
 
 
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
-@javax.jdo.annotations.Queries({
-        @javax.jdo.annotations.Query(name="auto_para_alquilar", language="JDOQL",value="SELECT FROM disponiles.Disponibles WHERE estaSeleccionada == true"),
-        @javax.jdo.annotations.Query(name="auto_libre", language="JDOQL",value="SELECT FROM disponibles.Disponibles WHERE estaSeleccionada == false"),
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+            name="Disponibles", language="JDOQL",
+            value="SELECT FROM dom.disponibles.Disponibles")
 })
-@ObjectType("AutosPorFecha")
-@AutoComplete(repository=DisponibleServicio.class,action="autosAlquilados")
+@ObjectType("Disponibles")
 @Audited
 
-public class AutoPorFecha {
-	
-	// {{ Identification on the UI
+
+public class Disponible {
+
 	@Named("Auto")
+	// {{ Identification on the UI
 	public String title() {		
 		final TitleBuffer buf = new TitleBuffer();
 		buf.append(getPatente());	       
@@ -38,25 +41,42 @@ public class AutoPorFecha {
 	}
 	// }}
 	    
-    // {{
-    private Date fecha;
-    @Named("Fecha")
-    public Date getFecha() {
-            return fecha;
-    }
-    public void setFecha(final Date fecha) {
-            this.fecha = fecha;
-    }
-    // }}
-    
     // {{	
     private String auto;
-    @Named("Auto")
+    @Hidden
+    @Named("Patente")
     public String getPatente(){
     	return auto;
     }
     public void setPatente(final String auto){
     	this.auto=auto;
+    }
+    // }}
+    
+    // {{
+    private boolean seleccionar;    
+    @Named("Seleccionada")
+    public boolean estaSeleccionada() {
+            return seleccionar;
+    }
+    public void setEstaSeleccionada(final boolean seleccionar) {
+            this.seleccionar = seleccionar;
+    }
+    // }}
+    
+    // {{
+    @Named("Fecha")
+    public String getFechaString() {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(getFecha());
+    }
+    private Date fecha;
+    @Hidden
+    public Date getFecha() {
+            return fecha;
+    }
+    public void setFecha(final Date fecha) {
+            this.fecha = fecha;
     }
     // }}
     
@@ -83,6 +103,23 @@ public class AutoPorFecha {
     // }}
     
     // {{
+    @Named("Seleccionar")
+    @Bulk    
+    public Disponible reserva(){
+    	if (getAlquiler()==null){
+    		if(estaSeleccionada())
+    			setEstaSeleccionada(false);
+    		else
+    			setEstaSeleccionada(true);  		
+    	}    	
+    	return this;    	
+    }
+    // }}    
+    public String disableReserva() {
+    return seleccionar ? "Ya esta seleccionada!" : null;
+    }  
+    
+    // {{
     private String modelo;
     @Named("Modelo")
     public String getModeloAuto(){
@@ -93,9 +130,18 @@ public class AutoPorFecha {
     }
     // }}
     
+    // {{ Inyeccion del Servicio
     @SuppressWarnings("unused")
-	private DomainObjectContainer container;    
+	private DisponibleServicio servicio;
+    public void injectDisponiblesServicio(final DisponibleServicio serv){
+    	this.servicio=serv;
+    }    
+    
+    // {{ injected: DomainObjectContainer 
+	@SuppressWarnings("unused")
+	private DomainObjectContainer container;
+    
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
+     this.container = container;
     }
-    //}}
 }

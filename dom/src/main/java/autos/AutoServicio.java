@@ -14,7 +14,6 @@ import org.apache.isis.applib.query.QueryDefault;
 import categoria.Categoria;
 import com.google.common.base.Objects;
 import autos.Auto;
-import autos.Auto.Estado;
 import autos.Auto.Seguro;
 import autos.Auto.TipoCombustible;
 import marca.Marca;
@@ -23,8 +22,9 @@ import marca.Marca;
 @Named("Flota")
 public class AutoServicio extends AbstractFactoryAndRepository {
 	
-	// {{ Carga de Autos
+	// {{ 
 	@MemberOrder(sequence = "1") 
+	@Named("Cargar Auto")
 	public Auto CargarAuto(			
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca, 
@@ -35,12 +35,11 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@Named("Kilometraje") int kms,
 		@Named("Capacidad Baul (lt)") int baul,
 		@Named("Tipo de Combustible") TipoCombustible combustible,
-		@Named("Estado de Alquiler") Estado estado,
 		@Named("Fecha de Compra") Date fechaCompra,
 		@Named("Compañía de Seguro")Seguro seguro) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
-		return elAuto(patente,marca,modelo,ano,categ,color,kms,baul,combustible,estado,fechaCompra,seguro,activo, ownedBy);
+		return elAuto(patente,marca,modelo,ano,categ,color,kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
 			     
 	}
 	// }}
@@ -57,7 +56,6 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		final int kms, 
 		final int baul,
 		final TipoCombustible combustible,
-		final Estado estado,
 		final Date fechaCompra,
 		final Seguro seguro,
 		final boolean activo,
@@ -85,7 +83,6 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 			auto.setKilometraje(kms);
 			auto.setCapacidadBaul(baul);
 			auto.setTipoCombustible(combustible);
-			auto.setEstado(estado);
 			auto.setFechaCompra(fechaCompra);
 			auto.setSeguro(seguro);
 			auto.setActivo(activo);
@@ -128,61 +125,14 @@ public class AutoServicio extends AbstractFactoryAndRepository {
     }
     // }}	
 		
-	// {{ Listado de Autos Activos
+	// {{ 
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "2") 
+    @Named("Listado Autos Activos")
     public List<Auto> listadoAutosActivos(){
-    	return allMatches(QueryDefault.create(Auto.class,"listado_autos"));
-    }
-    /*
-    public List<Auto> listadoAutosActivos() {
-        List<Auto> items = listadoActivos();
-        if(items.isEmpty()) {
-            getContainer().informUser("No hay autos activos ");
-        }
-        return items;
-    }
-
-    protected List<Auto> listadoActivos() {
-        return allMatches(Auto.class, new Filter<Auto>() {
-            @Override
-            public boolean accept(final Auto t) {
-                return t.getActivo() && t.getMarca().getActivo();
-            }
-        });
-    }
-    // }}
-    */
-    // {{  Listado de Autos Libres
-	@MemberOrder(sequence = "2") 
-    public List<Auto> listadoAutosLibres() {
-        List<Auto> items = listadoLibres();
-        if(items.isEmpty()) {
-            getContainer().informUser("No hay autos Libres ");
-        }
-        return items;
-    }
-    protected List<Auto> listadoLibres() {
-        return allMatches(Auto.class, new Filter<Auto>() {
-            @Override
-            public boolean accept(final Auto t) {            	
-                return t.getActivo() && t.getEstado().equals(Estado.LIBRE);
-            }
-        });
+    	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    
-    // }}    
-  
-	// {{ Busqueda de Autos por Categoria	
-    @MemberOrder(sequence = "3")  
-    public List<Auto> busquedaAutosPorCategoria(@Named("Categoria")final Categoria description) {    	
-        return allMatches(Auto.class, new Filter<Auto>() {
-            @Override
-            public boolean accept(final Auto t) {
-                return  t.getCategoria().equals(description) && t.getActivo();  
-            }
-        });
-    }
-    // }}
+   	// {{ 	
     
 	// {{  
 	@Hidden    
@@ -190,7 +140,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		return allMatches(Auto.class, new Filter<Auto>() {
 		@Override
 		public boolean accept(final Auto t) {		
-			return t.getPatente().contains(auto) && t.getActivo() && t.getEstado().equals(Estado.LIBRE);
+			return t.getPatente().contains(auto) && t.getActivo();
 		}
 	  });				
 	}

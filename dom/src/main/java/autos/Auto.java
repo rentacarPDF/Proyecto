@@ -1,6 +1,7 @@
 package autos;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
@@ -12,8 +13,8 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.annotation.Named;
 
 import categoria.Categoria;
@@ -23,7 +24,7 @@ import marca.Marca;
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Queries({
-@javax.jdo.annotations.Query(name="listado_autos", language="JDOQL",value="SELECT FROM autos.Auto WHERE activo==true"),
+@javax.jdo.annotations.Query(name="listadoAutosActivos", language="JDOQL",value="SELECT FROM autos.Auto WHERE activo==true"),
 @javax.jdo.annotations.Query(name="findAutos", language="JDOQL",value="SELECT FROM autos.Auto WHERE patente == :patente ")})
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 
@@ -43,14 +44,20 @@ public class Auto {
 		LA_SEGUNDA, MAPFRE, LA_PATRONAL, LA_CAJA, ZURICH; 
 	}	
 	
-	@Named("Dominio")
-	// {{ Identification on the UI	
-	public String title() {
-		final TitleBuffer buf = new TitleBuffer();
-		buf.append(getPatente());	       
-		return buf.toString();	
-	}
-	// }}
+	// {{ Patente	
+	private String patente;
+	@DescribedAs("El dominio del vehiculo.")
+	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation	
+	@MemberOrder(sequence="1")
+	@Title
+	@Hidden
+	@Named("Patente")
+	public String getPatente(){
+		return patente; 
+	}	
+	public void setPatente(String patente){
+		this.patente=patente; 
+	} 	
 	
 	// {{ {{ OwnedBy (property)	
 	private String ownedBy;
@@ -63,26 +70,13 @@ public class Auto {
 	}	
 	// }}
 	
-	// {{ Patente	
-	private String patente;
-	@DescribedAs("El dominio del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation
-	
-	@MemberOrder(sequence="1")
-	public String getPatente(){
-		return patente; 
-	}	
-	public void setPatente(String patente){
-		this.patente=patente; 
-	} 	
-	// }}
-	
 	// {{ Marca
 	@Persistent
 	private Marca marca;
 	@DescribedAs("La marca del vehiculo.")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@MemberOrder(sequence="2")	
+	@Named("Marca")
 	public Marca getMarca() {
 		return marca;
 	}	
@@ -96,6 +90,7 @@ public class Auto {
     @DescribedAs("El modelo del vehiculo.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "3")
+    @Named("Modelo")
 	public String getModelo(){
 		return modelo;
 	}
@@ -109,6 +104,7 @@ public class Auto {
     @DescribedAs("El año del vehiculo.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "4")
+    @Named("Año")
     public int getAno() {
         return ano; 
     }
@@ -123,6 +119,7 @@ public class Auto {
 	@DescribedAs("La categoria del vehiculo.")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@MemberOrder(sequence="5")	
+	@Named("Categoria")
 	public Categoria getCategoria() {
 		return categoria;
 	}	
@@ -135,7 +132,8 @@ public class Auto {
     private String color;
     @DescribedAs("El color del vehiculo.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-    @MemberOrder(sequence = "5")
+    @MemberOrder(sequence = "6")
+    @Named("Color")
     public String getColor() {
         return color; 
     }
@@ -148,7 +146,8 @@ public class Auto {
     private int kms;
     @DescribedAs("El kilometraje del vehiculo.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-    @MemberOrder(sequence = "6")
+    @MemberOrder(sequence = "7")
+    @Named("Kilometraje")
     public int getKilometraje() {
         return kms; 
     }
@@ -161,7 +160,8 @@ public class Auto {
     private int baul;
     @DescribedAs("La capacidad del baul del vehiculo.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-    @MemberOrder(sequence = "7")
+    @MemberOrder(sequence = "8")
+    @Named("Capacidad Baul (lts)")
     public int getCapacidadBaul() {
         return baul; 
     }
@@ -174,7 +174,8 @@ public class Auto {
  	private TipoCombustible combustible;
  	@DescribedAs("El tipo de combustible del vehiculo.")
  	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
- 	@MemberOrder(sequence="8")
+ 	@MemberOrder(sequence="9")
+ 	@Named("Tipo Combustible")
  	public TipoCombustible getTipoCombustible(){
  		return combustible; 
  	} 	
@@ -182,24 +183,17 @@ public class Auto {
  		this.combustible=combustible; 
  	}  	
  	// }}
- 	
- 	// {{ Estado de Alquiler
-  	private Estado estado;
-  	@DescribedAs("Señala el estado actual del vehiculo.")
-  	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-  	@MemberOrder(sequence="9")
-  	public Estado getEstado(){
-  		return estado; 
-  	}  	
-  	public void setEstado(Estado estado) {
-  		this.estado=estado; 
-  	}   	
-  	// }}
   	
   	// {{ Fecha de Compra del vehiculo
+    @Named("Fecha Compra")
+    public String getFechaString() {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(getFechaCompra());
+    }
     private Date fechaCompra;
     @DescribedAs("Señala la fecha de compra del vehiculo.")
     @MemberOrder(sequence="10")
+    @Hidden
     public Date getFechaCompra() {
         return fechaCompra; 
     }
@@ -216,6 +210,7 @@ public class Auto {
    	@DescribedAs("Señala el seguro del vehiculo.")
    	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
    	@MemberOrder(sequence="11")
+    @Named("Compañia Seguro")
    	public Seguro getSeguro() {
    		return seguro; 
    	}   	
@@ -237,6 +232,7 @@ public class Auto {
    	}	
     // }}   	   	
    	//{{ Remove   	
+    @Named("Borrar")
    	public void remove(){
    		setActivo(false);
    	}   	

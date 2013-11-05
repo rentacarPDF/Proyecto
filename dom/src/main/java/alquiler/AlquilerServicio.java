@@ -44,7 +44,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			
     			
     			for (Disponible disp:disponibilidad){
-    				if (disp.estaSeleccionada()){
+    				if (disp.isEstaSeleccionada()){
     					AutoPorFecha autoF=newTransientInstance(AutoPorFecha.class);
     					autoF.setFecha(disp.getFecha());
     					autoF.setCategoria(disp.getCategoria());

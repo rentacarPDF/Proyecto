@@ -56,7 +56,7 @@ public class Disponible {
     // {{
     private boolean seleccionar;    
     @Named("Seleccionada")
-    public boolean estaSeleccionada() {
+    public boolean isEstaSeleccionada() {
             return seleccionar;
     }
     public void setEstaSeleccionada(final boolean seleccionar) {
@@ -107,7 +107,7 @@ public class Disponible {
     @Bulk    
     public Disponible reserva(){
     	if (getAlquiler()==null){
-    		if(estaSeleccionada())
+    		if(isEstaSeleccionada())
     			setEstaSeleccionada(false);
     		else
     			setEstaSeleccionada(true);  		

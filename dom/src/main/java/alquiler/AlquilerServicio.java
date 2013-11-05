@@ -2,8 +2,11 @@ package alquiler;
 
 import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
 import com.google.common.base.Objects;
@@ -64,6 +67,25 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     	return alquiler;
 	}
     // }}
+    
+	// {{ Listado de Clientes Activos
+	@ActionSemantics(Of.SAFE)
+	public List<Cliente> choices0Reservar() {
+		List<Cliente> items = listaClientes();
+		if (items.isEmpty()) {
+			getContainer().informUser("No hay clientes activos");
+		}
+		return items;
+	}
+	protected List<Cliente> listaClientes() {
+		return allMatches(Cliente.class, new Filter<Cliente>() {
+			@Override
+			public boolean accept(final Cliente t) {
+				return t.getActivo();
+			}
+		});
+	}
+	// }}
     
     // {{ 
     private List<Disponible> listaAutosReservados() {         

@@ -81,7 +81,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	public List<Cliente> listadoClienteActivos() {
 		List<Cliente> items = listaClientes();
 		if (items.isEmpty()) {
-			getContainer().informUser("No hay clientes activos :-(");
+			getContainer().informUser("No hay clientes activos");
 		}
 		return items;
 	}

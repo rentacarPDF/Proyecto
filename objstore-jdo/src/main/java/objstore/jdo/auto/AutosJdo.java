@@ -13,7 +13,7 @@ public class AutosJdo extends AutoServicio{
     public List<Auto> listadoAutosActivos() {
         return allMatches(
                 new QueryDefault<Auto>(Auto.class, 
-                        "listado_autos"));
+                        "listadoAutosActivos"));
     }
 	
 	

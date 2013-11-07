@@ -7,6 +7,7 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.filter.Filter;
@@ -23,6 +24,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 	@Named("Entre fechas por Categoria")
 	public List<Disponible> entreFechas(
 			@Named("Fecha de alquiler:") LocalDate fechaAlq,
+			@Optional
 			@Named("Fecha de devolución:") LocalDate fechaDev,
 			@Named("Categoria") Categoria categoria) {
 
@@ -110,7 +112,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			
 			LocalDate fechaActual=new LocalDate();
 			
-			if (desde.isEqual(fechaActual) || desde.isBefore(fechaActual)) {
+			if (desde.isBefore(fechaActual)) {
 				
 				return "La fecha Alquiler no puede ser menor a la fecha de Hoy";
 

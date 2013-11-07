@@ -39,6 +39,7 @@ public class AutoPorFecha {
 	// }}
 	    
     // {{
+	
     private Date fecha;
     @Named("Fecha")
     public Date getFecha() {

@@ -37,9 +37,6 @@ public class Auto {
 	public static enum TipoCombustible {
 		NAFTA, DIESEL; 
 	}
-	public static enum Estado {
-		ALQUILADO, LIBRE, AVERIADO; 
-	}
 	public static enum Seguro{
 		LA_SEGUNDA, MAPFRE, LA_PATRONAL, LA_CAJA, ZURICH; 
 	}	

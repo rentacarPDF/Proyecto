@@ -3,6 +3,7 @@ package alquiler;
 import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -22,21 +23,21 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     @Named("Alquilar")
     @MemberOrder(sequence="1")
     public Alquiler reservar(
-                    @Named("Cliente") Cliente cliente
-                    ) {
-            
+                    @Named("Cliente") Cliente cliente ) {
+    		final String ownedBy = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
             persistIfNotAlready(alquiler);
             
             List<Disponible> disponibilidad = listaAutosReservados();
             
-            return crear(alquiler,disponibilidad,cliente);
+            return crear(alquiler,disponibilidad,cliente,ownedBy);
     }
-    
+    @Hidden
     private Alquiler crear(
     		final Alquiler alquiler,
     		final List<Disponible> disponibilidad,
-    		final Cliente cliente		
+    		final Cliente cliente,	
+    		final String userName
     		){
     		if(disponibilidad.size()>0){
     			alquiler.setClienteId(cliente);
@@ -44,7 +45,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setNombreCliente(cliente.getNombre());
     			alquiler.setApellidoCliente(cliente.getApellido());
     			alquiler.setEstado(EstadoAlquiler.RESERVADO);
-    			
+    			alquiler.setOwnedBy(userName);
     			
     			for (Disponible disp:disponibilidad){
     				if (disp.isEstaSeleccionada()){
@@ -54,15 +55,11 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     					autoF.setPatente(disp.getPatente());
     					autoF.setAlquiler(alquiler);
     					autoF.setModeloAuto(disp.getModeloAuto());
-    					alquiler.addToAutos(autoF);
-    					
+    					alquiler.addToAutos(autoF);    					
     					persistIfNotAlready(autoF);    					
     				}  
-    				getContainer().removeIfNotAlready(disp);
-    				
-    			}
-    			
-    			
+    				getContainer().removeIfNotAlready(disp);    				
+    			}    			
     		}
     	return alquiler;
 	}
@@ -88,7 +85,8 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	// }}
     
     // {{ 
-    private List<Disponible> listaAutosReservados() {         
+	@Hidden
+    public List<Disponible> listaAutosReservados() {         
         return allMatches(QueryDefault.create(Disponible.class, "Disponibles"));
     } 
     // }}
@@ -110,4 +108,3 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	}
 	// }}	
 }
-

@@ -25,15 +25,22 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.MemberGroups;
 
+
+import adicional.Adicional;
+import adicional.AdicionalServicio;
+
+import com.google.common.collect.Lists;
+
 import cliente.Cliente;
 import disponibles.AutoPorFecha;
+import disponibles.DisponibleServicio;
 
 
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.APPLICATION)
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
-@MemberGroups({"Estado","Datos del Alquiler","Autos"})
-@javax.jdo.annotations.Query(name="traerAlquileres", language="JDOQL",value="SELECT FROM alquiler.Alquiler2 order by numero asc")
+@MemberGroups({"Estado","Cliente","Datos del Alquiler","Autos","Datos de Factura"})
+@javax.jdo.annotations.Query(name="traerAlquileres", language="JDOQL",value="SELECT FROM alquiler.Alquiler order by numero asc")
 @AutoComplete(repository=AlquilerServicio.class, action="autoComplete")
 @Audited 
 @ObjectType("ALQUILER")
@@ -43,8 +50,7 @@ public class Alquiler {
     
 	public static enum EstadoAlquiler{
 		RESERVADO, EN_PROCESO, FINALIZADO;
-	}
-	
+	}	
 	public static enum TipoPago{
 		EFECTIVO, CHEQUE, TARJETA_CREDITO, TARJETA_DEBITO;
 	}
@@ -53,9 +59,9 @@ public class Alquiler {
     public String title(){
             return getEstado().toString();        
     }
-    //}}
+    // }}
     
-    //{{Numero de la reserva
+    //  {{Numero de la reserva
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long numero;
@@ -68,8 +74,9 @@ public class Alquiler {
     public void setNumero(final Long numero) {
             this.numero = numero;
     }
-    //}}
+    // }}
     
+    // {{
     private String nombreEstado;    
     @Named("Estado")
     @NotPersisted
@@ -87,9 +94,9 @@ public class Alquiler {
     public void setEstado(final EstadoAlquiler estado) {
             this.estado = estado;
     }
-    //}}
+    // }}
     
-    //{{Fecha en la que se realiza la reserva
+    // {{Fecha en la que se realiza el alquiler
     @Named("Fecha")
     @MemberOrder(name="Datos del Alquiler",sequence="2")
     public String getFechaString() {
@@ -112,6 +119,7 @@ public class Alquiler {
 	// {{ Precio 
 	private float precio;
     @Named("Precio")
+    @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos del Alquiler",sequence="3")
 	public float getPrecioAlquiler(){
@@ -120,13 +128,24 @@ public class Alquiler {
 	public void setPrecioAlquiler(final float precio){
 		this.precio=precio;
 	}	
+	@Hidden
+	public Alquiler calculoSubTotal(){
+		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
+		float suma=0;
+				
+		for (AutoPorFecha auto:listaAutos){
+			suma=suma+auto.getCategoria().getPrecio();
+		}		
+		setPrecioAlquiler(suma);
+		return this;
+	}	
 	// }}
 	
 	// {{ Tipo de Pago
 	private TipoPago tipoPago;
     @Named("Tipo de Pago")
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Datos del Alquiler",sequence="4")
+    @MemberOrder(name="Datos de Factura",sequence="1")
 	public TipoPago getTipoPago() {
 		return tipoPago;
 	}
@@ -139,17 +158,49 @@ public class Alquiler {
 	private int recibo;
     @Named("Nro Recibo")
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Datos del Alquiler",sequence="5")
+    @MemberOrder(name="Datos de Factura",sequence="2")
 	public int getNumeroRecibo() {
 		return recibo;
 	}
 	public void setNumeroRecibo(final int recibo) {
 		this.recibo = recibo;
 	}
+	// }}
+	
+	// {{ Precio 
+	private float precioTot;
+    @Named("Precio Total")
+    @Disabled
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos de Factura",sequence="3")
+	public float getPrecioTotal(){
+		return precioTot;
+	}
+	public void setPrecioTotal(final float precioTot){
+		this.precioTot=precioTot;
+	}	
+	@Hidden
+	public Alquiler calculoTotal(){
+		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());
+		List<Adicional> listaAdicionales=Lists.newArrayList(getAdicionales());
+		
+		float suma=0;
+		float pAdic=0;
+		
+		for (Adicional adic:listaAdicionales){
+			suma= adic.getPrecio()*listaAutos.size();;
+			pAdic=pAdic+suma;
+		}
+		
+		float total=getPrecioAlquiler()+pAdic;
+		
+		setPrecioTotal(total);
+		return this;
+	}	
 	// }}	
 	
-	// {{ Lista de Autos 
-	@Persistent(mappedBy="alquiler")	
+	// {{ Lista de Autos 	
+	@Persistent(mappedBy="alquiler")		
 	private List<AutoPorFecha> autos = new ArrayList<AutoPorFecha>();
     public List<AutoPorFecha> getAutos() {
         return autos;
@@ -162,18 +213,69 @@ public class Alquiler {
     public Alquiler removeFromAutos(final AutoPorFecha auto) {
             autos.remove(auto);
             container.removeIfNotAlready(auto);
-            return this;
+            calculoSubTotal();
+            calculoTotal();
+            return this;            
     }
     @Hidden
     public void addToAutos(AutoPorFecha auto) {
-     if(auto == null || autos.contains(auto)) {
+    	if(auto == null || autos.contains(auto)) {
              return;
-     }
-     auto.setAlquiler(this);
-     autos.add(auto);
+    	}
+    	auto.setAlquiler(this);
+    	autos.add(auto);
+    	calculoSubTotal();
+    	calculoTotal();
     }
+    public List<AutoPorFecha> choices0RemoveFromAutos() {
+        return Lists.newArrayList(getAutos());
+    }        
     // }}
     
+    // {{ Lista de Adicionales
+ 	@Persistent(mappedBy="alquiler")	
+ 	private List<Adicional> adicionales= new ArrayList<Adicional>();
+    public List<Adicional> getAdicionales() {
+         return adicionales;
+    }
+    public void setAdicionales(List<Adicional> listaAdicionales) {
+     	this.adicionales = listaAdicionales;
+    }
+    @Named("Añadir")
+    @MemberOrder(name="Adicionales",sequence="1")
+    public Alquiler agregar(
+    		@Named("Adicional") Adicional adicional){
+    	
+    	Adicional adic=container.newTransientInstance(Adicional.class);
+    	adic.setNombre(adicional.getNombre());
+    	adic.setDescripcion(adicional.getDescripcion());
+    	adic.setPrecio(adicional.getPrecio());
+    
+    	addToAdicionales(adic);    	
+    	return this;
+    }     
+    @Hidden
+    public void addToAdicionales(Adicional adic) {
+    	if(adic == null || adicionales.contains(adic)) {
+             return;
+    	}    	
+    	adic.setAlquiler(this);
+    	adicionales.add(adic);
+    	calculoTotal();
+    } 
+    @Named("Borrar")
+    @MemberOrder(name="Adicionales",sequence="2")
+    public Alquiler removeFromAdicionales(final Adicional adic) {
+    		adicionales.remove(adic);            
+            calculoTotal();
+            return this;
+    }
+    // }}
+    public List<Adicional> choices0RemoveFromAdicionales() {
+        return Lists.newArrayList(getAdicionales());
+    }        
+    // }}
+
 	// {{ Cliente		
 	private Cliente clienteId;
 	@DescribedAs("Numero de CUIL/CUIT")
@@ -229,7 +331,8 @@ public class Alquiler {
 	
 	@MemberOrder(name="Estado",sequence="2")
 	public Alquiler enProceso(){
-		setEstado(EstadoAlquiler.EN_PROCESO);
+		setEstado(EstadoAlquiler.EN_PROCESO);		   	
+		
 		return this;
 	}
     public String disableEnProceso() {
@@ -252,7 +355,7 @@ public class Alquiler {
 		return this;
 	}
     public String disableFinalizado() {
-        if(getEstado() == EstadoAlquiler.FINALIZADO) {
+        if(getEstado() == EstadoAlquiler.EN_PROCESO) {
                 return null;
         }
         else {
@@ -264,7 +367,7 @@ public class Alquiler {
                 }
         }
     }
-    
+        
     // {{ injected: DomainObjectContainer
     private DomainObjectContainer container;
     
@@ -273,6 +376,17 @@ public class Alquiler {
        
     }
     // }}    
+   
+    @SuppressWarnings("unused")
+	private AdicionalServicio adicServ;
+    @Hidden
+    public void inyectarAdicionalServicio(AdicionalServicio adicServ){
+    	this.adicServ=adicServ;
+    }
+    @SuppressWarnings("unused")
+	private DisponibleServicio dispServ;
+    @Hidden
+    public void inyectarAdicionalServicio(DisponibleServicio dispServ){
+    	this.dispServ=dispServ;
+    }
 }
-
-

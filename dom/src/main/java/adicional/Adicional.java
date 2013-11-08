@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -47,6 +48,7 @@ public class Adicional {
     
     private String descripcion;
     @Named("Descripcion")
+    @MultiLine(numberOfLines=3)
     @MemberOrder(sequence="2")
     public String getDescripcion() {
             return descripcion;

@@ -358,6 +358,20 @@ public class Alquiler {
 		this.apellido = apellido;
 	}
 	// }}
+	
+	// {{
+	@Named("Borrar")
+	public void borrarAlquiler(){		
+		for (Adicional adic:getAdicionales()){
+			container.removeIfNotAlready(adic);
+		}
+		for (AutoPorFecha auto:getAutos()){
+			container.removeIfNotAlready(auto);
+		}
+		container.informUser("Alquiler número: "+getNumero()+" a sido borrado");
+        container.removeIfNotAlready(this);		
+	}
+	// }}
     	
 	// {{ {{ OwnedBy (property)	
 	private String ownedBy;

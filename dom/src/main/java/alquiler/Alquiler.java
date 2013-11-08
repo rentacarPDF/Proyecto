@@ -162,18 +162,18 @@ public class Alquiler {
 	}
 	// }}	
 	
-	// {{ Numero de Recibo
-	private int recibo;
-    @Named("Nro Recibo")
+	// {{ Numero de Factura
+	private int factura;
+    @Named("Nro Factura")
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="2")
-	public int getNumeroRecibo() {
-		return recibo;
+	public int getNumeroFactura() {
+		return factura;
 	}
-	public void setNumeroRecibo(final int recibo) {
-		this.recibo = recibo;
+	public void setNumeroFactura(final int factura) {
+		this.factura = factura;
 	}
-	public String disableNumeroRecibo(){
+	public String disableNumeroFactura(){
 		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
 			return "El Alquiler debe estar FINALIZADO";
 		}

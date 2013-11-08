@@ -153,7 +153,12 @@ public class Alquiler {
 		this.tipoPago = tipoPago;
 	}
 	public String disableTipoPago(){
-		return (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO)?"El Alquiler debe estar FINALIZADO":null;
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
+			return "El Alquiler debe estar FINALIZADO";
+		}
+		else {
+			return getEstado()==EstadoAlquiler.FINALIZADO? null:"El Alquiler esta CERRADO no se puede editar";
+		}
 	}
 	// }}	
 	
@@ -169,15 +174,13 @@ public class Alquiler {
 		this.recibo = recibo;
 	}
 	public String disableNumeroRecibo(){
-		if (getEstado()==EstadoAlquiler.RESERVADO){
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
 			return "El Alquiler debe estar FINALIZADO";
-		}else{
-			if (getEstado()==EstadoAlquiler.EN_PROCESO){
-				return "El Alquiler debe estar FINALIZADO";
-			}else return null;
 		}
-	}
-	
+		else {
+			return getEstado()==EstadoAlquiler.FINALIZADO? null:"El Alquiler esta CERRADO no se puede editar";
+		}
+	}	
 	// }}
 	
 	// {{ Precio 
@@ -234,9 +237,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.EN_PROCESO) {
         	return autos.size()>0? null: "No existe Autos para este Alquiler";
         }
-        else {           
-        	return "El alquiler esta FINALIZADO";
-        }			          
+        else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
     }
     @Hidden
     public void addToAutos(AutoPorFecha auto) {
@@ -280,7 +281,9 @@ public class Alquiler {
             return null;
         }
         else {           
-               return getEstado() == EstadoAlquiler.RESERVADO?"El Alquiler debe estar EN PROCESO":"El Alquiler esta FINALIZADO";
+               if( getEstado() == EstadoAlquiler.RESERVADO){
+            	   return "El Alquiler debe estar EN PROCESO";
+               }else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
         }       
     }
     @Hidden
@@ -305,7 +308,9 @@ public class Alquiler {
         	return adicionales.size()>0? null: "No existe Adicionales para este Alquiler";
         }
         else {           
-        	return getEstado() == EstadoAlquiler.RESERVADO? "No existe Adicionales para este Alquiler":"El Alquiler esta FINALIZADO";
+        	if (getEstado() == EstadoAlquiler.RESERVADO){
+        		return "No existe Adicionales para este Alquiler";
+        	}else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
         }			          
     }
     public List<Adicional> choices0RemoveFromAdicionales() {
@@ -375,9 +380,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.RESERVADO) {
                 return null;
         }
-        else {
-               return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";                
-        }
+        else return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
     }
     
 	@MemberOrder(name="Estado",sequence="3")
@@ -389,9 +392,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.EN_PROCESO) {
                 return null;
         }
-        else {
-                return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
-        }
+        else return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
     }
     
 	@MemberOrder(name="Estado",sequence="4")

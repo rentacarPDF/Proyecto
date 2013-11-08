@@ -49,7 +49,7 @@ import disponibles.DisponibleServicio;
 public class Alquiler {
     
 	public static enum EstadoAlquiler{
-		RESERVADO, EN_PROCESO, FINALIZADO;
+		RESERVADO, EN_PROCESO, FINALIZADO, CERRAR;
 	}	
 	public static enum TipoPago{
 		EFECTIVO, CHEQUE, TARJETA_CREDITO, TARJETA_DEBITO;
@@ -152,6 +152,9 @@ public class Alquiler {
 	public void setTipoPago(final TipoPago tipoPago) {
 		this.tipoPago = tipoPago;
 	}
+	public String disableTipoPago(){
+		return (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO)?"El Alquiler debe estar FINALIZADO":null;
+	}
 	// }}	
 	
 	// {{ Numero de Recibo
@@ -165,6 +168,16 @@ public class Alquiler {
 	public void setNumeroRecibo(final int recibo) {
 		this.recibo = recibo;
 	}
+	public String disableNumeroRecibo(){
+		if (getEstado()==EstadoAlquiler.RESERVADO){
+			return "El Alquiler debe estar FINALIZADO";
+		}else{
+			if (getEstado()==EstadoAlquiler.EN_PROCESO){
+				return "El Alquiler debe estar FINALIZADO";
+			}else return null;
+		}
+	}
+	
 	// }}
 	
 	// {{ Precio 
@@ -363,7 +376,7 @@ public class Alquiler {
                 return null;
         }
         else {
-               return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"Tiene que estar RESERVADO para pasar a EN PROCESO";                
+               return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";                
         }
     }
     
@@ -377,8 +390,17 @@ public class Alquiler {
                 return null;
         }
         else {
-                return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"Tiene que estar EN PROCESO para pasar FINALIZADO";
+                return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
         }
+    }
+    
+	@MemberOrder(name="Estado",sequence="4")
+	public Alquiler cerrar(){
+		setEstado(EstadoAlquiler.CERRAR);
+		return this;
+	}
+    public String disableCerrar() {
+        return (getEstado() == EstadoAlquiler.EN_PROCESO||getEstado()==EstadoAlquiler.RESERVADO)?"El Alquiler debe estar FINALIZADO para poder CERRARLO":null;   
     }
         
     // {{ injected: DomainObjectContainer

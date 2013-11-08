@@ -1,5 +1,6 @@
 package disponibles;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.jdo.annotations.IdentityType;
@@ -7,6 +8,7 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -39,9 +41,13 @@ public class AutoPorFecha {
 	// }}
 	    
     // {{
-	
-    private Date fecha;
     @Named("Fecha")
+    public String getFechaString() {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(getFecha());
+    }
+    private Date fecha;
+    @Hidden
     public Date getFecha() {
             return fecha;
     }

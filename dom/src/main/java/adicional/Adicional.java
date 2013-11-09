@@ -27,17 +27,15 @@ import alquiler.Alquiler;
 @Audited
 
 public class Adicional {
-	
     // {{ Identification on the UI
 	@Named("Adicional")
     public String title() {		
         return getNombre().toString();
 	}     
     // }}
-	
 	private String nombre;
 	@Hidden
-	//@Named("Adicional")
+	@Named("Adicional")
 	@MemberOrder(sequence="1")
     public String getNombre(){
     	return nombre;
@@ -66,7 +64,6 @@ public class Adicional {
     public void setPrecio(final float precio) {
         this.precio = precio;
     }
-    
     private Alquiler alquiler;
     @Hidden
     @NotPersisted
@@ -78,7 +75,6 @@ public class Adicional {
     public void setAlquiler(final Alquiler alquiler) {
             this.alquiler = alquiler;
     }
-    
     // {{ Campo Activo
    	private boolean activo;
    	@Hidden
@@ -97,8 +93,7 @@ public class Adicional {
    		setActivo(false);
    	}   	
    	//}}  
-    
-	private String ownedBy;
+    private String ownedBy;
 	@Hidden 
 	public String getOwnedBy() {
 	    return ownedBy;	
@@ -107,11 +102,9 @@ public class Adicional {
 	    this.ownedBy = ownedBy;	
 	}	
 	// }}
-    
     // {{ injected: DomainObjectContainer
     @SuppressWarnings("unused")
 	private DomainObjectContainer container;
-
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
        this.container = container;
     }   

@@ -17,16 +17,14 @@ import autos.Auto;
 
 @Named("Marca")
 public class MarcaServicio extends AbstractFactoryAndRepository {
-
 	//{{ Carga de Marcas
 	@MemberOrder(sequence = "1")
-	public Marca CargarMarca(@Named("Marca") String marca) { 
+	public Marca cargarMarca(@Named("Marca") String marca) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
 		return laMarca(marca, activo, ownedBy); 
 	}
 	// }}
-	
 	// {{	
 	@Hidden // for use by fixtures
 	public Marca laMarca(
@@ -42,7 +40,6 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 		return aux;
 	}
 	// }}	
-	
 	// {{ Listado de Marcas 
 	@MemberOrder(sequence = "2") 
 	public List<Marca> listadoMarcas() {
@@ -54,7 +51,6 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	   });
 	}
 	// }}
-	
 	// {{ Listado de Autos filtrado por Marcas	
 	@MemberOrder(sequence = "3")
 	public List<Auto> listadoAutosPorMarca(final Marca lista) {
@@ -70,7 +66,6 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 		return items;
 	}
 	// }}
-	
 	// {{ 
 	@Hidden    
 	public List<Marca> autoComplete(final String marcas) {
@@ -82,7 +77,6 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	  });				
 	}
 	// }}
-	
 	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Marca t)	{
 		return Objects.equal(t.getOwnedBy(), currentUserName()); 

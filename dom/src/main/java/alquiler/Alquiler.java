@@ -44,23 +44,18 @@ import disponibles.DisponibleServicio;
 @AutoComplete(repository=AlquilerServicio.class, action="autoComplete")
 @Audited 
 @ObjectType("ALQUILER")
-
-
 public class Alquiler {
-    
 	public static enum EstadoAlquiler{
 		RESERVADO, EN_PROCESO, FINALIZADO, CERRAR;
 	}	
 	public static enum TipoPago{
 		EFECTIVO, CHEQUE, TARJETA_CREDITO, TARJETA_DEBITO;
 	}
-	
 	//{{Titulo
     public String title(){
             return getEstado().toString();        
     }
     // }}
-    
     //  {{Numero de la reserva
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -75,8 +70,7 @@ public class Alquiler {
             this.numero = numero;
     }
     // }}
-    
-    // {{
+    // {{Estado
     private String nombreEstado;    
     @Named("Estado")
     @NotPersisted
@@ -88,14 +82,13 @@ public class Alquiler {
     }    
     private EstadoAlquiler estado;    
     @Hidden
-    public EstadoAlquiler getEstado() {
+    public EstadoAlquiler getEstado(){
             return estado;
     }
-    public void setEstado(final EstadoAlquiler estado) {
+    public void setEstado(final EstadoAlquiler estado){
             this.estado = estado;
     }
     // }}
-    
     // {{Fecha en la que se realiza el alquiler
     @Named("Fecha")
     @MemberOrder(name="Datos del Alquiler",sequence="2")
@@ -115,8 +108,7 @@ public class Alquiler {
             this.fecha = fecha;
     }
     //}}
-
-	// {{ Precio 
+    // {{ Precio 
 	private float precio;
     @Named("Precio")
     @Disabled
@@ -129,6 +121,7 @@ public class Alquiler {
 		this.precio=precio;
 	}	
 	@Hidden
+	//{{ Calculo para el sub-Total
 	public Alquiler calculoSubTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
 		float suma=0;
@@ -140,7 +133,6 @@ public class Alquiler {
 		return this;
 	}	
 	// }}
-	
 	// {{ Tipo de Pago
 	private TipoPago tipoPago;
     @Named("Tipo de Pago")
@@ -161,7 +153,6 @@ public class Alquiler {
 		}
 	}
 	// }}	
-	
 	// {{ Numero de Factura
 	private int factura;
     @Named("Nro Factura")
@@ -182,7 +173,6 @@ public class Alquiler {
 		}
 	}	
 	// }}
-	
 	// {{ Precio 
 	private float precioTot;
     @Named("Precio Total")
@@ -199,22 +189,17 @@ public class Alquiler {
 	public Alquiler calculoTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());
 		List<Adicional> listaAdicionales=Lists.newArrayList(getAdicionales());
-		
 		float suma=0;
 		float pAdic=0;
-		
 		for (Adicional adic:listaAdicionales){
 			suma= adic.getPrecio()*listaAutos.size();;
 			pAdic=pAdic+suma;
 		}
-		
 		float total=getPrecioAlquiler()+pAdic;
-		
 		setPrecioTotal(total);
 		return this;
 	}	
 	// }}	
-	
 	// {{ Lista de Autos 	
 	@Persistent(mappedBy="alquiler")		
 	private List<AutoPorFecha> autos = new ArrayList<AutoPorFecha>();
@@ -253,7 +238,6 @@ public class Alquiler {
         return Lists.newArrayList(getAutos());
     }        
     // }}
-    
     // {{ Lista de Adicionales
  	@Persistent(mappedBy="alquiler")	
  	private List<Adicional> adicionales= new ArrayList<Adicional>();
@@ -267,7 +251,6 @@ public class Alquiler {
     @MemberOrder(name="Adicionales",sequence="1")
     public Alquiler agregar(
     		@Named("Adicional") Adicional adicional){
-    	
     	Adicional adic=container.newTransientInstance(Adicional.class);
     	adic.setNombre(adicional.getNombre());
     	adic.setDescripcion(adicional.getDescripcion());
@@ -302,7 +285,7 @@ public class Alquiler {
             calculoTotal();
             return this;
     }
-    // }}
+    
     public String disableRemoveFromAdicionales(Adicional adicional){
         if(getEstado() == EstadoAlquiler.EN_PROCESO) {
         	return adicionales.size()>0? null: "No existe Adicionales para este Alquiler";
@@ -316,7 +299,7 @@ public class Alquiler {
     public List<Adicional> choices0RemoveFromAdicionales() {
         return Lists.newArrayList(getAdicionales());
     }        
-
+    //}}
     // {{ Cliente		
 	private Cliente clienteId;
 	@DescribedAs("Numero de CUIL/CUIT")
@@ -330,7 +313,6 @@ public class Alquiler {
 		this.clienteId=clienteId;
 	}	
 	// }}
-	
 	// {{ Nombre Cliente
 	private String nombre;
 	@Disabled
@@ -357,9 +339,8 @@ public class Alquiler {
 	public void setApellidoCliente(String apellido) {
 		this.apellido = apellido;
 	}
-	// }}
-	
 	// {{
+	//{{
 	@Named("Borrar")
 	public void borrarAlquiler(){		
 		for (Adicional adic:getAdicionales()){
@@ -383,7 +364,6 @@ public class Alquiler {
 	    this.ownedBy = ownedBy;	
 	}	
 	// }}
-	
 	@MemberOrder(name="Estado",sequence="2")
 	public Alquiler enProceso(){
 		setEstado(EstadoAlquiler.EN_PROCESO);		   	
@@ -396,8 +376,8 @@ public class Alquiler {
         }
         else return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
     }
-    
-	@MemberOrder(name="Estado",sequence="3")
+    @Named("Estado")
+    @MemberOrder(name="Estado",sequence="3")
 	public Alquiler finalizado(){
 		setEstado(EstadoAlquiler.FINALIZADO);
 		return this;
@@ -414,19 +394,17 @@ public class Alquiler {
 		setEstado(EstadoAlquiler.CERRAR);
 		return this;
 	}
+    //{{Deshabilitacion de estado cerrar
     public String disableCerrar() {
         return (getEstado() == EstadoAlquiler.EN_PROCESO||getEstado()==EstadoAlquiler.RESERVADO)?"El Alquiler debe estar FINALIZADO para poder CERRARLO":null;   
     }
-        
+    //}}
     // {{ injected: DomainObjectContainer
     private DomainObjectContainer container;
-    
     public void setDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
-       
     }
     // }}    
-   
     @SuppressWarnings("unused")
 	private AdicionalServicio adicServ;
     @Hidden

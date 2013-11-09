@@ -7,6 +7,7 @@ import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
@@ -25,15 +26,16 @@ import com.google.common.base.Objects;
 @AutoComplete(repository=CategoriaServicio.class, action="autoComplete")
 
 public class Categoria {
-
-    public static enum Caja {
+	//{{ENUM para tipo de caja
+	public static enum Caja {
     	AUTOMATICA, MANUAL;
     }
-    
+	//}}
+	//{{ENUM para traccion
     public static enum Traccion {
-    	Cuatrox4 , Cuatrox2 ;
+    	CUATROx4 , CUATROx2 ;
     }
-
+    //}}
     // {{ Identification on the UI
     public String title() {
 		final TitleBuffer buf = new TitleBuffer();
@@ -52,11 +54,10 @@ public class Categoria {
 	    this.ownedBy = ownedBy;
 	}  
     //}}
-	
 	//{{ Nombre de Categoria
 	private String categoria;
-	
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Categoria")
 	@MemberOrder(sequence="1")
 	public String getNombre() {
 		return categoria;
@@ -65,7 +66,6 @@ public class Categoria {
 		this.categoria=categoria;
 	}	
 	//}}
-	
 	//{{ Cantidad de puertas
     private int cantPuertas ;	
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
@@ -77,10 +77,10 @@ public class Categoria {
 		this.cantPuertas=cantPuertas;
 	}	
     //}}
-	
 	//{{ Cantidad de Plazas
 	private int cantPlazas ;
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("CantidadDePLazas")
 	@MemberOrder(sequence="3")
 	public int getCantPlazas() {
 		return cantPlazas;
@@ -89,11 +89,11 @@ public class Categoria {
 		this.cantPlazas=cantPlazas;
 	}
 	//}}
-	
 	//{{ Caja
 	private Caja caja;
 	@DescribedAs("Señala tipo de caja del vehiculo.")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Caja")
 	@MemberOrder(sequence="4")
 	public Caja getCaja() {
 		return caja;
@@ -102,11 +102,11 @@ public class Categoria {
 		this.caja=caja;
 	}
 	//}}
-	
 	//{{ Traccion
 	private Traccion traccion;
 	@DescribedAs("Señala tipo de traccion del vehiculo.")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Traccion")
 	@MemberOrder(sequence="5")	
 	public Traccion getTraccion() {
 		return traccion;
@@ -120,6 +120,7 @@ public class Categoria {
 	private int precio;
 	@DescribedAs("El precio de la categoria.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Precio")
     @MemberOrder(sequence = "6")
 	public int getPrecio() {
 		return precio;
@@ -128,10 +129,10 @@ public class Categoria {
 		this.precio=precio;
 	}
 	//}}
-	
 	// {{ Activo
    	private boolean activo;
    	@Hidden
+   	@Named("Activo")
    	@MemberOrder(sequence="7")
     public boolean getActivo() {
    		return activo; 
@@ -145,7 +146,6 @@ public class Categoria {
         setActivo(false);
 	}
     // }}
-	
 	// {{ Filtro 
    	public static Filter<Categoria> thoseOwnedBy(final String currentUser) {
         return new Filter<Categoria>() {

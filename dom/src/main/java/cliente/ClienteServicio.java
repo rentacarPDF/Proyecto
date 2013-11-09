@@ -19,7 +19,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
-	public Cliente CargarCliente(@Named("Nombre") String nombre,
+	public Cliente cargarCliente(@Named("Nombre") String nombre,
 			@Named("Apellido") String apellido,
 			@Named("Tipo de Id Tributaria") TipoId tipo,
 			@Named("Numero") String numeroId,
@@ -46,12 +46,8 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 						return Objects.equal(cliente.getNumeroIdent(), numeroId);
 					}
 				});
-			
-
-		Cliente cliente = newTransientInstance(Cliente.class);
-
+			Cliente cliente = newTransientInstance(Cliente.class);
 		if (mismoNumDoc.size() == 0) {
-
 			cliente.setNombre(nombre);
 			cliente.setApellido(apellido);
 			cliente.setTipoId(tipo);
@@ -60,21 +56,16 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			cliente.setEmail(mail);
 			cliente.setOwnedBy(userName);
 			cliente.setActivo(true);
-			
-			
 			persistIfNotAlready(cliente);			
 			
 		} else {
 			cliente = null;
 			getContainer().warnUser("YA SE ENCUENTRA EL CLIENTE CARGADO");
 			System.out.println("YA SE ENCUENTRA EL CLIENTE CARGADO");
-			
 		}
-
 		return cliente;
 	} 
 	// }}
-	
 	// {{ Listado de Clientes Activos
 	@ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "2")
@@ -106,7 +97,6 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	  });				
 	}
 	// }}
-		 
 	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Cliente t) {
 		return Objects.equal(t.getOwnedBy(), currentUserName());

@@ -21,11 +21,10 @@ import marca.Marca;
 
 @Named("Flota")
 public class AutoServicio extends AbstractFactoryAndRepository {
-	
 	// {{ 
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Auto")
-	public Auto CargarAuto(			
+	public Auto cargarAuto(			
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca, 
 		@Named("Modelo") String modelo, 
@@ -40,10 +39,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
 		return elAuto(patente,marca,modelo,ano,categ,color,kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
-			     
 	}
 	// }}
-	
 	// {{
 	@Hidden // for use by fixtures
 	public Auto elAuto(
@@ -60,7 +57,6 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		final Seguro seguro,
 		final boolean activo,
 		final String userName) {
-		
 		final List<Auto> mismaPatente = allMatches(Auto.class,
 				new Filter<Auto>() {
 				@Override
@@ -69,9 +65,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 					}			
 				}	
 		);
-		
 		Auto auto = newTransientInstance(Auto.class);
-		
 		if(mismaPatente.size()==0) {
 		
 			auto.setPatente(patente);
@@ -87,9 +81,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 			auto.setSeguro(seguro);
 			auto.setActivo(activo);
 			auto.setOwnedBy(userName);
- 
 			persistIfNotAlready(auto);
-		
 		}
 		else {
 			auto = null;		 
@@ -98,10 +90,17 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		return auto;
     }
 	// }}
+	//{{chises Cargar auto
 	public List<Marca> choices1CargarAuto(){
 		List<Marca> items = listaMarcasActivas();		
 		return items;
 	}
+	public List<Categoria> choices4CargarAuto(){
+		List<Categoria> items = listaCategoriasActivas();		
+		return items;
+	}
+	//}}
+	//{{Listado de Marcas Activas
     protected List<Marca> listaMarcasActivas() {
         return allMatches(Marca.class, new Filter<Marca>() {
             @Override
@@ -111,11 +110,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
         });
     }
     // }}
-	public List<Categoria> choices4CargarAuto(){
-		List<Categoria> items = listaCategoriasActivas();		
-		return items;
-	}
-    protected List<Categoria> listaCategoriasActivas() {
+    //{{Listado de categorias Activas
+	protected List<Categoria> listaCategoriasActivas() {
         return allMatches(Categoria.class, new Filter<Categoria>() {
             @Override
             public boolean accept(final Categoria t) {            	          	
@@ -124,8 +120,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
         });
     }
     // }}	
-		
-	// {{ 
+	// {{ Listado de Autos Activos
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "2") 
     @Named("Listado Autos Activos")
@@ -133,8 +128,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    
    	// {{ 	
-    
-	// {{  
+   // {{  AutoComplite
 	@Hidden    
 	public List<Auto> autoComplete(final String auto) {
 		return allMatches(Auto.class, new Filter<Auto>() {
@@ -145,8 +139,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	  });				
 	}
 	// }}	
-    
-	// {{ Helpers
+    // {{ Helpers
 	protected boolean ownedByCurrentUser(final Auto t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());
 	}

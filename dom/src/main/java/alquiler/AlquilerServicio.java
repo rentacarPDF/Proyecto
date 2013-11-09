@@ -23,13 +23,11 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     @Named("Alquilar")
     @MemberOrder(sequence="1")
     public Alquiler reservar(
-                    @Named("Cliente") Cliente cliente ) {
+            @Named("Cliente") Cliente cliente ) {
     		final String ownedBy = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
             persistIfNotAlready(alquiler);
-            
             List<Disponible> disponibilidad = listaAutosReservados();
-            
             return crear(alquiler,disponibilidad,cliente,ownedBy);
     }
     @Hidden
@@ -46,7 +44,6 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setApellidoCliente(cliente.getApellido());
     			alquiler.setEstado(EstadoAlquiler.RESERVADO);
     			alquiler.setOwnedBy(userName);
-    			
     			for (Disponible disp:disponibilidad){
     				if (disp.isEstaSeleccionada()){
     					AutoPorFecha autoF=newTransientInstance(AutoPorFecha.class);
@@ -83,14 +80,12 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 		});
 	}
 	// }}
-    
-    // {{ 
+    // {{ Listado de autos reservados
 	@Hidden
     public List<Disponible> listaAutosReservados() {         
         return allMatches(QueryDefault.create(Disponible.class, "Disponibles"));
     } 
     // }}
-    
     // {{
     @Named("Listado Alquileres")
     @MemberOrder(sequence="2")

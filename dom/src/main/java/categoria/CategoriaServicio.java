@@ -24,19 +24,17 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	
 	// {{ Carga de Categorias
 	@MemberOrder(sequence="1")
-	public Categoria CargarCategoria(
+	public Categoria cargarCategoria(
 			@Named("Categoria")String categoria,
 			@Named("Cantidad de puertas")int cantPuert,
 			@Named("Cantidad de plazas")int cantPlaz,
 			@Named("Tipo de caja")Caja caja,
 			@Named("Tipo de traccion") Traccion traccion,
 			@Named("Precio de la categoria")int precio)
-	{   
-		final String ownedBy = currentUserName();
+	{   final String ownedBy = currentUserName();
 		final boolean activo= true;
 		return laCategoria(categoria,cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
 	}
-	
 	@Hidden
 	public Categoria laCategoria(
 		String cat,
@@ -61,7 +59,6 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			return categoria;
 		}
 	// }}
-	
 	// {{ Listado de Categorias Activas
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
@@ -82,8 +79,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
         });
     }
     // }}	
-    
-	// {{ Listado de Autos filtrado por Categoria
+    // {{ Listado de Autos filtrado por Categoria
     @MemberOrder(sequence="3") 
 	public List<Auto> listadoAutosPorCategoria(final Categoria lista) {
 		return allMatches(Auto.class, new Filter<Auto>() {
@@ -98,8 +94,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
     	return items;
     }    
 	// }} 
-    	
-	// {{ 
+    // {{AutoComplete 
 	@Hidden    
 	public List<Categoria> autoComplete(final String cat) {
 		return allMatches(Categoria.class, new Filter<Categoria>() {
@@ -110,7 +105,6 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	  });				
 	}
 	// }}    
-		
 	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Categoria t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());

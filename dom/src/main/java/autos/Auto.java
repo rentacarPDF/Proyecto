@@ -33,14 +33,12 @@ import marca.Marca;
 
 
 public class Auto {
-	
 	public static enum TipoCombustible {
 		NAFTA, DIESEL; 
 	}
 	public static enum Seguro{
 		LA_SEGUNDA, MAPFRE, LA_PATRONAL, LA_CAJA, ZURICH; 
 	}	
-	
 	// {{ Patente	
 	private String patente;
 	@DescribedAs("El dominio del vehiculo.")
@@ -55,7 +53,6 @@ public class Auto {
 	public void setPatente(String patente){
 		this.patente=patente; 
 	} 	
-	
 	// {{ {{ OwnedBy (property)	
 	private String ownedBy;
 	@Hidden 
@@ -95,7 +92,6 @@ public class Auto {
         this.modelo = modelo; 
     }
     // }}
-    
     // {{ Año    
     private int ano;
     @DescribedAs("El año del vehiculo.")
@@ -109,8 +105,7 @@ public class Auto {
         this.ano = ano; 
     }   
     // }}  
-    
-	// {{ Categoria
+    // {{ Categoria
 	@Persistent
 	private Categoria categoria;
 	@DescribedAs("La categoria del vehiculo.")
@@ -215,8 +210,7 @@ public class Auto {
    		this.seguro=seguro; 
    	}	
     // }}
-   	
-    // {{ Campo Activo
+   	// {{ Campo Activo
    	private boolean activo;
    	@Hidden
    	@DescribedAs("Activo")

@@ -19,7 +19,6 @@ import autos.Auto;
 
 @Named("Disponibles")
 public class DisponibleServicio extends AbstractFactoryAndRepository {
-
 	@MemberOrder(sequence = "1")
 	@Named("Entre fechas por Categoria")
 	public List<Disponible> entreFechas(
@@ -27,18 +26,14 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			@Optional
 			@Named("Fecha de devolución:") LocalDate fechaDev,
 			@Named("Categoria") Categoria categoria) {
-
 		List<Disponible> listaAutosDisponibles = new ArrayList<Disponible>();
 		final List<Auto> autos = listaAutos();
-
 		LocalDate fechaAux = fechaAlq;
 		LocalDate hastaAux = (fechaDev != null) ? fechaDev : fechaAlq;
 
 		for (int i = 0; i <= calculoDias(fechaAlq, hastaAux); i++) {
-
 			for (Auto auto : autos) {
 				Disponible disp = newTransientInstance(Disponible.class);
-
 				if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
 					AutoPorFecha autoFecha = existeAlquiler(fechaAux,
 							auto.getPatente());
@@ -63,11 +58,6 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 						listaAutosDisponibles.add(disp);
 					}
 				}
-
-				// disp.setFecha(fechaAux.toDate());
-				// persistIfNotAlready(disp);
-				// listaAutosDisponibles.add(disp);
-
 			}
 			fechaAux = fechaAlq.plusDays(i + 1);
 		}
@@ -75,6 +65,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 	}
 
 	// }}
+	//{{Categoria
 	public List<Categoria> choices2EntreFechas() {
 		List<Categoria> items = listaCategoriasActivas();
 		return items;
@@ -88,34 +79,25 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			}
 		});
 	}
-
 	// }}
-
 	// {{ Calculo de diferencia de dias entre fechas.
 	protected int calculoDias(final LocalDate a1, final LocalDate a2) {
 		long inicio = a1.toDate().getTime();
 		long fin = a2.toDate().getTime();
 		long diferencia = fin - inicio;
 		long resultado = diferencia / (24 * 60 * 60 * 1000);
-
 		return (int) resultado;
 	}
-
 	// }}
-
 	// {{ Validacion del ingreso de fechas
 	public String validateEntreFechas(LocalDate desde, LocalDate hasta,
 			Categoria categoria) {
 		if (hasta == null) {
 			return null;
 		} else {	
-			
 			LocalDate fechaActual=new LocalDate();
-			
 			if (desde.isBefore(fechaActual)) {
-				
 				return "La fecha Alquiler no puede ser menor a la fecha de Hoy";
-
 			} else {
 				if (hasta.isBefore(desde) || hasta.isEqual(desde)) {
 					return "La fecha de Alquiler debe ser menor a la fecha de Devolucion";
@@ -125,16 +107,14 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			}
 		}
 	}
-
 	// }}
+	//{{Listado de autos
 	@Programmatic
 	public List<Auto> listaAutos() {
 		return allMatches(QueryDefault.create(Auto.class, "listadoAutosActivos"));
 	}
-
 	// }}
-
-	// {{
+	// {{Existencia de alquileres
 	private AutoPorFecha existeAlquiler(final LocalDate fecha,
 			final String patente) {
 		return uniqueMatch(AutoPorFecha.class, new Filter<AutoPorFecha>() {
@@ -147,8 +127,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 	}
 
 	// }}
-
-	// {{
+	// {{Autos alquilados
 	@Hidden
 	public List<AutoPorFecha> autosAlquilados(final String patente) {
 		return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>() {

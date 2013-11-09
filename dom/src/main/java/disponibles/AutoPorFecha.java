@@ -30,7 +30,6 @@ import categoria.Categoria;
 @Audited
 
 public class AutoPorFecha {
-	
 	// {{ Identification on the UI
 	@Named("Auto")
 	public String title() {		
@@ -39,8 +38,7 @@ public class AutoPorFecha {
 		return buf.toString();	
 	}
 	// }}
-	    
-    // {{
+	// {{ Fecha
     @Named("Fecha")
     public String getFechaString() {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -55,7 +53,6 @@ public class AutoPorFecha {
             this.fecha = fecha;
     }
     // }}
-    
     // {{	
     private String auto;
     @Named("Auto")
@@ -66,7 +63,6 @@ public class AutoPorFecha {
     	this.auto=auto;
     }
     // }}
-    
     // {{
     private Categoria categoria;
     @Named("Categoria")
@@ -77,7 +73,6 @@ public class AutoPorFecha {
     	this.categoria=categoria;
     }
     // }}
-    
     // {{
     private Alquiler alquiler;
     @Named("Estado Alquiler")
@@ -88,7 +83,6 @@ public class AutoPorFecha {
     	this.alquiler=alquiler;
     }
     // }}
-    
     // {{
     private String modelo;
     @Named("Modelo")
@@ -99,7 +93,6 @@ public class AutoPorFecha {
     	this.modelo=modelo;
     }
     // }}
-    
     @SuppressWarnings("unused")
 	private DomainObjectContainer container;    
     public void injectDomainObjectContainer(final DomainObjectContainer container) {

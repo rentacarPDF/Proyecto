@@ -39,26 +39,22 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			final float precio,
 			final boolean activo,
 			final String userName) {
-		
 			Adicional adic=newTransientInstance(Adicional.class);
 			adic.setNombre(nombre);
 			adic.setDescripcion(descrip);
 			adic.setPrecio(precio);
 			adic.setActivo(activo);
 			adic.setOwnedBy(userName);
-			
 			persistIfNotAlready(adic);
-			
 			return adic;
 	}
-	
-    // {{ 
+    // {{Lista de adicionales 
     public List<Adicional> listaAdicionales() {         
         return allMatches(QueryDefault.create(Adicional.class, "listaAdicionales"));
     } 
     // }}
 	
-	// {{  
+	// {{AutoComplete  
 	@Hidden    
 	public List<Adicional> autoComplete(final String nombre) {
 		return allMatches(Adicional.class, new Filter<Adicional>() {
@@ -69,7 +65,6 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	  });				
 	}
 	// }}	
-	
 	// {{ Helpers
 	protected boolean ownedByCurrentUser(final Auto t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());

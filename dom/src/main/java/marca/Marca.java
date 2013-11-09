@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
@@ -30,7 +31,6 @@ import javax.jdo.annotations.VersionStrategy;
 
 
 public class Marca {
-	
 	// {{ Identification on the UI	
 	public String title(){
 		final TitleBuffer buf = new TitleBuffer();		
@@ -38,7 +38,6 @@ public class Marca {
 		return buf.toString(); 
 	}
 	// }}
-	
 	// {{ OwnedBy (property)
 	private String ownedBy;	
 	@Hidden
@@ -50,11 +49,11 @@ public class Marca {
 	    this.ownedBy = ownedBy; 
 	}	    
 	// }}	  
-	
 	//{{ Nombre de la Marca
 	private String nombre;
 	@DescribedAs("La marca del vehiculo.")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Nombre")
 	@MemberOrder(sequence="1")
 	public String getNombre(){
 		return nombre;
@@ -63,12 +62,11 @@ public class Marca {
 		this.nombre=nombre;
 	}
 	// }}
-	
 	// {{ Campo Activo
    	private boolean activo;
    	@Hidden
    	@DescribedAs("Activo")   	
-   	public boolean getActivo() {
+   	public boolean getActivo(){
    		return activo; 
    	}   	
    	public void setActivo(boolean activo){
@@ -79,26 +77,6 @@ public class Marca {
    		container.warnUser("Se elimino el registro");
    	}   	
    	//}}
-		
-	/*
-	//{{ Lista de Autos
-	@Persistent(mappedBy="marca")	
-	private List<Auto> listaAuto = new ArrayList<Auto>();
-	public List<Auto> getListaAuto() { 
-		return listaAuto; 
-	}
-	public void setListaAuto(List<Auto> auto) { 
-		this.listaAuto= auto; }	
-	@Hidden
-	public void agregarListaAutos(Auto auto){
-		if(auto == null || listaAuto.contains(auto)) {
-		return;
-		}		
-		auto.setMarca(this);
-		listaAuto.add(auto);
-	}	
-	// }} */
-	
 	// {{ Filtro
 	public static Filter <Marca> thoseOwnedBy(final String currentUser){
         	return new Filter<Marca>(){
@@ -109,11 +87,8 @@ public class Marca {
         };
     }
 	// }}
-	
 	// {{ injected: DomainObjectContainer
-    
     private DomainObjectContainer container;
-    
     public void setDomainObjectContainer(final DomainObjectContainer container){
         this.container = container;
     }

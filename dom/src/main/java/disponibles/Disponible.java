@@ -28,10 +28,7 @@ import alquiler.Alquiler;
 })
 @ObjectType("Disponibles")
 @Audited
-
-
 public class Disponible {
-
 	@Named("Auto")
 	// {{ Identification on the UI
 	public String title() {		
@@ -40,7 +37,6 @@ public class Disponible {
 		return buf.toString();	
 	}
 	// }}
-	    
     // {{	
     private String auto;
     @Hidden
@@ -52,7 +48,6 @@ public class Disponible {
     	this.auto=auto;
     }
     // }}
-    
     // {{
     private boolean seleccionar;    
     @Named("Seleccionada")
@@ -63,7 +58,6 @@ public class Disponible {
             this.seleccionar = seleccionar;
     }
     // }}
-    
     // {{
     @Named("Fecha")
     public String getFechaString() {
@@ -79,7 +73,6 @@ public class Disponible {
             this.fecha = fecha;
     }
     // }}
-    
     // {{
     private Categoria categoria;
     @Named("Categoria")
@@ -90,7 +83,6 @@ public class Disponible {
     	this.categoria=categoria;
     }
     // }}
-    
     // {{
     private Alquiler alquiler;
     @Named("Estado Alquiler")
@@ -101,7 +93,6 @@ public class Disponible {
     	this.alquiler=alquiler;
     }
     // }}
-    
     // {{
     @Named("Seleccionar")
     @Bulk    
@@ -118,8 +109,7 @@ public class Disponible {
     public String disableReserva() {
     return seleccionar ? "Ya esta seleccionada!" : null;
     }  
-    
-    // {{
+    // {{Modelo
     private String modelo;
     @Named("Modelo")
     public String getModeloAuto(){
@@ -129,18 +119,15 @@ public class Disponible {
     	this.modelo=modelo;
     }
     // }}
-    
     // {{ Inyeccion del Servicio
     @SuppressWarnings("unused")
 	private DisponibleServicio servicio;
     public void injectDisponiblesServicio(final DisponibleServicio serv){
     	this.servicio=serv;
     }    
-    
     // {{ injected: DomainObjectContainer 
 	@SuppressWarnings("unused")
 	private DomainObjectContainer container;
-    
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
      this.container = container;
     }

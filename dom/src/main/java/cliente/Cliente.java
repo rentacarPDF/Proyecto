@@ -22,12 +22,12 @@ import com.google.common.base.Objects;
 @AutoComplete(repository = ClienteServicio.class, action = "autoComplete")
 
 public class Cliente {
-
+     //{{ENUM tipoId Cliente
 	public static enum TipoId {
 		CUIL, CUIT;
 	}	
-	
-	@Named("Cliente")
+	//}}
+	 
 	// {{ Identification on the UI
 	public String title() {
 		final TitleBuffer buf = new TitleBuffer();
@@ -35,10 +35,8 @@ public class Cliente {
 		return buf.toString();
 	}
 	// }}
-
 	// {{ OwnedBy (property)
 	private String ownedBy;
-
 	@Hidden
 	public String getOwnedBy() {
 		return ownedBy;
@@ -47,11 +45,10 @@ public class Cliente {
 		this.ownedBy = ownedBy;
 	}
 	// }}
-
 	// {{ Nombre
 	private String nombre;
-
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Nombre")
 	@MemberOrder(sequence = "1")
 	public String getNombre() {
 		return nombre;
@@ -63,8 +60,8 @@ public class Cliente {
 
 	// {{ Apellido
 	private String apellido;
-
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("Apellido")
 	@MemberOrder(sequence = "2")
 	public String getApellido() {
 		return apellido;
@@ -73,12 +70,11 @@ public class Cliente {
 		this.apellido = apellido;
 	}
 	// }}
-
 	// {{ Tipo de Identificacion Tributaria
 	private TipoId tipo;
-
 	@DescribedAs("Señala el tipo de documento")
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("TipoId")
 	@MemberOrder(sequence = "3")
 	public TipoId getTipoId() {
 		return tipo;
@@ -87,7 +83,6 @@ public class Cliente {
 		this.tipo = tipo;
 	}
 	// }}
-
 	// {{ Numero de Identificacion Tributaria
 	private String numeroIdent;
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
@@ -99,11 +94,10 @@ public class Cliente {
 		this.numeroIdent = numeroId;
 	}
 	// }}
-	
 	// {{ Numero de telefono
 	private int numeroTel;
-
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("NumeroDeTel")
 	@MemberOrder(sequence = "5")
 	public int getNumeroTel() {
 		return numeroTel;
@@ -115,8 +109,8 @@ public class Cliente {
 	
 	// {{ Correo electronico
 	private String mail;
-
 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	@Named("mail")
 	@MemberOrder(sequence = "6")
 	public String getEmail() {
 		return mail;
@@ -125,12 +119,10 @@ public class Cliente {
 		this.mail = mail;
 	}
 	// }}	
-	
-		
 	// {{ Activo
 	private boolean activo;
-
 	@Hidden
+	@Named("Activo")
 	@MemberOrder(sequence = "9")
 	public boolean getActivo() {
 		return activo;
@@ -139,7 +131,6 @@ public class Cliente {
 		this.activo = activo;
 	}
 	// }}
-
 	// {{ Remove (action)
 	public void remove() {
 		setActivo(false);
@@ -159,7 +150,6 @@ public class Cliente {
 
 	// {{ injected: DomainObjectContainer
 	private DomainObjectContainer container;
-
 	protected DomainObjectContainer getContainer() {
 		return container;
 	}

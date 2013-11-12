@@ -11,6 +11,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
+import org.joda.time.LocalDate;
 
 import categoria.Categoria;
 import com.google.common.base.Objects;
@@ -102,6 +103,30 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		return auto;
     }
 	// }}
+	//{{Validacion de ingreso de fecha de compra
+	public String validateCargarAuto(
+			 String patente,
+			 Marca marca, 
+			 String modelo,
+			 int ano,
+			 Categoria categ, 
+			 String color,
+			 int kms, 
+			 int baul,
+			 TipoCombustible combustible,
+			 Date fecha,
+			 Seguro seguro)
+	{
+	
+			LocalDate fechaActual=new LocalDate();
+			if (fecha.getTime()> fechaActual.toDate().getTime()){
+				return "La fecha de compra no puede ser mayor al dia de hoy";
+			}else{
+				return null;
+			}
+		
+	}
+	//}}
 	//{{chises Cargar auto
 	public List<Marca> choices1CargarAuto(){
 		List<Marca> items = listaMarcasActivas();		

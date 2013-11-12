@@ -30,6 +30,11 @@ import categoria.Categoria;
 @Audited
 
 public class AutoPorFecha {
+	
+	public String iconName(){
+		return "auto";
+	}
+	
 	// {{ Identification on the UI
 	@Named("Auto")
 	public String title() {		

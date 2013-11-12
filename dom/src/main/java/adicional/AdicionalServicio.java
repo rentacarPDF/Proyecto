@@ -23,7 +23,7 @@ import com.google.common.base.Objects;
 public class AdicionalServicio extends AbstractFactoryAndRepository{
 	
 	public String iconName(){
-		return "adicional";
+		return "adicionales";
 	}
 	
 	@MemberOrder(sequence = "1") 

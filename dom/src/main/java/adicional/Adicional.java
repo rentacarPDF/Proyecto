@@ -29,7 +29,7 @@ import alquiler.Alquiler;
 public class Adicional {
     // {{ Identification on the UI
 	public String iconName(){
-		return "adicional";
+		return "adicionales";
 	}
 	@Named("Adicional")
     public String title() {		

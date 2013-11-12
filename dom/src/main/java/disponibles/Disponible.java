@@ -30,7 +30,7 @@ import alquiler.Alquiler;
 @Audited
 public class Disponible {
 	public String iconName(){
-		return "disponible";
+		return "auto";
 	}
 	@Named("Auto")
 	// {{ Identification on the UI

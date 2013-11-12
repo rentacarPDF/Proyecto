@@ -20,38 +20,39 @@
 /*
 uncomment to add a logo (in an ../images directory relative to this file)
 */
+
+
 #header {
-    height: 80px;
-    width: 180px;
-    background-image: url("../images/logo.png width="80'" height=80");
-	background-repeat: no-repeat;
-	color:rgb(246,116,0);
-	
+	height:140px;
+	background-image: url("../images/logo.png");
+	background-color: white;
+	background-position: center top;
+	entityIconAndTitlePanel a img {
+	    display: none;
+	}	
 }
-
-
 
 #header h1 {
-
-	color:rgb(246,116,0);
+	color:#279898;
+	background-color: white;
 }
 
-
+.headerContainer{
+	background:none;
+	background-color:white;
+	
+}
 
 a#header{
  text-decoration: underline;	
 }
 
-
-
 .bookmarkedPagesPanel {
-
 	display:none;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesList {
    display:none;
-
 }
 
 .bookmarkedPagesPanel .bookmarkedPageItem {
@@ -107,7 +108,6 @@ display:none;
    display:none;
 }
 
-
 .bookmarkDepth0 {
     display:none;
 }
@@ -156,10 +156,141 @@ display:none;
 	
 }
 
-div#links.a {
-	
-	color:rgb(246,116,0);	
+.links a {
+	color:#183434;
 }
 
 
 
+/**************** APPLICATION MENU **************/
+
+#applicationActions {
+    padding-left: 10px;
+    height:40px;
+    margin-left: 10px;
+}
+
+#applicationActions .menuh {
+	background-color: #279898;
+	position:relative;
+	z-index:501;
+}
+
+	#applicationActions .menuh ul.cssMenuItems {
+		line-height:30px;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh a:link, 
+	#applicationActions .cssMenuPanel .menuh a:visited, 
+	#applicationActions .cssMenuPanel .menuh a:active, 
+	#applicationActions .cssMenuPanel .menuh p {
+		background-color: transparent;
+    	color:white;
+    	text-decoration: none;
+    	text-transform:uppercase;
+    	font-size:0.9em;
+    	font-weight:bold;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li a:link, 
+	#applicationActions .cssMenuPanel .menuh li a:visited, 
+	#applicationActions .cssMenuPanel .menuh li a:active, 
+	#applicationActions .cssMenuPanel .menuh li p {
+		border-radius:4px 4px 0px 0px;
+    	-moz-border-radius:4px 4px 0px 0px;
+    	-webkit-border-radius:4px 4px 0px 0px;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li a:link, 
+	#applicationActions .cssMenuPanel .menuh li li a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li a:active, 
+	#applicationActions .cssMenuPanel .menuh li li p {
+		border-radius:0px;
+    	-moz-border-radius:0px;
+    	-webkit-border-radius:0px;
+		background-color:#279898;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:last-child p {
+		border-radius:0px 0px 4px 4px;
+		-webkit-border-radius:0px 0px 4px 4px;
+		-moz-border-radius:0px 0px 4px 4px;
+		background-color: #279898;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child p {
+		border-radius:0px 4px 0px 0px;
+		-webkit-border-radius:0px 4px 0px 0px;
+		-moz-border-radius:0px 4px 0px 0px;
+		background-color: #279898;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:link, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:visited, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:active, 
+	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child p {
+		border-radius:0px 4px 4px 4px;
+		-webkit-border-radius:0px 4px 4px 4px;
+		-moz-border-radius:0px 4px 4px 4px;
+		background-color: #279898;
+	}
+	
+	
+	#applicationActions .menuh a, 
+	#applicationActions .menuh p {
+	    border: 0px solid #00477F;
+	    padding: 0px 1em 0px 1em;
+	    background-image:none !important;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li:hover a, 
+	#applicationActions .cssMenuPanel .menuh li:hover p {
+		color: #FFFFFF;
+		background-color: #279898;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh a:hover, 
+	#applicationActions .cssMenuPanel .menuh p:hover {
+		color: #FFFFFF;
+		background-color: #279898;
+	}
+	
+	#applicationActions .cssMenuPanel .menuh li li a:hover, 
+	#applicationActions .cssMenuPanel .menuh li li p:hover {
+		color: #FFFFFF;
+		background-color: #6E9595 !important;
+	}
+	
+	#applicationActions ul.cssSubMenuItemsPanel {
+		min-width:220px;
+	}
+	
+    #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
+        color: #888;
+        background-color: #F0EFEA;
+    } 
+
+
+/**************** ELEMENTS **************/
+
+body{
+	background-color: #279898;
+}
+
+
+/* Buttons */
+.edit,
+.ok,
+.okButton {
+	background-color:#279898;
+}
+
+.cancel {
+	background-color:#279898;	
+}

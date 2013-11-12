@@ -56,7 +56,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		final List<Categoria> mismoNombre= allMatches(Categoria.class, new Filter<Categoria>(){
 			@Override
 			public boolean accept(final Categoria categoria){
-				return java.util.Objects.equals(categoria.getNombre(), cat);
+				return Objects.equal(categoria.getNombre(), cat);
 			}
 		});
 		Categoria categoria= newTransientInstance(Categoria.class);

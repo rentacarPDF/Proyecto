@@ -10,6 +10,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 
 import autos.Auto;
@@ -27,15 +28,19 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	// {{ Carga de Categorias
 	@MemberOrder(sequence="1")
 	public Categoria cargarCategoria(
+			//@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 			@Named("Categoria")String categoria,
+			@RegEx(validation = "([0-9])")
 			@Named("Cantidad de puertas")int cantPuert,
+			@RegEx(validation = "([0-9])")
 			@Named("Cantidad de plazas")int cantPlaz,
 			@Named("Tipo de caja")Caja caja,
 			@Named("Tipo de traccion") Traccion traccion,
+			@RegEx(validation = "([0-9])")
 			@Named("Precio de la categoria")int precio)
 	{   final String ownedBy = currentUserName();
 		final boolean activo= true;
-		return laCategoria(categoria,cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
+		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
 	}
 	@Hidden
 	public Categoria laCategoria(

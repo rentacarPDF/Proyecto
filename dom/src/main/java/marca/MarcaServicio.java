@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 
@@ -22,10 +23,12 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	}
 	//{{ Carga de Marcas
 	@MemberOrder(sequence = "1")
-	public Marca cargarMarca(@Named("Marca") String marca) { 
+	public Marca cargarMarca(
+			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]")
+			@Named("Marca") String marca) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
-		return laMarca(marca, activo, ownedBy); 
+		return laMarca(marca.toUpperCase(), activo, ownedBy); 
 	}
 	// }}
 	// {{	

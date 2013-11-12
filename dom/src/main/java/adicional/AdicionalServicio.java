@@ -9,6 +9,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 
@@ -26,15 +27,18 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Adicional")
-	public Adicional cargar(			
+	public Adicional cargar(
+			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 			@Named("Nombre") String nombre,
 			@Optional
 			@MultiLine
+			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 			@Named("Descripcion") String descrip,
+			@RegEx(validation = "([0-9])")
 			@Named("Precio") float precio){
 			final boolean activo=true;
 			final String ownedBy = currentUserName();
-			return adicional(nombre,descrip,precio,activo,ownedBy);
+			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,ownedBy);
 	}
 	@Hidden
 	public Adicional adicional(

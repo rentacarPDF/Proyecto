@@ -59,7 +59,7 @@ public class Categoria {
     //}}
 	//{{ Nombre de Categoria
 	private String categoria;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+	//@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Categoria")
 	@MemberOrder(sequence="1")
 	public String getNombre() {

@@ -28,7 +28,6 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 			@Named("Apellido") String apellido,
 			@Named("Tipo de Id Tributaria") TipoId tipo,
-			//@RegEx(validation = "([0-9])")
 			@Named("Numero") String numeroId,
 			@RegEx(validation = "([0-9])")
 			@Named("Numero de Telefono") int numeroTel,

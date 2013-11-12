@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 
@@ -31,19 +32,24 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	@Named("Cargar Auto")
 	public Auto cargarAuto(			
 		@Named("Patente") String patente,
-		@Named("Marca") Marca marca, 
-		@Named("Modelo") String modelo, 
+		@Named("Marca") Marca marca,
+		@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+		@Named("Modelo") String modelo,
+		@RegEx(validation = "([0-9])")
 		@Named("Año") int ano,
 		@Named("Categoria") Categoria categ,
+		@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 		@Named("Color") String color,
+		@RegEx(validation = "([0-9])")
 		@Named("Kilometraje") int kms,
+		@RegEx(validation = "([0-9])")
 		@Named("Capacidad Baul (lt)") int baul,
 		@Named("Tipo de Combustible") TipoCombustible combustible,
 		@Named("Fecha de Compra") Date fechaCompra,
 		@Named("Compañía de Seguro")Seguro seguro) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
-		return elAuto(patente,marca,modelo,ano,categ,color,kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
+		return elAuto(patente,marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
 	}
 	// }}
 	// {{

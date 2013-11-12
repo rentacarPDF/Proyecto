@@ -149,7 +149,7 @@ public class Alquiler {
 		float suma=0;
 				
 		for (AutoPorFecha auto:listaAutos){
-			suma=suma+auto.getCategoria().getPrecio();
+			//suma=suma+auto.getCategoria().getPrecio();
 		}		
 		setPrecioAlquiler(suma);
 		return this;

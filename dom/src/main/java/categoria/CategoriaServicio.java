@@ -37,7 +37,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			@Named("Tipo de caja")Caja caja,
 			@Named("Tipo de traccion") Traccion traccion,
 			@RegEx(validation = "[0-9]+")
-			@Named("Precio de la categoria")int precio)
+			@Named("Precio de la categoria")String precio)
 	{   final String ownedBy = currentUserName();
 		final boolean activo= true;
 		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
@@ -49,7 +49,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		final int cantPlaz,
 		final Caja caja,
 		final Traccion traccion,
-		final int precio,
+		final String precio,
 		final String userName,
 		boolean activo)
 		{

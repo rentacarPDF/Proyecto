@@ -65,7 +65,7 @@ public class Categoria {
 	public String getNombre() {
 		return categoria;
 	}	
-	public void setNombre(String categoria) {
+	public void setNombre(final String categoria) {
 		this.categoria=categoria;
 	}	
 	//}}
@@ -76,7 +76,7 @@ public class Categoria {
 	public int getCantPuertas() {
 		return cantPuertas;
 	}	
-	public void setCantPuertas(int cantPuertas) {
+	public void setCantPuertas(final int cantPuertas) {
 		this.cantPuertas=cantPuertas;
 	}	
     //}}
@@ -88,7 +88,7 @@ public class Categoria {
 	public int getCantPlazas() {
 		return cantPlazas;
 	}	
-	public void setCantPlazas(int cantPlazas) {
+	public void setCantPlazas(final int cantPlazas) {
 		this.cantPlazas=cantPlazas;
 	}
 	//}}
@@ -101,7 +101,7 @@ public class Categoria {
 	public Caja getCaja() {
 		return caja;
 	}	
-	public void setCaja(Caja caja) {
+	public void setCaja(final Caja caja) {
 		this.caja=caja;
 	}
 	//}}
@@ -114,21 +114,21 @@ public class Categoria {
 	public Traccion getTraccion() {
 		return traccion;
 	}	
-	public void setTraccion(Traccion traccion) {
+	public void setTraccion(final Traccion traccion) {
 		this.traccion=traccion;
 	}
 	//}}
 	
 	//{{ Precio
-	private int precio;
+	private String precio;
 	@DescribedAs("El precio de la categoria.")
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Precio")
     @MemberOrder(sequence = "6")
-	public int getPrecio() {
+	public String getPrecio() {
 		return precio;
 	}
-	public void setPrecio(int precio) {
+	public void setPrecio(final String precio) {
 		this.precio=precio;
 	}
 	//}}
@@ -140,7 +140,7 @@ public class Categoria {
     public boolean getActivo() {
    		return activo; 
    	}   	
-   	public void setActivo(boolean activo) {
+   	public void setActivo(final boolean activo) {
    		this.activo=activo; 
    	}
    	// }}   		

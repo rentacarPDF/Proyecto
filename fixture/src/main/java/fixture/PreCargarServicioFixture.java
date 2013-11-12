@@ -29,7 +29,7 @@ public class PreCargarServicioFixture extends AbstractService{
 		public PreCargarServicioFixture() {
 	        this(null);
 	    }
-	    public PreCargarServicioFixture(String ownedBy) {
+	    public PreCargarServicioFixture(final String ownedBy) {
 	        this.user = ownedBy;
 	    }
 	    public void install() {
@@ -38,7 +38,7 @@ public class PreCargarServicioFixture extends AbstractService{
 	        getContainer().flush();
 	    }	
 	    //{{installFor 
-	    private void installFor(String user) {
+	    private void installFor(final String user) {
 	    	//Se instalan Marcas
 	    	createMarcaForUser("FORD");
 	    	createMarcaForUser("FIAT");
@@ -72,17 +72,17 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	return marcaServicio.cargarMarca(marca);
 	    }
 	    //Metodo que instancia el Servicio de Categoria y se crean los objetos.
-	    private Categoria createCategoriaForUser(final String categoria, int cantPuert, int cantPlaz, Caja caja, Traccion traccion, int precio){
+	    private Categoria createCategoriaForUser(final String categoria,final int cantPuert,final int cantPlaz,final Caja caja,final Traccion traccion,final int precio){
 	    	
 	    	return categoriaServicio.cargarCategoria(categoria, cantPuert, cantPlaz, caja, traccion, precio);
 	    }
 	    //Metodo que instancia el Servicio de Adicional y se crean los objetos.
-	    private Adicional createAdicionalForUser(String nombre, String descrip, float precio){
+	    private Adicional createAdicionalForUser(final String nombre, final String descrip, final float precio){
 	    	return adicionalServicio.cargar(nombre, descrip, precio);
 	    }
 	    //Metodo que instancia el Servicio de Cliente y se crean los objetos.
 	    @SuppressWarnings("unused")
-		private Cliente createClienteForUser(String nombre, String apellido, TipoId tipo, String numeroId, int numeroTel, String mail){
+		private Cliente createClienteForUser(final String nombre, final String apellido, final TipoId tipo, final String numeroId, final int numeroTel, final String mail){
 	    	return clienteServicio.cargarCliente(nombre, apellido, tipo, numeroId, numeroTel, mail);
 	    }
 	    // /////////////////////////////////////

@@ -7,6 +7,7 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import com.google.common.base.Objects;
 
@@ -19,15 +20,21 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
-	public Cliente cargarCliente(@Named("Nombre") String nombre,
+	public Cliente cargarCliente(
+			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@Named("Nombre") String nombre,
+			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
 			@Named("Apellido") String apellido,
 			@Named("Tipo de Id Tributaria") TipoId tipo,
+			//@RegEx(validation = "([0-9])")
 			@Named("Numero") String numeroId,
+			@RegEx(validation = "([0-9])")
 			@Named("Numero de Telefono") int numeroTel,
+			@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
 			@Named("Correo Electrónico") String mail){
 		final String ownedBy = currentUserName();
 		final boolean activo = true;
-		return elCliente(nombre, apellido, tipo, numeroId, numeroTel, mail, ownedBy, activo);
+		return elCliente(nombre.toUpperCase(), apellido.toUpperCase(), tipo, numeroId, numeroTel, mail, ownedBy, activo);
 	}	
 	@Hidden
 	public Cliente elCliente(

@@ -55,10 +55,10 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	createCategoriaForUser("C", 6, 4, Caja.MANUAL, Traccion.CUATROx4, 100);
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
-	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años",30);
-	    	createAdicionalForUser("Porta Sky","Porta Sky para transportar tus equipamiento para esquiar con mayor seguridad en un viaje.",70);
-	    	createAdicionalForUser("Conductor Adicional","En el caso de que haya más de un conductor, debe abonarse un seguro adicional",80);
-	    	createAdicionalForUser("Seguro Internacional","En el caso de que se quiera salir del país, debe abonar un seguro adicional con cobertura solo en paises limítrofes",120);
+	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");
+	    	createAdicionalForUser("Porta Sky","Porta Sky para transportar tus equipamiento para esquiar con mayor seguridad en un viaje.","70");
+	    	createAdicionalForUser("Conductor Adicional","En el caso de que haya más de un conductor, debe abonarse un seguro adicional","80");
+	    	createAdicionalForUser("Seguro Internacional","En el caso de que se quiera salir del país, debe abonar un seguro adicional con cobertura solo en paises limítrofes","120");
 	    	getContainer().informUser("Se han instalado correctamente los Adicionales");
 	    	getContainer().flush();
 	    }
@@ -77,7 +77,7 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	return categoriaServicio.cargarCategoria(categoria, cantPuert, cantPlaz, caja, traccion, precio);
 	    }
 	    //Metodo que instancia el Servicio de Adicional y se crean los objetos.
-	    private Adicional createAdicionalForUser(final String nombre, final String descrip, final float precio){
+	    private Adicional createAdicionalForUser(final String nombre, final String descrip, final String precio){
 	    	return adicionalServicio.cargar(nombre, descrip, precio);
 	    }
 	    //Metodo que instancia el Servicio de Cliente y se crean los objetos.

@@ -36,7 +36,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			@MaxLength(100)
 			@Named("Descripcion") String descrip,
 			@RegEx(validation = "[0-9]+")
-			@Named("Precio") float precio){
+			@Named("Precio") String precio){
 			final boolean activo=true;
 			final String ownedBy = currentUserName();
 			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,ownedBy);
@@ -45,7 +45,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	public Adicional adicional(
 			final String nombre,
 			final String descrip,
-			final float precio,
+			final String precio,
 			final boolean activo,
 			final String userName) {
 			Adicional adic=newTransientInstance(Adicional.class);

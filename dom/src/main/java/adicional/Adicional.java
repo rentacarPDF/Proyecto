@@ -58,13 +58,13 @@ public class Adicional {
             this.descripcion = descripcion;
     }
 	
-    private float precio;
+    private String precio;
     @Named("Precio x dia")
     @MemberOrder(sequence="3")
-    public float getPrecio() {
+    public String getPrecio() {
         return precio;
     }
-    public void setPrecio(final float precio) {
+    public void setPrecio(final String precio) {
         this.precio = precio;
     }
     private Alquiler alquiler;

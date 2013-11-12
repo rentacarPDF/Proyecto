@@ -214,7 +214,7 @@ public class Alquiler {
 		float suma=0;
 		float pAdic=0;
 		for (Adicional adic:listaAdicionales){
-			suma= adic.getPrecio()*listaAutos.size();;
+			//suma= adic.getPrecio()*listaAutos.size();;
 			pAdic=pAdic+suma;
 		}
 		float total=getPrecioAlquiler()+pAdic;

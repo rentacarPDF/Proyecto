@@ -33,6 +33,11 @@ import marca.Marca;
 
 
 public class Auto {
+	
+	public String iconName(){
+		return "auto";
+	}
+	
 	public static enum TipoCombustible {
 		NAFTA, DIESEL; 
 	}

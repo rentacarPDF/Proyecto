@@ -31,6 +31,9 @@ import javax.jdo.annotations.VersionStrategy;
 
 
 public class Marca {
+	public String iconName(){
+		return "marca";
+	}
 	// {{ Identification on the UI	
 	public String title(){
 		final TitleBuffer buf = new TitleBuffer();		

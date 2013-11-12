@@ -17,7 +17,9 @@ import cliente.Cliente.TipoId;
 
 @Named("Cliente")
 public class ClienteServicio extends AbstractFactoryAndRepository {
-	
+	public String iconName(){
+		return "cliente";
+	}
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
 	public Cliente cargarCliente(

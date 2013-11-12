@@ -45,6 +45,9 @@ import disponibles.DisponibleServicio;
 @Audited 
 @ObjectType("ALQUILER")
 public class Alquiler {
+	public String iconName(){
+		return "alquiler";
+	}
 	public static enum EstadoAlquiler{
 		RESERVADO, EN_PROCESO, FINALIZADO, CERRAR;
 	}	

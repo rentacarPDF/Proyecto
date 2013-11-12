@@ -29,6 +29,9 @@ import alquiler.Alquiler;
 @ObjectType("Disponibles")
 @Audited
 public class Disponible {
+	public String iconName(){
+		return "disponible";
+	}
 	@Named("Auto")
 	// {{ Identification on the UI
 	public String title() {		

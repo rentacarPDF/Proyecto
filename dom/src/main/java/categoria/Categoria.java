@@ -26,6 +26,9 @@ import com.google.common.base.Objects;
 @AutoComplete(repository=CategoriaServicio.class, action="autoComplete")
 
 public class Categoria {
+	public String iconName(){
+		return "categoria";
+	}
 	//{{ENUM para tipo de caja
 	public static enum Caja {
     	AUTOMATICA, MANUAL;

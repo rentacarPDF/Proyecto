@@ -21,6 +21,11 @@ import marca.Marca;
 
 @Named("Flota")
 public class AutoServicio extends AbstractFactoryAndRepository {
+
+	public String iconName(){
+		return "auto";
+	}
+	
 	// {{ 
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Auto")

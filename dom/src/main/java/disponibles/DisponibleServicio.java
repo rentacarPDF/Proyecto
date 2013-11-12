@@ -19,6 +19,9 @@ import autos.Auto;
 
 @Named("Disponibles")
 public class DisponibleServicio extends AbstractFactoryAndRepository {
+	public String iconName(){
+		return "disponible";
+	}
 	@MemberOrder(sequence = "1")
 	@Named("Entre fechas por Categoria")
 	public List<Disponible> entreFechas(

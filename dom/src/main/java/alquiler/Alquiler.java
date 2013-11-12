@@ -1,5 +1,6 @@
 package alquiler;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -131,27 +132,31 @@ public class Alquiler {
     }
     //}}
     // {{ Precio 
-	private float precio;
+	private String  precio;
     @Named("Precio")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos del Alquiler",sequence="3")
-	public float getPrecioAlquiler(){
+	public String getPrecioAlquiler(){
 		return precio;
 	}
-	public void setPrecioAlquiler(final float precio){
+	public void setPrecioAlquiler(final String precio){
 		this.precio=precio;
 	}	
 	@Hidden
 	//{{ Calculo para el sub-Total
 	public Alquiler calculoSubTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
-		float suma=0;
-				
+		
+		BigDecimal sum=new BigDecimal("0");		
+		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
 		for (AutoPorFecha auto:listaAutos){
+			BigDecimal aux=new BigDecimal(auto.getCategoria().getPrecio());
+			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
+			sum=sum.add(aux);
 			//suma=suma+auto.getCategoria().getPrecio();
 		}		
-		setPrecioAlquiler(suma);
+		setPrecioAlquiler(sum.toString());
 		return this;
 	}	
 	// }}
@@ -196,30 +201,48 @@ public class Alquiler {
 	}	
 	// }}
 	// {{ Precio 
-	private float precioTot;
+	private String precioTot;
     @Named("Precio Total")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="3")
-	public float getPrecioTotal(){
+	public String getPrecioTotal(){
 		return precioTot;
 	}
-	public void setPrecioTotal(final float precioTot){
+	public void setPrecioTotal(final String precioTot){
 		this.precioTot=precioTot;
 	}	
 	@Hidden
 	public Alquiler calculoTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());
 		List<Adicional> listaAdicionales=Lists.newArrayList(getAdicionales());
-		float suma=0;
-		float pAdic=0;
+		
+		BigDecimal suma=new BigDecimal("0");		
+		suma.setScale(5, BigDecimal.ROUND_HALF_UP);
+		
+		BigDecimal aux=new BigDecimal("0");		
+		aux.setScale(5, BigDecimal.ROUND_HALF_UP);
+		
+		BigDecimal lista=new BigDecimal(listaAutos.size());		
+		lista.setScale(5, BigDecimal.ROUND_HALF_UP);
+		
 		for (Adicional adic:listaAdicionales){
-			//suma= adic.getPrecio()*listaAutos.size();;
-			pAdic=pAdic+suma;
+			BigDecimal pAdic=new BigDecimal(adic.getPrecio());		
+			pAdic.setScale(5, BigDecimal.ROUND_HALF_UP);			
+			
+			aux= pAdic.multiply(lista);			
+			suma=suma.add(aux);
 		}
-		float total=getPrecioAlquiler()+pAdic;
-		setPrecioTotal(total);
-		return this;
+		BigDecimal total=new BigDecimal(listaAutos.size());		
+		total.setScale(5, BigDecimal.ROUND_HALF_UP);
+		
+		BigDecimal precioAlq=new BigDecimal(getPrecioAlquiler());		
+		precioAlq.setScale(5, BigDecimal.ROUND_HALF_UP);
+		
+		total= precioAlq.add(suma);
+		setPrecioTotal(total.toString());
+		
+		return this;		
 	}	
 	// }}	
 	// {{ Lista de Autos 	

@@ -28,15 +28,15 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	// {{ Carga de Categorias
 	@MemberOrder(sequence="1")
 	public Categoria cargarCategoria(
-			//@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@RegEx(validation="[A-Za-z]+")
 			@Named("Categoria")String categoria,
-			@RegEx(validation = "([0-9])")
+			@RegEx(validation = "[0-9]+")
 			@Named("Cantidad de puertas")int cantPuert,
-			@RegEx(validation = "([0-9])")
+			@RegEx(validation = "[0-9]+")
 			@Named("Cantidad de plazas")int cantPlaz,
 			@Named("Tipo de caja")Caja caja,
 			@Named("Tipo de traccion") Traccion traccion,
-			@RegEx(validation = "([0-9])")
+			@RegEx(validation = "[0-9]+")
 			@Named("Precio de la categoria")int precio)
 	{   final String ownedBy = currentUserName();
 		final boolean activo= true;

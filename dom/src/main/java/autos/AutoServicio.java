@@ -30,26 +30,27 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	// {{ 
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Auto")
-	public Auto cargarAuto(			
+	public Auto cargarAuto(
+		@RegEx(validation="[A-Za-z]{3}\\d{3}")
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca,
-		@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+		@RegEx(validation="[A-Za-z]+")
 		@Named("Modelo") String modelo,
-		@RegEx(validation = "([0-9])")
+		@RegEx(validation = "[0-9]+")
 		@Named("Año") int ano,
 		@Named("Categoria") Categoria categ,
-		@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+		@RegEx(validation="[A-Za-z]+")
 		@Named("Color") String color,
-		@RegEx(validation = "([0-9])")
+		@RegEx(validation = "[0-9]+")
 		@Named("Kilometraje") int kms,
-		@RegEx(validation = "([0-9])")
+		@RegEx(validation = "[0-9]+")
 		@Named("Capacidad Baul (lt)") int baul,
 		@Named("Tipo de Combustible") TipoCombustible combustible,
 		@Named("Fecha de Compra") Date fechaCompra,
 		@Named("Compañía de Seguro")Seguro seguro) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();
-		return elAuto(patente,marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
+		return elAuto(patente.toUpperCase(),marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
 	}
 	// }}
 	// {{
@@ -96,7 +97,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		}
 		else {
 			auto = null;		 
-			getContainer().warnUser("YA SE ENCUENTRA ESTE AUTO");
+			getContainer().warnUser("EN EL SISTEMA YA SE ENCUENTRA UN AUTO CON ESTE DOMINIO");
 		}		
 		return auto;
     }

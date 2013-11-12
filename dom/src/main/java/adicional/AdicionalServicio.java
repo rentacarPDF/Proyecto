@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -28,13 +29,13 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Adicional")
 	public Adicional cargar(
-			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@RegEx(validation="[A-Za-z]+")
 			@Named("Nombre") String nombre,
 			@Optional
 			@MultiLine
-			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@MaxLength(100)
 			@Named("Descripcion") String descrip,
-			@RegEx(validation = "([0-9])")
+			@RegEx(validation = "[0-9]+")
 			@Named("Precio") float precio){
 			final boolean activo=true;
 			final String ownedBy = currentUserName();

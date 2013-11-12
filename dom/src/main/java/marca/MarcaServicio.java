@@ -24,7 +24,7 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	//{{ Carga de Marcas
 	@MemberOrder(sequence = "1")
 	public Marca cargarMarca(
-			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]")
+			@RegEx(validation = "[A-Za-z]+")
 			@Named("Marca") String marca) { 
 		final boolean activo=true;
 		final String ownedBy = currentUserName();

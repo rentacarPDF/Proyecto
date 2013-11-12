@@ -23,13 +23,14 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
 	public Cliente cargarCliente(
-			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@RegEx(validation = "[A-Za-z]+")
 			@Named("Nombre") String nombre,
-			@RegEx(validation = "(\\w[@&:\\-\\,\\.\\+ \\w])+[A-Za-z]+")
+			@RegEx(validation="[A-Za-z]+")
 			@Named("Apellido") String apellido,
 			@Named("Tipo de Id Tributaria") TipoId tipo,
+			@RegEx(validation="\\d{2}-\\d{7,8}-\\d{1,2}")
 			@Named("Numero") String numeroId,
-			@RegEx(validation = "([0-9])")
+			@RegEx(validation = "[0-9]+")
 			@Named("Numero de Telefono") int numeroTel,
 			@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
 			@Named("Correo Electrónico") String mail){

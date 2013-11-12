@@ -44,16 +44,25 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	}
 	@Hidden
 	public Categoria laCategoria(
-		String cat,
-		int cantPuert,
-		int cantPlaz,
-		Caja caja,
-		Traccion traccion,
-		int precio,
-		String userName,
+		final String cat,
+		final int cantPuert,
+		final int cantPlaz,
+		final Caja caja,
+		final Traccion traccion,
+		final int precio,
+		final String userName,
 		boolean activo)
 		{
-			final Categoria categoria= newTransientInstance(Categoria.class);
+		final List<Categoria> mismoNombre= allMatches(Categoria.class, new Filter<Categoria>(){
+			@Override
+			public boolean accept(final Categoria categoria){
+				return java.util.Objects.equals(categoria.getNombre(), cat);
+			}
+		});
+		Categoria categoria= newTransientInstance(Categoria.class);
+		if(mismoNombre.size()==0){
+			
+		
 			categoria.setNombre(cat);
 			categoria.setCantPuertas(cantPuert);
 			categoria.setCantPlazas(cantPlaz);
@@ -63,7 +72,14 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			categoria.setOwnedBy(userName);
 			categoria.setActivo(true);
 			persist(categoria);
-			return categoria;
+		}
+		else
+		{
+			categoria=null;
+			getContainer().warnUser("EN EL SISTEMA YA SE ENCUENTA UNA CATEGORIA CON ESE NOMBRE");
+			
+		}
+		return categoria;
 		}
 	// }}
 	// {{ Listado de Categorias Activas

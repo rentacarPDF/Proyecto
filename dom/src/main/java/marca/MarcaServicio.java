@@ -34,15 +34,27 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	// {{	
 	@Hidden // for use by fixtures
 	public Marca laMarca(
-		String marca,
-		boolean activo,
-		String userName) {
-	final Marca aux = newTransientInstance(Marca.class);
+		final String marca,
+		final boolean activo,
+		final String userName) {
+		final List<Marca> mismaCategoria= allMatches(Marca.class,new Filter<Marca>(){
+			@Override
+			public boolean accept(final Marca marc){
+				return Objects.equal(marc.getNombre(), marca);
+			}
+		});
+		Marca aux = newTransientInstance(Marca.class);
+		if(mismaCategoria.size()==0)
+		{
 		aux.setNombre(marca);
 		aux.setActivo(activo);
 		aux.setOwnedBy(userName);
-		
 		persist(aux);
+		}
+		else{
+			aux = null;
+			getContainer().warnUser("EN EL SISTEMA YA SE ENCUENTRA UNA MARCA CON ESE NOMBRE");
+		}
 		return aux;
 	}
 	// }}	

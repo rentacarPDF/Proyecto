@@ -21,7 +21,9 @@ import categoria.Categoria.Traccion;
 
 @Named("Categoria")
 public class CategoriaServicio extends AbstractFactoryAndRepository {
-	
+	public String iconName(){
+		return "categoria";
+	}	
 	// {{ Carga de Categorias
 	@MemberOrder(sequence="1")
 	public Categoria cargarCategoria(

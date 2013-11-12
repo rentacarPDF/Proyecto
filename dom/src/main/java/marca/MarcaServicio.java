@@ -17,6 +17,9 @@ import autos.Auto;
 
 @Named("Marca")
 public class MarcaServicio extends AbstractFactoryAndRepository {
+	public String iconName(){
+		return "marca";
+	}
 	//{{ Carga de Marcas
 	@MemberOrder(sequence = "1")
 	public Marca cargarMarca(@Named("Marca") String marca) { 

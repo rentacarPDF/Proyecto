@@ -22,6 +22,9 @@ import com.google.common.base.Objects;
 @AutoComplete(repository = ClienteServicio.class, action = "autoComplete")
 
 public class Cliente {
+	public String iconName(){
+		return "cliente";
+	}
      //{{ENUM tipoId Cliente
 	public static enum TipoId {
 		CUIL, CUIT;

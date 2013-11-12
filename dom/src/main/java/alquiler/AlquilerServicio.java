@@ -20,6 +20,9 @@ import disponibles.Disponible;
 @Named("Alquileres")
 public class AlquilerServicio extends AbstractFactoryAndRepository{
 
+	public String iconName(){
+		return "alquiler";
+	}
     @Named("Alquilar")
     @MemberOrder(sequence="1")
     public Alquiler reservar(

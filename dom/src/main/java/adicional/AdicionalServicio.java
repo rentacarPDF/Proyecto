@@ -19,7 +19,11 @@ import com.google.common.base.Objects;
 
 @Named("Adicionales")
 public class AdicionalServicio extends AbstractFactoryAndRepository{
-			
+	
+	public String iconName(){
+		return "adicional";
+	}
+	
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Adicional")
 	public Adicional cargar(			

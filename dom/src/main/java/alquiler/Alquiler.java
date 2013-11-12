@@ -45,8 +45,27 @@ import disponibles.DisponibleServicio;
 @Audited 
 @ObjectType("ALQUILER")
 public class Alquiler {
+	
 	public String iconName(){
-		return "alquiler";
+		
+		if(getEstado() == EstadoAlquiler.CERRAR){
+			return "cerrado";
+		}else {
+			if(getEstado() == EstadoAlquiler.EN_PROCESO){
+				return "enproceso";
+			}else{
+				if(getEstado() == EstadoAlquiler.FINALIZADO){
+					return "finalizado";
+				}else
+				{
+					if(getEstado() == EstadoAlquiler.RESERVADO){
+						return "reservado";
+					}else{
+						return "alquiler";
+					}
+				}
+			}
+		} 
 	}
 	public static enum EstadoAlquiler{
 		RESERVADO, EN_PROCESO, FINALIZADO, CERRAR;

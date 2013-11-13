@@ -421,7 +421,6 @@ public class Alquiler {
         }
         else return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
     }
-    @Named("Estado")
     @MemberOrder(name="Estado",sequence="3")
 	public Alquiler finalizado(){
 		setEstado(EstadoAlquiler.FINALIZADO);

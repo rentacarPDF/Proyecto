@@ -397,6 +397,14 @@ public class Alquiler {
 		container.informUser("Alquiler número: "+getNumero()+" a sido borrado");
         container.removeIfNotAlready(this);		
 	}
+	public String disableBorrarAlquiler(){
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
+			return null;
+		}
+		else {
+			return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede borrar":"El Alquiler esta CERRADO no se puede borrar";
+		}
+	}
 	// }}
     	
 	// {{ {{ OwnedBy (property)	

@@ -8,6 +8,7 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -60,6 +61,7 @@ public class AutoPorFecha {
     // }}
     // {{	
     private String auto;
+    @Disabled
     @Named("Auto")
     public String getPatente(){
     	return auto;
@@ -70,6 +72,7 @@ public class AutoPorFecha {
     // }}
     // {{
     private Categoria categoria;
+    @Disabled
     @Named("Categoria")
     public Categoria getCategoria(){
     	return categoria;
@@ -90,6 +93,7 @@ public class AutoPorFecha {
     // }}
     // {{
     private String modelo;
+    @Disabled
     @Named("Modelo")
     public String getModeloAuto(){
     	return modelo;

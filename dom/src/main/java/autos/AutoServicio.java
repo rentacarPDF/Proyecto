@@ -35,7 +35,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@RegEx(validation="[A-Za-z]{3}\\d{3}")
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca,
-		@RegEx(validation="[A-Za-z]+")
+		@RegEx(validation="[A-Za-z^Nñ]+")
 		@Named("Modelo") String modelo,
 		@RegEx(validation = "[0-9]+")
 		@Named("Año") int ano,

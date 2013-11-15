@@ -8,6 +8,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.filter.Filter;
 
+import categoria.Categoria;
 import cliente.Cliente;
 
 import alquiler.Alquiler.EstadoAlquiler;
@@ -39,4 +40,12 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 		});
 	 }
 	//}}
+	public List<AutoPorFecha> historialPorCategoria(final Categoria categoria) 
+	 { return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
+		 @Override 
+		 public boolean accept(final AutoPorFecha auto) 
+		 {  return auto.getCategoria().equals(categoria) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO;  
+		 }
+		});
+	 }
 }

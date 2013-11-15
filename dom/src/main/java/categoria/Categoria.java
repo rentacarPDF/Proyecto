@@ -9,7 +9,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.util.TitleBuffer;
 
@@ -59,7 +58,6 @@ public class Categoria {
     //}}
 	//{{ Nombre de Categoria
 	private String categoria;
-	//@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Categoria")
 	@MemberOrder(sequence="1")
 	public String getNombre() {
@@ -70,8 +68,7 @@ public class Categoria {
 	}	
 	//}}
 	//{{ Cantidad de puertas
-    private int cantPuertas ;	
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+    private int cantPuertas ;
 	@MemberOrder(sequence="2")
 	public int getCantPuertas() {
 		return cantPuertas;
@@ -82,7 +79,6 @@ public class Categoria {
     //}}
 	//{{ Cantidad de Plazas
 	private int cantPlazas ;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("CantidadDePLazas")
 	@MemberOrder(sequence="3")
 	public int getCantPlazas() {
@@ -95,7 +91,6 @@ public class Categoria {
 	//{{ Caja
 	private Caja caja;
 	@DescribedAs("Señala tipo de caja del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Caja")
 	@MemberOrder(sequence="4")
 	public Caja getCaja() {
@@ -108,7 +103,6 @@ public class Categoria {
 	//{{ Traccion
 	private Traccion traccion;
 	@DescribedAs("Señala tipo de traccion del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Traccion")
 	@MemberOrder(sequence="5")	
 	public Traccion getTraccion() {
@@ -122,7 +116,6 @@ public class Categoria {
 	//{{ Precio
 	private String precio;
 	@DescribedAs("El precio de la categoria.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Precio")
     @MemberOrder(sequence = "6")
 	public String getPrecio() {

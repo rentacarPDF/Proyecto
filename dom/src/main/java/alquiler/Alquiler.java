@@ -22,7 +22,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.MemberGroups;
 
@@ -361,7 +360,6 @@ public class Alquiler {
 	// {{ Nombre Cliente
 	private String nombre;
 	@Disabled
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Nombre")
 	@MemberOrder(name="Cliente",sequence="2")	
 	public String getNombreCliente() {
@@ -375,7 +373,6 @@ public class Alquiler {
 	// {{ Apellido Cliente
 	private String apellido;
 	@Disabled
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Apellido")
 	@MemberOrder(name="Cliente",sequence="3")	
 	public String getApellidoCliente() {
@@ -406,7 +403,6 @@ public class Alquiler {
 		}
 	}
 	// }}
-    	
 	// {{ {{ OwnedBy (property)	
 	private String ownedBy;
 	@Hidden 

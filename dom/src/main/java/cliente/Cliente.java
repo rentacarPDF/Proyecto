@@ -9,7 +9,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.util.TitleBuffer;
 import com.google.common.base.Objects;
@@ -50,7 +49,6 @@ public class Cliente {
 	// }}
 	// {{ Nombre
 	private String nombre;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Nombre")
 	@MemberOrder(sequence = "1")
 	public String getNombre() {
@@ -63,7 +61,6 @@ public class Cliente {
 
 	// {{ Apellido
 	private String apellido;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Apellido")
 	@MemberOrder(sequence = "2")
 	public String getApellido() {
@@ -76,7 +73,6 @@ public class Cliente {
 	// {{ Tipo de Identificacion Tributaria
 	private TipoId tipo;
 	@DescribedAs("Señala el tipo de documento")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("TipoId")
 	@MemberOrder(sequence = "3")
 	public TipoId getTipoId() {
@@ -88,7 +84,6 @@ public class Cliente {
 	// }}
 	// {{ Numero de Identificacion Tributaria
 	private String numeroIdent;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@MemberOrder(sequence = "4")
 	public String getNumeroIdent() {
 		return numeroIdent;
@@ -99,7 +94,6 @@ public class Cliente {
 	// }}
 	// {{ Numero de telefono
 	private int numeroTel;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("NumeroDeTel")
 	@MemberOrder(sequence = "5")
 	public int getNumeroTel() {
@@ -112,7 +106,6 @@ public class Cliente {
 	
 	// {{ Correo electronico
 	private String mail;
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("mail")
 	@MemberOrder(sequence = "6")
 	public String getEmail() {

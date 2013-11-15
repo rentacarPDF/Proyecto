@@ -12,7 +12,6 @@ import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.annotation.Named;
@@ -46,8 +45,7 @@ public class Auto {
 	}	
 	// {{ Patente	
 	private String patente;
-	@DescribedAs("El dominio del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") // words, spaces and selected punctuation	
+	@DescribedAs("El dominio del vehiculo.")	
 	@MemberOrder(sequence="1")
 	@Title
 	@Hidden
@@ -73,7 +71,6 @@ public class Auto {
 	@Persistent
 	private Marca marca;
 	@DescribedAs("La marca del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@MemberOrder(sequence="2")	
 	@Named("Marca")
 	public Marca getMarca() {
@@ -83,11 +80,9 @@ public class Auto {
 		this.marca=marca;
 	}	
 	// }}
-	
 	// {{ Modelo
 	private String modelo;
     @DescribedAs("El modelo del vehiculo.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "3")
     @Named("Modelo")
 	public String getModelo(){
@@ -100,7 +95,6 @@ public class Auto {
     // {{ Año    
     private int ano;
     @DescribedAs("El año del vehiculo.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "4")
     @Named("Año")
     public int getAno() {
@@ -114,7 +108,6 @@ public class Auto {
 	@Persistent
 	private Categoria categoria;
 	@DescribedAs("La categoria del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@MemberOrder(sequence="5")	
 	@Named("Categoria")
 	public Categoria getCategoria() {
@@ -124,11 +117,9 @@ public class Auto {
 		this.categoria=categoria;
 	}	
 	// }}
-    
     // {{ Color
     private String color;
     @DescribedAs("El color del vehiculo.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "6")
     @Named("Color")
     public String getColor() {
@@ -137,12 +128,10 @@ public class Auto {
     public void setColor(final String color) {
         this.color = color; 
     }    
-    // }}
-    
+    // }} 
     // {{ Kilometraje    
     private int kms;
     @DescribedAs("El kilometraje del vehiculo.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "7")
     @Named("Kilometraje")
     public int getKilometraje() {
@@ -152,11 +141,9 @@ public class Auto {
         this.kms = kms; 
     }    
     // }}
-    
     // {{ Capacidad del Baul
     private int baul;
     @DescribedAs("La capacidad del baul del vehiculo.")
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @MemberOrder(sequence = "8")
     @Named("Capacidad Baul (lts)")
     public int getCapacidadBaul() {
@@ -170,7 +157,6 @@ public class Auto {
     // {{ Tipo de Combustible
  	private TipoCombustible combustible;
  	@DescribedAs("El tipo de combustible del vehiculo.")
- 	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
  	@MemberOrder(sequence="9")
  	@Named("Tipo Combustible")
  	public TipoCombustible getTipoCombustible(){
@@ -180,7 +166,6 @@ public class Auto {
  		this.combustible=combustible; 
  	}  	
  	// }}
-  	
   	// {{ Fecha de Compra del vehiculo
     @Named("Fecha Compra")
     public String getFechaString() {
@@ -201,11 +186,9 @@ public class Auto {
         setFechaCompra(null); 
     }  
     // }}
-    
     // {{ Seguro del vehiculo
    	private Seguro seguro;
    	@DescribedAs("Señala el seguro del vehiculo.")
-   	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
    	@MemberOrder(sequence="11")
     @Named("Compañia Seguro")
    	public Seguro getSeguro() {

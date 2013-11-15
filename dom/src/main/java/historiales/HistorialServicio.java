@@ -17,6 +17,9 @@ import disponibles.AutoPorFecha;
 
 @Named("Historial")
 public class HistorialServicio extends AbstractFactoryAndRepository {
+	public String iconName(){
+		return "historial";
+	}
 	//Historial de autos alquilados
 	//{{
 	@MemberOrder(sequence = "1")
@@ -25,7 +28,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
 		 { 
-			 return auto.getPatente().contains(patente.getPatente()) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO; //return auto.getPatente().equals(patente); } }); } 
+			 return auto.getPatente().contains(patente.getPatente()) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO; 
 		 }
 		});
 	 }

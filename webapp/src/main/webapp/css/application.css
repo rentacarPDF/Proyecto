@@ -24,9 +24,6 @@ uncomment to add a logo (in an ../images directory relative to this file)
 
 #header {
 	height:140px;
-	background-image: url("../images/logo.png");
-	background-color: white;
-	background-position: center top;
 	entityIconAndTitlePanel a img {
 	    display: none;
 	}	
@@ -39,8 +36,10 @@ uncomment to add a logo (in an ../images directory relative to this file)
 
 .headerContainer{
 	background:none;
-	background-color:white;
-	
+	background-image: url("../images/logo.png");
+    background-repeat: no-repeat;
+    background-position: center top;
+	background-color:white;	
 }
 
 a#header{

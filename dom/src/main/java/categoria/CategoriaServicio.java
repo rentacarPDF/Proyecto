@@ -86,7 +86,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     @NotInServiceMenu
-    public List<Categoria> CategoriaActivos() {
+    public List<Categoria> categoriaActivos() {
         List<Categoria> items = listaCategorias();
         if(items.isEmpty()) {
             getContainer().informUser("No hay categorias activas :-(");

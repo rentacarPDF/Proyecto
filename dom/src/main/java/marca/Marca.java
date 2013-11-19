@@ -74,7 +74,8 @@ public class Marca {
    	}   	
    	public void setActivo(boolean activo){
    		this.activo=activo; 
-   	}   	
+   	}  
+   	@Named("Borrar")
    	public void remove(){
    		setActivo(false);   
    		container.warnUser("Se elimino el registro");

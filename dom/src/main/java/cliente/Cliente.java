@@ -135,6 +135,7 @@ public class Cliente {
 	}
 	// }}
 	// {{ Remove (action)
+	@Named("Borrar")
 	public void remove() {
 		setActivo(false);
 	}

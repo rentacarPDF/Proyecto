@@ -145,6 +145,7 @@ public class Categoria {
    	}
    	// }}   		
     // {{ Remove (action)
+   	@Named("Borrar")
     public void remove() {
         setActivo(false);
 	}

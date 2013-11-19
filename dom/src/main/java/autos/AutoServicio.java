@@ -35,7 +35,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@RegEx(validation="[A-Za-z]{3}\\d{3}")
 		@Named("Patente") String patente,
 		@Named("Marca") Marca marca,
-		@RegEx(validation="[A-Za-z]+")
+		@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 		@Named("Modelo") String modelo,
 		@RegEx(validation = "[0-9]+")
 		@Named("Año") int ano,
@@ -164,8 +164,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    
-   	// {{ 	
-   // {{  AutoComplite
+   	// }}	
+    // {{  AutoComplite
 	@Hidden    
 	public List<Auto> autoComplete(final String auto) {
 		return allMatches(Auto.class, new Filter<Auto>() {

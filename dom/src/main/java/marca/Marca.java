@@ -10,7 +10,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.util.TitleBuffer;
 
@@ -55,7 +54,6 @@ public class Marca {
 	//{{ Nombre de la Marca
 	private String nombre;
 	@DescribedAs("La marca del vehiculo.")
-	@RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
 	@Named("Nombre")
 	@MemberOrder(sequence="1")
 	public String getNombre(){

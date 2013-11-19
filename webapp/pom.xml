@@ -277,13 +277,13 @@
 			<artifactId>danhaywood-isis-wicket-excel</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		<!-- 
+	
 		<dependency>
 			<groupId>com.danhaywood.isis.wicket</groupId>
 			<artifactId>danhaywood-isis-wicket-fullcalendar</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		-->
+		
 	</dependencies>
 
 </project>

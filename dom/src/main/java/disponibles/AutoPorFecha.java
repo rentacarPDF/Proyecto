@@ -1,7 +1,5 @@
 package disponibles;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -13,6 +11,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.joda.time.LocalDate;
 
 import alquiler.Alquiler;
 import categoria.Categoria;
@@ -45,17 +44,19 @@ public class AutoPorFecha {
 	}
 	// }}
 	// {{ Fecha
+	/*
     @Named("Fecha")
     public String getFechaString() {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         return formato.format(getFecha());
     }
-    private Date fecha;
+    */
+    private LocalDate fecha;
     @Hidden
-    public Date getFecha() {
+    public LocalDate getFecha() {
             return fecha;
     }
-    public void setFecha(final Date fecha) {
+    public void setFecha(final LocalDate fecha) {
             this.fecha = fecha;
     }
     // }}

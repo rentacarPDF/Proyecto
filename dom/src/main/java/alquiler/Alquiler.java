@@ -48,7 +48,7 @@ public class Alquiler {
 	
 	public String iconName(){
 		
-		if(getEstado() == EstadoAlquiler.CERRAR){
+		if(getEstado() == EstadoAlquiler.CERRADO){
 			return "cerrado";
 		}else {
 			if(getEstado() == EstadoAlquiler.EN_PROCESO){
@@ -68,7 +68,7 @@ public class Alquiler {
 		} 
 	}
 	public static enum EstadoAlquiler{
-		RESERVADO, EN_PROCESO, FINALIZADO, CERRAR;
+		RESERVADO, EN_PROCESO, FINALIZADO, CERRADO;
 	}	
 	public static enum TipoPago{
 		EFECTIVO, CHEQUE, TARJETA_CREDITO, TARJETA_DEBITO;
@@ -439,7 +439,7 @@ public class Alquiler {
     
 	@MemberOrder(name="Estado",sequence="4")
 	public Alquiler cerrar(){
-		setEstado(EstadoAlquiler.CERRAR);
+		setEstado(EstadoAlquiler.CERRADO);
 		return this;
 	}
     //{{Deshabilitacion de estado cerrar

@@ -23,7 +23,11 @@ import estadistica.Estadistica.Mes;
 
 @Named("Estadisticas")
 public class EstadisticaServicio extends AbstractFactoryAndRepository {
-
+	
+	public String iconName(){
+		return "estadistica";
+	}	
+	
 	@Named("Consulta")
 	public List<Estadistica> estadistica(
 			@Named("Año") String ano,

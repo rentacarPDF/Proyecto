@@ -32,7 +32,7 @@ public class Estadistica {
 		JULIO, AGOSTO, SEPTIEMBRE, OCTUBRE, NOVIEMBRE, DICIEMBRE;
 	}	
 	public String iconName(){
-		return null;
+		return "estadistica";
 	}	
 	// {{ Identification on the UI
 	@Named("Estadistica")

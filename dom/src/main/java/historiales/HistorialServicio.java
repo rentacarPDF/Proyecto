@@ -28,7 +28,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
 		 { 
-			 return auto.getPatente().contains(patente.getPatente()) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO; 
+			 return auto.getPatente().contains(patente.getPatente()) && auto.getAlquiler().getEstado()==EstadoAlquiler.CERRADO; 
 		 }
 		});
 	 }
@@ -38,7 +38,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 { return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
-		 {  return auto.getAlquiler().getClienteId().equals(cliente) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO;  
+		 {  return auto.getAlquiler().getClienteId().equals(cliente) && auto.getAlquiler().getEstado()==EstadoAlquiler.CERRADO;  
 		 }
 		});
 	 }
@@ -47,7 +47,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 { return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
-		 {  return auto.getCategoria().equals(categoria) && auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO;  
+		 {  return auto.getCategoria().equals(categoria) && auto.getAlquiler().getEstado()==EstadoAlquiler.CERRADO;  
 		 }
 		});
 	 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -28,7 +29,8 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		return "estadistica";
 	}	
 	
-	@Named("Consulta")
+	@Named("Consulta Por Periodo")
+    @MemberOrder(sequence="1") 
 	public List<Estadistica> estadistica(
 			@Named("Año") String ano,
 			@Optional
@@ -49,63 +51,61 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 			LocalDate hastaAux = diaFin(mes, ano);
 			LocalDate fechaAux=fechaInicio;
 			
-			for (Auto auto : autos){				
-			Estadistica est = newTransientInstance(Estadistica.class);
 			if (categoria==null){
-				for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
-					int suma=0;				
-						if(auto.getPatente()!=est.getPatente()){
-							est.setPatente(auto.getPatente());
-							est.setModeloAuto(auto.getModelo());
-							est.setCategoria(auto.getCategoria());
-						}
-						if (existeAlquiler(fechaAux, est.getPatente()) != null) {
+				for (Auto auto : autos){				
+					Estadistica est = newTransientInstance(Estadistica.class);
+					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
+						int suma=0;				
+							if(auto.getPatente()!=est.getPatente()){
+								est.setPatente(auto.getPatente());
+								est.setModeloAuto(auto.getModelo());
+								//est.setCategoria(auto.getCategoria());
+								est.setMes(mes.toString());
+							}
+							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
+								suma=est.getCantAlq();
+								suma=suma+1;
+								est.setCantAlq(suma);					
+							}		
+							fechaAux = fechaInicio.plusDays(i + 1);						
+					}
+					persistIfNotAlready(est);
+					listaEstadistica.add(est);
+				}
+			}else{ // (categoria!=null)
+				List<Auto> autosPorCate = listaAutosCate(categoria);
+				Estadistica est = newTransientInstance(Estadistica.class);
+				for (Auto auto : autosPorCate){
+					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
+						int suma=0;				
+						est.setCategoria(categoria);	
+						est.setMes(mes.toString());
+						if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
 							suma=est.getCantAlq();
 							suma=suma+1;
 							est.setCantAlq(suma);					
 						}		
 						fechaAux = fechaInicio.plusDays(i + 1);						
+					}					
 				}
 				persistIfNotAlready(est);
 				listaEstadistica.add(est);
-			}else{
-				if (categoria!=null & auto.getCategoria()==categoria){
-					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
-						int suma=0;				
-							if(auto.getPatente()!=est.getPatente()){
-								est.setPatente(auto.getPatente());
-								est.setModeloAuto(auto.getModelo());
-								est.setCategoria(auto.getCategoria());
-							}
-							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
-								suma=est.getCantAlq();
-								suma=suma+1;
-								est.setCantAlq(suma);					
-							}		
-							fechaAux = fechaInicio.plusDays(i + 1);						
-					}
-					persistIfNotAlready(est);
-					listaEstadistica.add(est);
-				}
 			}
-			}		
-		}else{
+		}else{ // (mes==null)
 			LocalDate fechaInicio = new LocalDate(ano+"-01-01"); 
 			LocalDate hastaAux = new LocalDate(ano+"-12-31");
 			LocalDate fechaAux=fechaInicio;
 			
-			System.out.println("Fecha Anual inicio : " + fechaInicio);
-			System.out.println("Fecha Anual fin: "+ hastaAux);
-			
-			for (Auto auto : autos){				
-				Estadistica est = newTransientInstance(Estadistica.class);
-				if (categoria==null){
+			if (categoria==null){
+				for (Auto auto : autos){				
+					Estadistica est = newTransientInstance(Estadistica.class);
 					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
 						int suma=0;				
 							if(auto.getPatente()!=est.getPatente()){
 								est.setPatente(auto.getPatente());
 								est.setModeloAuto(auto.getModelo());
-								est.setCategoria(auto.getCategoria());
+								//est.setCategoria(auto.getCategoria());
+								est.setMes("ENERO-DICIEMBRE");
 							}
 							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
 								suma=est.getCantAlq();
@@ -116,29 +116,30 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 					}
 					persistIfNotAlready(est);
 					listaEstadistica.add(est);
-				}else{
-					if (categoria!=null & auto.getCategoria()==categoria){
-						for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
-							int suma=0;				
-								if(auto.getPatente()!=est.getPatente()){
-									est.setPatente(auto.getPatente());
-									est.setModeloAuto(auto.getModelo());
-									est.setCategoria(auto.getCategoria());
-								}
-								if (existeAlquiler(fechaAux, est.getPatente()) != null) {
-									suma=est.getCantAlq();
-									suma=suma+1;
-									est.setCantAlq(suma);					
-								}		
-								fechaAux = fechaInicio.plusDays(i + 1);						
-						}
-						persistIfNotAlready(est);
-						listaEstadistica.add(est);
-					}
 				}
-			}		
-		}return listaEstadistica;		
+			}else{ // (categoria!=null)
+				List<Auto> autosPorCate = listaAutosCate(categoria);
+				Estadistica est = newTransientInstance(Estadistica.class);
+				for (Auto auto : autosPorCate){
+					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
+						int suma=0;				
+						est.setCategoria(categoria);	
+						est.setMes("ENERO-DICIEMBRE");
+						if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
+							suma=est.getCantAlq();
+							suma=suma+1;
+							est.setCantAlq(suma);					
+						}		
+						fechaAux = fechaInicio.plusDays(i + 1);						
+					}					
+				}
+				persistIfNotAlready(est);
+				listaEstadistica.add(est);
+			}
+		}		
+		return listaEstadistica;		
 	}
+	// {{ Choices de Categoria
 	public List<Categoria> choices2Estadistica(){
 		List<Categoria> items = listaCategoriasActivas();		
 		return items;
@@ -174,6 +175,18 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 	@Programmatic
 	public List<Estadistica> traerEstadisticas() {
 		return allMatches(QueryDefault.create(Estadistica.class, "listarEstadisticas"));
+	}
+	// }}
+	
+    // {{ Listado de Autos filtrado por Categoria
+	@Programmatic
+	public List<Auto> listaAutosCate(final Categoria lista) {
+		return allMatches(Auto.class, new Filter<Auto>() {
+		@Override
+		public boolean accept(Auto t){
+		return  lista.equals(t.getCategoria())&& t.getActivo();
+		}
+	  });
 	}
 	// }}
 	

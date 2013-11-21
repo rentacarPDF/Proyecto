@@ -52,7 +52,7 @@ public class AutoPorFecha {
     }
     */
     private LocalDate fecha;
-    @Hidden
+    @Named("Fecha")
     public LocalDate getFecha() {
             return fecha;
     }

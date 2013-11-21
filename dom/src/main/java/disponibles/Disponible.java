@@ -68,7 +68,7 @@ public class Disponible {
     }
     */
     private LocalDate fecha;
-    @Hidden
+    @Named("Fecha")
     public LocalDate getFecha() {
             return fecha;
     }

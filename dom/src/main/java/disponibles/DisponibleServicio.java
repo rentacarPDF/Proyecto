@@ -123,7 +123,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 		return uniqueMatch(AutoPorFecha.class, new Filter<AutoPorFecha>() {
 			@Override
 			public boolean accept(AutoPorFecha auto) {
-				return auto.getFecha().equals(fecha.toDate())
+				return auto.getFecha().equals(fecha)
 						&& auto.getPatente().equals(patente);
 			}
 		});

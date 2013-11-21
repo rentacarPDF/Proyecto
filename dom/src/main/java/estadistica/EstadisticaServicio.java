@@ -2,6 +2,7 @@ package estadistica;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
@@ -150,6 +151,18 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}		
 		return listaEstadistica;		
 	}
+	// {{ Choices de Año
+    public List<String> choices0Estadistica(){
+    	Calendar cal= Calendar.getInstance();
+    	int anoActual= cal.get(Calendar.YEAR);    	
+    	List<String> lista = new ArrayList<String>();
+    	
+    	for(int a=0; a<=10; a++)	{ 
+    		int calculo= anoActual-a;
+    		lista.add(Integer.toString(calculo));
+    	}
+    	return lista;
+    }
 	// {{ Choices de Categoria
 	public List<Categoria> choices2Estadistica(){
 		List<Categoria> items = listaCategoriasActivas();		
@@ -253,16 +266,10 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		case DICIEMBRE:fechaAux=new LocalDate(ano+"-12-31");break;
 		}
 		return fechaAux;
-	}	
-	
-	@SuppressWarnings("unused")
-	private DisponibleServicio dispServ;
-    @Hidden
-    public void inyectarAdicionalServicio(DisponibleServicio dispServ){
-    	this.dispServ=dispServ;
-    }
+	}
     
     @Named("Crear Grafico")
+    @MemberOrder(sequence="3") 
     public WickedChart createChart() {
         Options options = new Options();
 
@@ -271,11 +278,11 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
                 .setType(SeriesType.COLUMN));
 
         options
-            .setTitle(new Title("Mes"));
+            .setTitle(new Title("ESTADISTICAS"));
 
         options
             .setyAxis(new Axis()
-                .setTitle(new Title("Cantidad de Alquileres")));
+                .setTitle(new Title("CANTIDAD DE ALQUILERES")));
 
         options
             .setLegend(new Legend()
@@ -313,5 +320,13 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 	    	}                
         }
         return new WickedChart(options);
+    }
+    
+	
+	@SuppressWarnings("unused")
+	private DisponibleServicio dispServ;
+    @Hidden
+    public void inyectarAdicionalServicio(DisponibleServicio dispServ){
+    	this.dispServ=dispServ;
     }
 }

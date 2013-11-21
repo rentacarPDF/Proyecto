@@ -95,6 +95,19 @@ public class Estadistica {
     // }}
     
     // {{
+    private String mes;
+    @Disabled
+    @Hidden
+    @Named("Mes de Alquiler")
+    public String getMes(){
+    	return mes;
+    }
+    public void setMes(final String mes){
+    	this.mes=mes;
+    }
+    // }}
+    
+    // {{
     private int cantAlq;
     @Disabled
     @Named("Cantidad de Alquileres")

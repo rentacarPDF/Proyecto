@@ -32,7 +32,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			@Named("Numero") String numeroId,
 			@RegEx(validation = "[0-9]+")
 			@Named("Numero de Telefono") int numeroTel,
-			@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
+			@RegEx(validation = "(\\w+\\-)*(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
 			@Named("Correo Electrónico") String mail){
 		final String ownedBy = currentUserName();
 		final boolean activo = true;

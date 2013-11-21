@@ -110,6 +110,12 @@
 			<groupId>com.danhaywood.isis.wicket</groupId>
 			<artifactId>danhaywood-isis-wicket-wickedcharts-applib</artifactId>
 		</dependency>
+		
+		<dependency>
+         	<groupId>org.twitter4j</groupId>
+         	<artifactId>twitter4j-core</artifactId>
+        	<version>[3.0,)</version>
+      	 </dependency>
 
 	</dependencies>
 

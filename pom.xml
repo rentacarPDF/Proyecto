@@ -49,6 +49,19 @@
               <snapshots>
               </snapshots>
           </repository>
+
+	<repository>
+         <id>twitter4j.org</id>
+         <name>twitter4j.org Repository</name>
+         <url>http://twitter4j.org/maven2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+
     </repositories>
 
     <build>
@@ -351,6 +364,11 @@
             <scope>import</scope>
         	</dependency>
         
+	    <dependency>
+              <groupId>org.twitter4j</groupId>
+              <artifactId>twitter4j-core</artifactId>
+              <version>[3.0,)</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

@@ -1,6 +1,6 @@
 package estadistica;
 
-
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +13,17 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
+import com.danhaywood.isis.wicket.wickedcharts.applib.WickedChart;
+import com.googlecode.wickedcharts.highcharts.options.Axis;
+import com.googlecode.wickedcharts.highcharts.options.ChartOptions;
+import com.googlecode.wickedcharts.highcharts.options.HorizontalAlignment;
+import com.googlecode.wickedcharts.highcharts.options.Legend;
+import com.googlecode.wickedcharts.highcharts.options.LegendLayout;
+import com.googlecode.wickedcharts.highcharts.options.Options;
+import com.googlecode.wickedcharts.highcharts.options.SeriesType;
+import com.googlecode.wickedcharts.highcharts.options.Title;
+import com.googlecode.wickedcharts.highcharts.options.VerticalAlignment;
+import com.googlecode.wickedcharts.highcharts.options.series.SimpleSeries;
 
 import categoria.Categoria;
 
@@ -249,5 +260,58 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     @Hidden
     public void inyectarAdicionalServicio(DisponibleServicio dispServ){
     	this.dispServ=dispServ;
+    }
+    
+    @Named("Crear Grafico")
+    public WickedChart createChart() {
+        Options options = new Options();
+
+        options
+            .setChartOptions(new ChartOptions()
+                .setType(SeriesType.COLUMN));
+
+        options
+            .setTitle(new Title("Mes"));
+
+        options
+            .setyAxis(new Axis()
+                .setTitle(new Title("Cantidad de Alquileres")));
+
+        options
+            .setLegend(new Legend()
+                .setLayout(LegendLayout.VERTICAL)
+                .setAlign(HorizontalAlignment.RIGHT)
+                .setVerticalAlign(VerticalAlignment.TOP)
+                .setX(-10)
+                .setY(100)
+                .setBorderWidth(0));
+		
+        List<Estadistica> listaEst = traerEstadisticas();
+        for(Estadistica h : listaEst) {
+	        if(h.getCategoria()==null){        
+	        options
+	        .addSeries(new SimpleSeries()
+	            .setName(h.getPatente())
+	            .setData(
+	                Arrays
+	                    .asList(new Number[] { h.getCantAlq() })));
+		        options
+		            .setxAxis(new Axis()            	
+		                .setCategories(Arrays
+		                    .asList(new String[] {h.getMes() })));	        	
+	        }else{ // (h.getCategoria!=null)
+                options
+                .addSeries(new SimpleSeries()
+                    .setName(h.getCategoria().getNombre())
+                    .setData(
+                        Arrays
+                            .asList(new Number[] { h.getCantAlq() })));      	      
+       	        options
+       	            .setxAxis(new Axis()            	
+       	                .setCategories(Arrays
+       	                    .asList(new String[] {h.getMes() })));	        	        
+	    	}                
+        }
+        return new WickedChart(options);
     }
 }

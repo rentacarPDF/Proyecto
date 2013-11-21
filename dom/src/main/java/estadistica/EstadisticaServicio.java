@@ -178,6 +178,57 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     }
     // }}	
  
+	@Named("Consulta Anual")
+    @MemberOrder(sequence="2") 
+	public List<Estadistica> estadisticaAnual(
+			@Named("Año") String ano,
+			@Optional
+			@Named("Categoria") Categoria categoria) {
+		
+		List<Estadistica> listaEstadistica = new ArrayList<Estadistica>();		
+		
+		List<Estadistica> listaEst = traerEstadisticas();
+        for(Estadistica h : listaEst) {
+            remove(h);
+        }
+        
+		if (categoria==null){
+			final List<Auto> autos = listaAutos();			
+			
+			for (Auto auto : autos){						
+				
+				for (int a = 1; a<=12; a++){
+					Estadistica est = newTransientInstance(Estadistica.class);
+					LocalDate fechaInicio = new LocalDate(ano+"-"+a+"-01"); 
+					LocalDate hastaAux = verFechaFinal(fechaInicio, ano);
+					LocalDate fechaAux=fechaInicio;
+									
+					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
+						int suma=0;				
+						if(auto.getPatente()!=est.getPatente()){
+							est.setPatente(auto.getPatente());
+							est.setModeloAuto(auto.getModelo());
+							//est.setCategoria(auto.getCategoria());								
+							
+						}
+						if (existeAlquiler(fechaAux, est.getPatente()) != null) {
+							suma=est.getCantAlq();
+							suma=suma+1;
+							est.setCantAlq(suma);					
+						}		
+						fechaAux = fechaInicio.plusDays(i + 1);						
+					}
+					est.setMes(Integer.toString(fechaInicio.getMonthOfYear()));
+					persistIfNotAlready(est);
+					listaEstadistica.add(est);	
+				}			
+			}
+		}else{ // (categoria!=null)
+			
+		}	
+		return listaEstadistica;
+	}
+	
 	// {{ Calculo de diferencia de dias entre fechas.
 	protected int calculoDias(final LocalDate a1, final LocalDate a2) {
 		long inicio = a1.toDate().getTime();
@@ -267,7 +318,26 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}
 		return fechaAux;
 	}
-    
+	protected LocalDate verFechaFinal(final LocalDate fecha, String ano){
+		LocalDate fechaAux = null;
+
+		switch(fecha.getMonthOfYear()){ 
+		case 1:fechaAux=new LocalDate(ano+"-01-31");break;
+		case 2:fechaAux=new LocalDate(ano+"-02-28");break;
+		case 3:fechaAux=new LocalDate(ano+"-03-31");break;
+		case 4:fechaAux=new LocalDate(ano+"-04-30");break;
+		case 5:fechaAux=new LocalDate(ano+"-05-31");break;
+		case 6:fechaAux=new LocalDate(ano+"-06-30");break;
+		case 7:fechaAux=new LocalDate(ano+"-07-31");break;
+		case 8:fechaAux=new LocalDate(ano+"-08-30");break;
+		case 9:fechaAux=new LocalDate(ano+"-09-30");break;
+		case 10:fechaAux=new LocalDate(ano+"-10-31");break;
+		case 11:fechaAux=new LocalDate(ano+"-11-30");break;
+		case 12:fechaAux=new LocalDate(ano+"-12-31");break;
+		}
+		return fechaAux;
+	}	
+	
     @Named("Crear Grafico")
     @MemberOrder(sequence="3") 
     public WickedChart createChart() {

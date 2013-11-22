@@ -71,7 +71,8 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 							if(auto.getPatente()!=est.getPatente()){
 								est.setPatente(auto.getPatente());
 								est.setModeloAuto(auto.getModelo());
-								//est.setCategoria(auto.getCategoria());
+								est.setCategoria(auto.getCategoria());
+								est.setSeleccionCategoria(false);
 								est.setMes(mes.toString());
 							}
 							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
@@ -91,6 +92,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
 						int suma=0;				
 						est.setCategoria(categoria);	
+						est.setSeleccionCategoria(true);
 						est.setMes(mes.toString());
 						if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
 							suma=est.getCantAlq();
@@ -116,7 +118,8 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 							if(auto.getPatente()!=est.getPatente()){
 								est.setPatente(auto.getPatente());
 								est.setModeloAuto(auto.getModelo());
-								//est.setCategoria(auto.getCategoria());
+								est.setCategoria(auto.getCategoria());
+								est.setSeleccionCategoria(false);
 								est.setMes("ENERO-DICIEMBRE");
 							}
 							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
@@ -136,6 +139,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
 						int suma=0;				
 						est.setCategoria(categoria);	
+						est.setSeleccionCategoria(true);
 						est.setMes("ENERO-DICIEMBRE");
 						if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
 							suma=est.getCantAlq();
@@ -208,8 +212,8 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 						if(auto.getPatente()!=est.getPatente()){
 							est.setPatente(auto.getPatente());
 							est.setModeloAuto(auto.getModelo());
-							//est.setCategoria(auto.getCategoria());								
-							
+							est.setCategoria(auto.getCategoria());
+							est.setSeleccionCategoria(false);							
 						}
 						if (existeAlquiler(fechaAux, est.getPatente()) != null) {
 							suma=est.getCantAlq();
@@ -365,7 +369,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		
         List<Estadistica> listaEst = traerEstadisticas();
         for(Estadistica h : listaEst) {
-	        if(h.getCategoria()==null){        
+	        if(h.getSeleccionCategoria()==false){        
 	        options
 	        .addSeries(new SimpleSeries()
 	            .setName(h.getPatente())
@@ -376,7 +380,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		            .setxAxis(new Axis()            	
 		                .setCategories(Arrays
 		                    .asList(new String[] {h.getMes() })));	        	
-	        }else{ // (h.getCategoria!=null)
+	        }else{ // (h.getSeleccionCategoria()==true)
                 options
                 .addSeries(new SimpleSeries()
                     .setName(h.getCategoria().getNombre())

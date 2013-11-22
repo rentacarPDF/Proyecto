@@ -5,8 +5,10 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
+import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -42,26 +44,12 @@ public class Estadistica {
 		return buf.toString();	
 	}
 	// }}
-	// {{ Fecha
-	/*
-    @Named("Fecha")
-    public String getFechaString() {
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        return formato.format(getFecha());
-    }
-    */
-    private LocalDate fecha;
-    @Hidden
-    public LocalDate getFecha() {
-            return fecha;
-    }
-    public void setFecha(final LocalDate fecha) {
-            this.fecha = fecha;
-    }
-    // }}
-    // {{	
+
+    // {{ Auto
     private String auto;
     @Disabled
+    @Hidden
+    @MemberOrder(sequence="6")
     @Named("Auto")
     public String getPatente(){
     	return auto;
@@ -70,9 +58,11 @@ public class Estadistica {
     	this.auto=auto;
     }
     // }}
-    // {{
+    
+    // {{ Categoria
     private Categoria categoria;
     @Disabled
+    @MemberOrder(sequence="3")
     @Named("Categoria")
     public Categoria getCategoria(){
     	return categoria;
@@ -82,9 +72,10 @@ public class Estadistica {
     }
     // }}
     
-    // {{
+    // {{ Modelo
     private String modelo;
     @Disabled
+    @MemberOrder(sequence="1")
     @Named("Modelo")
     public String getModeloAuto(){
     	return modelo;
@@ -94,10 +85,10 @@ public class Estadistica {
     }
     // }}
     
-    // {{
+    // {{ Mes
     private String mes;
     @Disabled
-    @Hidden
+    @MemberOrder(sequence="4")
     @Named("Mes de Alquiler")
     public String getMes(){
     	return mes;
@@ -107,9 +98,10 @@ public class Estadistica {
     }
     // }}
     
-    // {{
+    // {{ Cantidad Alquileres
     private int cantAlq;
     @Disabled
+    @MemberOrder(sequence="2")
     @Named("Cantidad de Alquileres")
     public int getCantAlq(){
     	return cantAlq;
@@ -118,6 +110,19 @@ public class Estadistica {
     	this.cantAlq=cantAlq;
     }
     // }}
+    
+   	// {{ Seleccion Categoria
+   	private boolean seleccionCat;
+   	@Hidden
+   	@MemberOrder(sequence="5")
+   	@DescribedAs("SeleccionCategoria")
+   	public boolean getSeleccionCategoria() {
+   		return seleccionCat; 
+   	}   	
+   	public void setSeleccionCategoria(final boolean seleccionCat){
+   		this.seleccionCat=seleccionCat; 
+   	}	
+    // }}  
     
     @SuppressWarnings("unused")
 	private DomainObjectContainer container;    

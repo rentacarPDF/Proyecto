@@ -41,8 +41,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		return "estadistica";
 	}	
 	
-	@Named("Consulta Por Periodo")
-    @MemberOrder(sequence="1") 
+   @Hidden
 	public List<Estadistica> estadistica(
 			@Named("Año") String ano,
 			@Optional
@@ -342,9 +341,17 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		return fechaAux;
 	}	
 	
-    @Named("Crear Grafico")
-    @MemberOrder(sequence="3") 
-    public WickedChart createChart() {
+    @Named("Consulta Por Periodo")
+    @MemberOrder(sequence="1") 
+    public WickedChart crearGraficoPeriodo(
+			@Named("Año") String ano,
+			@Optional
+			@Named("Mes") Mes mes,
+			@Optional
+			@Named("Categoria") Categoria categoria) {
+    	
+    	estadistica(ano, mes, categoria);       
+    
         Options options = new Options();
 
         options

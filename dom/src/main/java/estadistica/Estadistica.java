@@ -12,7 +12,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
-import org.joda.time.LocalDate;
 
 
 import categoria.Categoria;

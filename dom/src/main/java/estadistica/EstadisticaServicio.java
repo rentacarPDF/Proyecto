@@ -181,7 +181,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     }
     // }}	
  
-	@Named("Consulta Anual")
+	@Hidden
     @MemberOrder(sequence="2") 
 	public List<Estadistica> estadisticaAnual(
 			@Named("Año") String ano,
@@ -255,6 +255,14 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		return allMatches(QueryDefault.create(Estadistica.class, "listarEstadisticas"));
 	}
 	// }}
+	
+	@Programmatic
+	// {{ Listado de Estadisticas por Auto 
+		public List<Estadistica> listaEstadisticaPorAuto(String patente){
+			return allMatches(QueryDefault.create(Estadistica.class, "listaEstadisticasPorAuto","auto",patente));
+			
+		}
+	//	}}
 	
     // {{ Listado de Autos filtrado por Categoria
 	@Programmatic
@@ -404,6 +412,65 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     }
     
 	
+    @Named("Consulta Anual")
+    @MemberOrder(sequence="2") 
+    public WickedChart crearGraficoAnual(
+			@Named("Año") String ano,
+			@Optional
+			@Named("Categoria") Categoria categoria) {
+    	
+    	estadisticaAnual(ano, categoria);
+    	
+    	
+        Options options = new Options();
+
+        options
+            .setChartOptions(new ChartOptions()
+                .setType(SeriesType.LINE));
+
+        options
+            .setTitle(new Title("ESTADISTICAS POR AÑO "+ano));
+
+        options
+            .setyAxis(new Axis()
+                .setTitle(new Title("CANTIDAD DE ALQUILERES POR AÑO "+ano)));
+
+        options
+            .setLegend(new Legend()
+                .setLayout(LegendLayout.VERTICAL)
+                .setAlign(HorizontalAlignment.RIGHT)
+                .setVerticalAlign(VerticalAlignment.TOP)
+                .setX(-10)
+                .setY(100)
+                .setBorderWidth(0));
+		
+        
+        List<Auto> listaAutos=listaAutos();
+        List<Estadistica> listaEst=null;
+        
+	        //Si solo se escoje Año.
+	        if(ano!=null && categoria==null){
+		        	
+		        for(Auto a : listaAutos) {   
+		        	listaEst = listaEstadisticaPorAuto(a.getPatente());
+			        options
+			        .addSeries(new SimpleSeries()
+			            .setName(categoria==null?a.getPatente():a.getCategoria().toString())
+			            .setData(
+			                Arrays
+			                    .asList(new Number[] {listaEst.get(0).getCantAlq(),listaEst.get(1).getCantAlq(),listaEst.get(2).getCantAlq(),listaEst.get(3).getCantAlq(),listaEst.get(4).getCantAlq(),listaEst.get(5).getCantAlq(),listaEst.get(6).getCantAlq(),listaEst.get(7).getCantAlq(),listaEst.get(8).getCantAlq(),listaEst.get(9).getCantAlq(),listaEst.get(10).getCantAlq(),listaEst.get(11).getCantAlq()})));
+				        options
+				            .setxAxis(new Axis()            	
+				                .setCategories(Arrays
+				                    .asList(new String[] {"ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"})));	        	     	        
+				}
+	        }            
+        
+        return new WickedChart(options);
+    }
+    
+    
+    
 	@SuppressWarnings("unused")
 	private DisponibleServicio dispServ;
     @Hidden

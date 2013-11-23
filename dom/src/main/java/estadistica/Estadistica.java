@@ -22,6 +22,7 @@ import categoria.Categoria;
 @javax.jdo.annotations.Queries({
         @javax.jdo.annotations.Query(name="listarEstadisticas", language="JDOQL",value="SELECT FROM estadistica.Estadistica"),
         @javax.jdo.annotations.Query(name="borrarEstadisticas", language="JDOQL",value="DELETE FROM estadistica.Estadistica"),
+        @javax.jdo.annotations.Query(name="listaEstadisticasPorAuto",language="JDOQL",value="SELECT FROM estadistica.Estadistica where auto== :auto")
 })
 @ObjectType("Estadistica")
 @Audited
@@ -122,6 +123,8 @@ public class Estadistica {
    		this.seleccionCat=seleccionCat; 
    	}	
     // }}  
+   	   	
+   	//}}
     
     @SuppressWarnings("unused")
 	private DomainObjectContainer container;    

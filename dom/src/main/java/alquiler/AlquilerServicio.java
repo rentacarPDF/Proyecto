@@ -1,5 +1,6 @@
 package alquiler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mails.Mail;
@@ -52,6 +53,8 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setApellidoCliente(cliente.getApellido());
     			alquiler.setEstado(EstadoAlquiler.RESERVADO);
     			alquiler.setOwnedBy(userName);
+    			
+    			ArrayList<String> listaReservas=new ArrayList<String>();
     			for (Disponible disp:disponibilidad){
     				if (disp.isEstaSeleccionada()){
     					AutoPorFecha autoF=newTransientInstance(AutoPorFecha.class);
@@ -60,13 +63,14 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     					autoF.setPatente(disp.getPatente());
     					autoF.setAlquiler(alquiler);
     					autoF.setModeloAuto(disp.getModeloAuto());
+    					listaReservas.add("Patente: "+disp.getPatente()+" "+"Modelo: "+disp.getModeloAuto()+" "+"Fecha: "+disp.getFecha().toString());
     					alquiler.addToAutos(autoF);    					
     					persistIfNotAlready(autoF);    					
     				}  
     				getContainer().removeIfNotAlready(disp);
     				
     			}
-    		mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),alquiler.getAutos().toString(),alquiler.getPrecioTotal(),cliente.getEmail());	
+    		mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
     		}
     	return alquiler;
 	}

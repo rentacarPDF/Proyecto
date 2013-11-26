@@ -1,5 +1,6 @@
 package mails;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -13,7 +14,7 @@ import org.apache.isis.applib.annotation.Hidden;
 public class Mail {
 //Probando mandar mails
 @Hidden	
-public void enviaMails(String apellido,String nombreCliente,String patente,String totalPago,String correo){
+public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<String> lista,String totalPago,String correo){
 	try
     {
         // Propiedades de la conexión
@@ -37,13 +38,11 @@ public void enviaMails(String apellido,String nombreCliente,String patente,Strin
         //Asunto del mensaje
         message.setSubject("RentaCar-PDF Alquiler de Autos");
         message.setText(
-        		 "Estimado/a:"+ apellido+" "+nombreCliente+" " +
-                 		""+" RentaCar-PDF le informa que usted ha alquilado" +
-                 "el auto:"+" "+"con la patente:"+patente +" "+
-                 		" "
-                 		+"------------------------------------------------------"
-                 		+" "+"Total pago:$"+totalPago+" "); 
-
+        		 "Estimado/a Sr/a: "+ apellidoCliente+" "+nombreCliente+",  " +
+                  		""+"  RentaCar-PDF le informa que usted ha alquilado el/los siguientes vehículos" +         
+                  		
+                  		lista.toString() + "    " +     		
+                  		" "+" El monto total a abonar es: $"+totalPago+".  "+"                Gracias por elegirnos!");
         // Lo enviamos.
         Transport t = session.getTransport("smtp");
         t.connect("proyectofinalifes2013@gmail.com", "pepito123");

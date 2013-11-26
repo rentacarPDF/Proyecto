@@ -63,7 +63,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     					autoF.setPatente(disp.getPatente());
     					autoF.setAlquiler(alquiler);
     					autoF.setModeloAuto(disp.getModeloAuto());
-    					listaReservas.add("Patente: "+disp.getPatente()+" "+"Modelo: "+disp.getModeloAuto()+" "+"Fecha: "+disp.getFecha().toString());
+    					listaReservas.add("\n"+"Patente:"+disp.getPatente()+"\n"+"Modelo: "+disp.getModeloAuto()+" "+"Fecha: "+disp.getFecha().toString());
     					alquiler.addToAutos(autoF);    					
     					persistIfNotAlready(autoF);    					
     				}  

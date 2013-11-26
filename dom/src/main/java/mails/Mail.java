@@ -38,11 +38,11 @@ public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<Str
         //Asunto del mensaje
         message.setSubject("RentaCar-PDF Alquiler de Autos");
         message.setText(
-        		 "Estimado/a Sr/a: "+ apellidoCliente+" "+nombreCliente+",  " +
-                  		""+"  RentaCar-PDF le informa que usted ha alquilado el/los siguientes vehículos" +         
-                  		
-                  		lista.toString() + "    " +     		
-                  		" "+" El monto total a abonar es: $"+totalPago+".  "+"                Gracias por elegirnos!");
+        		 "Estimado/a Sr/a: "+ apellidoCliente+" "+nombreCliente+" ," +
+                  		""+"  RentaCar-PDF le informa que usted ha alquilado el/los siguientes vehículos :"+"\n"+         
+                  		lista.toString()+"\n" +     		
+                  		" "+" El monto total a abonar es: $"+totalPago+"\n"+"               " +
+                  		" Gracias por elegirnos!");
         // Lo enviamos.
         Transport t = session.getTransport("smtp");
         t.connect("proyectofinalifes2013@gmail.com", "pepito123");

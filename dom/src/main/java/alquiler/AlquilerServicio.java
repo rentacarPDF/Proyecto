@@ -1,6 +1,9 @@
 package alquiler;
 
 import java.util.List;
+
+import mails.Mail;
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Hidden;
@@ -29,16 +32,18 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
             @Named("Cliente") Cliente cliente ) {
     		final String ownedBy = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
+            Mail mail=new Mail();
             persistIfNotAlready(alquiler);
             List<Disponible> disponibilidad = listaAutosReservados();
-            return crear(alquiler,disponibilidad,cliente,ownedBy);
+            return crear(alquiler,disponibilidad,cliente,ownedBy,mail);
     }
     @Hidden
     private Alquiler crear(
     		final Alquiler alquiler,
     		final List<Disponible> disponibilidad,
     		final Cliente cliente,	
-    		final String userName
+    		final String userName,
+    		final Mail mail
     		){
     		if(disponibilidad.size()>0){
     			alquiler.setClienteId(cliente);
@@ -58,8 +63,10 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     					alquiler.addToAutos(autoF);    					
     					persistIfNotAlready(autoF);    					
     				}  
-    				getContainer().removeIfNotAlready(disp);    				
-    			}    			
+    				getContainer().removeIfNotAlready(disp);
+    				
+    			}
+    		mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),alquiler.getAutos().toString(),alquiler.getPrecioTotal(),cliente.getEmail());	
     		}
     	return alquiler;
 	}

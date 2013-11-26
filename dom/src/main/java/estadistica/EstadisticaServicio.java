@@ -42,7 +42,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 	}	
 	
    @Hidden
-	public List<Estadistica> estadistica(
+   public List<Estadistica> estadistica(
 			@Named("Año") String ano,
 			@Optional
 			@Named("Mes") Mes mes,
@@ -182,53 +182,42 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     // }}	
  
 	@Hidden
-    @MemberOrder(sequence="2") 
-	public List<Estadistica> estadisticaAnual(
-			@Named("Año") String ano,
-			@Optional
-			@Named("Categoria") Categoria categoria) {
+	public List<Estadistica> estadisticaAnual(String ano) {
 		
 		List<Estadistica> listaEstadistica = new ArrayList<Estadistica>();		
 		
 		List<Estadistica> listaEst = traerEstadisticas();
         for(Estadistica h : listaEst) {
             remove(h);
-        }
-        
-		if (categoria==null){
-			final List<Auto> autos = listaAutos();			
-			
-			for (Auto auto : autos){						
-				
-				for (int a = 1; a<=12; a++){
-					Estadistica est = newTransientInstance(Estadistica.class);
-					LocalDate fechaInicio = new LocalDate(ano+"-"+a+"-01"); 
-					LocalDate hastaAux = verFechaFinal(fechaInicio, ano);
-					LocalDate fechaAux=fechaInicio;
+        }        
+		final List<Auto> autos = listaAutos();			
+		for (Auto auto : autos){				
+			for (int a = 1; a<=12; a++){
+				Estadistica est = newTransientInstance(Estadistica.class);
+				LocalDate fechaInicio = new LocalDate(ano+"-"+a+"-01"); 
+				LocalDate hastaAux = verFechaFinal(fechaInicio, ano);
+				LocalDate fechaAux=fechaInicio;
 									
-					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
-						int suma=0;				
-						if(auto.getPatente()!=est.getPatente()){
-							est.setPatente(auto.getPatente());
-							est.setModeloAuto(auto.getModelo());
-							est.setCategoria(auto.getCategoria());
-							est.setSeleccionCategoria(false);							
-						}
-						if (existeAlquiler(fechaAux, est.getPatente()) != null) {
-							suma=est.getCantAlq();
-							suma=suma+1;
-							est.setCantAlq(suma);					
-						}		
-						fechaAux = fechaInicio.plusDays(i + 1);						
+				for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
+					int suma=0;				
+					if(auto.getPatente()!=est.getPatente()){
+						est.setPatente(auto.getPatente());
+						est.setModeloAuto(auto.getModelo());
+						est.setCategoria(auto.getCategoria());
+						est.setSeleccionCategoria(false);							
 					}
-					est.setMes(Integer.toString(fechaInicio.getMonthOfYear()));
-					persistIfNotAlready(est);
-					listaEstadistica.add(est);	
-				}			
-			}
-		}else{ // (categoria!=null)
-			
-		}	
+					if (existeAlquiler(fechaAux, est.getPatente()) != null) {
+						suma=est.getCantAlq();
+						suma=suma+1;
+						est.setCantAlq(suma);					
+					}		
+					fechaAux = fechaInicio.plusDays(i + 1);						
+				}
+				est.setMes(Integer.toString(fechaInicio.getMonthOfYear()));
+				persistIfNotAlready(est);
+				listaEstadistica.add(est);	
+			}			
+		}			
 		return listaEstadistica;
 	}
 	
@@ -415,11 +404,9 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     @Named("Consulta Anual")
     @MemberOrder(sequence="2") 
     public WickedChart crearGraficoAnual(
-			@Named("Año") String ano,
-			@Optional
-			@Named("Categoria") Categoria categoria) {
+			@Named("Año") String ano) {
     	
-    	estadisticaAnual(ano, categoria);
+    	estadisticaAnual(ano);
     	
     	
         Options options = new Options();
@@ -429,11 +416,11 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
                 .setType(SeriesType.LINE));
 
         options
-            .setTitle(new Title("ESTADISTICAS POR AÑO "+ano));
+            .setTitle(new Title("ESTADISTICAS AÑO "+ano));
 
         options
             .setyAxis(new Axis()
-                .setTitle(new Title("CANTIDAD DE ALQUILERES POR AÑO "+ano)));
+                .setTitle(new Title("CANTIDAD DE ALQUILERES AÑO "+ano)));
 
         options
             .setLegend(new Legend()
@@ -449,13 +436,12 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         List<Estadistica> listaEst=null;
         
 	        //Si solo se escoje Año.
-	        if(ano!=null && categoria==null){
-		        	
+	        if(ano!=null){		        	
 		        for(Auto a : listaAutos) {   
 		        	listaEst = listaEstadisticaPorAuto(a.getPatente());
 			        options
 			        .addSeries(new SimpleSeries()
-			            .setName(categoria==null?a.getPatente():a.getCategoria().toString())
+			            .setName(a.getPatente())
 			            .setData(
 			                Arrays
 			                    .asList(new Number[] {listaEst.get(0).getCantAlq(),listaEst.get(1).getCantAlq(),listaEst.get(2).getCantAlq(),listaEst.get(3).getCantAlq(),listaEst.get(4).getCantAlq(),listaEst.get(5).getCantAlq(),listaEst.get(6).getCantAlq(),listaEst.get(7).getCantAlq(),listaEst.get(8).getCantAlq(),listaEst.get(9).getCantAlq(),listaEst.get(10).getCantAlq(),listaEst.get(11).getCantAlq()})));
@@ -467,9 +453,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 	        }            
         
         return new WickedChart(options);
-    }
-    
-    
+    }    
     
 	@SuppressWarnings("unused")
 	private DisponibleServicio dispServ;

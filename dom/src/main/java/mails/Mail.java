@@ -13,7 +13,6 @@ import org.apache.isis.applib.annotation.Hidden;
 
 
 public class Mail {
-//Probando mandar mails
 @Hidden	
 public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<String> lista,String totalPago,String correo){
 	try

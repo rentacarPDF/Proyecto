@@ -154,32 +154,6 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}		
 		return listaEstadistica;		
 	}
-	// {{ Choices de Año
-    public List<String> choices0Estadistica(){
-    	Calendar cal= Calendar.getInstance();
-    	int anoActual= cal.get(Calendar.YEAR);    	
-    	List<String> lista = new ArrayList<String>();
-    	
-    	for(int a=0; a<=10; a++)	{ 
-    		int calculo= anoActual-a;
-    		lista.add(Integer.toString(calculo));
-    	}
-    	return lista;
-    }
-	// {{ Choices de Categoria
-	public List<Categoria> choices2Estadistica(){
-		List<Categoria> items = listaCategoriasActivas();		
-		return items;
-	}
-	protected List<Categoria> listaCategoriasActivas() {
-        return allMatches(Categoria.class, new Filter<Categoria>() {
-            @Override
-            public boolean accept(final Categoria t) {            	          	
-                return t.getActivo();            	          	
-            }
-        });
-    }
-    // }}	
  
 	@Hidden
 	public List<Estadistica> estadisticaAnual(String ano) {
@@ -399,7 +373,32 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         }
         return new WickedChart(options);
     }
-    
+	// {{ Choices de Año
+    public List<String> choices0CrearGraficoPeriodo(){
+    	Calendar cal= Calendar.getInstance();
+    	int anoActual= cal.get(Calendar.YEAR);    	
+    	List<String> lista = new ArrayList<String>();
+    	
+    	for(int a=0; a<=10; a++)	{ 
+    		int calculo= anoActual-a;
+    		lista.add(Integer.toString(calculo));
+    	}
+    	return lista;
+    }
+	// {{ Choices de Categoria
+	public List<Categoria> choices2CrearGraficoPeriodo(){
+		List<Categoria> items = listaCategoriasActivas();		
+		return items;
+	}
+	protected List<Categoria> listaCategoriasActivas() {
+        return allMatches(Categoria.class, new Filter<Categoria>() {
+            @Override
+            public boolean accept(final Categoria t) {            	          	
+                return t.getActivo();            	          	
+            }
+        });
+    }
+    // }}	
 	
     @Named("Consulta Anual")
     @MemberOrder(sequence="2") 
@@ -454,7 +453,18 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         
         return new WickedChart(options);
     }    
-    
+	// {{ Choices de Año
+    public List<String> choices0CrearGraficoAnual(){
+    	Calendar cal= Calendar.getInstance();
+    	int anoActual= cal.get(Calendar.YEAR);    	
+    	List<String> lista = new ArrayList<String>();
+    	
+    	for(int a=0; a<=10; a++)	{ 
+    		int calculo= anoActual-a;
+    		lista.add(Integer.toString(calculo));
+    	}
+    	return lista;
+    }    
 	@SuppressWarnings("unused")
 	private DisponibleServicio dispServ;
     @Hidden

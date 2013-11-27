@@ -1,8 +1,6 @@
 package adicional;
 
 import java.util.List;
-
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MaxLength;
@@ -13,19 +11,25 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
-
-import autos.Auto;
-
 import com.google.common.base.Objects;
-
 
 @Named("Adicionales")
 public class AdicionalServicio extends AbstractFactoryAndRepository{
-	
+	/**
+	 * Retorna el nombre del adicional
+	 * @return String
+	 */
 	public String iconName(){
 		return "adicionales";
 	}
-	
+	/**
+	 * Se realiza la carga del Adicional
+	 * @param nombre
+	 * @param descrip
+	 * @param precio
+	 * 
+	 * @return Adicional
+	 */
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Adicional")
 	public Adicional cargar(
@@ -41,6 +45,18 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			final String ownedBy = currentUserName();
 			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,ownedBy);
 	}
+	/**
+	 * Se persiste y setea cada una de las propiedades del Adicional
+	 * 
+	 * @param nombre
+	 * @param descrip
+	 * @param precio
+	 * @param activo
+	 * @param userName
+	 * 
+	 * @return Adicional
+	 * 
+	 */
 	@Hidden
 	public Adicional adicional(
 			final String nombre,
@@ -57,13 +73,22 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			persistIfNotAlready(adic);
 			return adic;
 	}
-    // {{Lista de adicionales 
+   /**
+    * Lista de adicionales
+    * @return List<Adicional>
+    */
     public List<Adicional> listaAdicionales() {         
         return allMatches(QueryDefault.create(Adicional.class, "listaAdicionales"));
     } 
-    // }}
-	
-	// {{AutoComplete  
+    
+    /**
+     * Accion de Autocompletado generada por el framework, 
+     * retorna una lista de los objetos de la entidad.
+     * 
+     * @param nombre
+     * 
+     * @return List<adicional.Adicional> 
+     */
 	@Hidden    
 	public List<Adicional> autoComplete(final String nombre) {
 		return allMatches(Adicional.class, new Filter<Adicional>() {
@@ -73,13 +98,29 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 		}
 	  });				
 	}
-	// }}	
-	// {{ Helpers
-	protected boolean ownedByCurrentUser(final Auto t) {
+	
+	/**
+	 * Helpers
+	 * 
+	 * Retorna un boolean que determina 
+	 * si el usuario que se le est&aacute; pasando por parametro es el mismo.
+	 * 
+	 * @param t
+	 * @return boolean
+	 * 
+	 */
+	protected boolean ownedByCurrentUser(final Adicional t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());
 	}
+	/**
+	 * Helpers
+	 * 
+	 * Retorna el usuario.
+	 * 
+	 * @return String
+	 */
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
 	}
-	// }}		
+	 	
 }

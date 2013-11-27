@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.isis.applib.annotation.Hidden;
 
+
 public class Mail {
 //Probando mandar mails
 @Hidden	
@@ -38,11 +39,12 @@ public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<Str
         //Asunto del mensaje
         message.setSubject("RentaCar-PDF Alquiler de Autos");
         message.setText(
-        		 "Estimado/a Sr/a: "+ apellidoCliente+" "+nombreCliente+" ," +
-                  		""+"  RentaCar-PDF le informa que usted ha alquilado el/los siguientes vehículos :"+"\n"+         
-                  		lista.toString()+"\n" +     		
-                  		" "+" El monto total a abonar es: $"+totalPago+"\n"+"               " +
-                  		" Gracias por elegirnos!");
+       		 "Estimado/a Sr/a: "+ apellidoCliente+" "+nombreCliente+" ," +
+                 		""+"  RentaCar-PDF le informa que usted ha alquilado el/los siguientes vehículos :"+"\n"+         
+                 		lista.toString()+"\n"+"\n"+     		
+                 		" "+" El monto total a abonar es: $"+totalPago+"\n"+"\n"+"               " +
+                 		" Gracias por elegirnos!"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\nRentaCar-PDF 25 de mayo 1123 Neuquen Capital tel:299-445095");
+
         // Lo enviamos.
         Transport t = session.getTransport("smtp");
         t.connect("proyectofinalifes2013@gmail.com", "pepito123");

@@ -2,9 +2,6 @@ package alquiler;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import mails.Mail;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Hidden;
@@ -15,18 +12,30 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
 import com.google.common.base.Objects;
-
 import alquiler.Alquiler.EstadoAlquiler;
 import cliente.Cliente;
 import disponibles.AutoPorFecha;
 import disponibles.Disponible;
+import mails.Mail;
 
 @Named("Alquileres")
 public class AlquilerServicio extends AbstractFactoryAndRepository{
-
+	/**
+	 * Identificacion del nombre del icono que aparecera en la UI
+	 * @return String
+	 */
 	public String iconName(){
 		return "alquiler";
 	}
+	/**
+	 * Metodo que permite comenzar el proceso de Alquiler, 
+	 * partiendo de la definicion del Cliente
+	 * @see disponibles.Disponible
+	 * @see AlquilerServicio#listaAutosReservados()
+	 * 
+	 * @param cliente
+	 * @return Alquiler
+	 */
     @Named("Alquilar")
     @MemberOrder(sequence="1")
     public Alquiler reservar(
@@ -38,6 +47,18 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
             List<Disponible> disponibilidad = listaAutosReservados();
             return crear(alquiler,disponibilidad,cliente,ownedBy,mail);
     }
+    /**
+     * 
+     * Metodo que setea todas las propiedades que tiene la entidad Alquiler
+     * creado en el metodo {@link AlquilerServicio#reservar(Cliente)}.
+     * 
+     * @param alquiler
+     * @param disponibilidad
+     * @param cliente
+     * @param userName
+     * 
+     * @return Alquiler
+     */
     @Hidden
     private Alquiler crear(
     		final Alquiler alquiler,
@@ -74,9 +95,14 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     		}
     	return alquiler;
 	}
-    // }}
-    
-	// {{ Listado de Clientes Activos
+  
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link AlquilerServicio#reservar(Cliente)}
+     * 
+     * @return List<Cliente>
+     */
 	@ActionSemantics(Of.SAFE)
 	public List<Cliente> choices0Reservar() {
 		List<Cliente> items = listaClientes();
@@ -85,6 +111,11 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 		}
 		return items;
 	}
+	/**
+	 * Metodo que retorna una lista de Clientes activos 
+	 * 
+	 * @return List<Cliente>
+	 */
 	protected List<Cliente> listaClientes() {
 		return allMatches(Cliente.class, new Filter<Cliente>() {
 			@Override
@@ -93,27 +124,47 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 			}
 		});
 	}
-	// }}
-    // {{ Listado de autos reservados
+	/**
+	 * Metodo que retorna una lista de Autos Reservados.
+	 * 
+	 * @see disponibles.Disponible
+	 * @return List<Disponible>
+	 */
 	@Hidden
     public List<Disponible> listaAutosReservados() {         
         return allMatches(QueryDefault.create(Disponible.class, "Disponibles"));
     } 
-    // }}
-    // {{
+
+	/**
+	 * Metodo que retorna una lista de Alquileres
+	 * @return List<Alquiler>
+	 */
     @Named("Listado Alquileres")
     @MemberOrder(sequence="2")
     public List<Alquiler> listaAlquileres() {
             return allMatches(QueryDefault.create(Alquiler.class, "traerAlquileres"));
     }
-    // }}
-		
-	// {{ Helpers
+    /**
+	 * Helpers
+	 * 
+	 * Retorna un boolean que determina 
+	 * si el usuario que se le est&aacute; pasando por parametro es el mismo.
+	 * 
+	 * @param Alquiler
+	 * @return boolean
+	 * 
+	 */
 	protected boolean ownedByCurrentUser(final Alquiler t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());
 	}
+	/**
+	 * Helpers
+	 * 
+	 * Retorna el usuario.
+	 * 
+	 * @return String
+	 */
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
-	}
-	// }}	
+	}	
 }

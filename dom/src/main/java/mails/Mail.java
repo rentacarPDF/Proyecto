@@ -25,7 +25,7 @@ public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<Str
         //configuracion de puerto
         props.setProperty("mail.smtp.port", "587");
         //configuracionn de servidor con gmail de la empresa
-        props.setProperty("mail.smtp.user", "proyectofinalifes2013@gmail.com");
+        props.setProperty("mail.smtp.user", "rentacarPDF@gmail.com");
         props.setProperty("mail.smtp.auth", "true");
 
         // Preparamos la sesion
@@ -33,7 +33,7 @@ public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<Str
       
         // Construimos el mensaje
         MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("proyectofinalifes2013@gmail.com"));
+        message.setFrom(new InternetAddress("rentacarPDF@gmail.com"));
         //mandando al correo
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(correo));
         //Asunto del mensaje
@@ -47,7 +47,7 @@ public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<Str
 
         // Lo enviamos.
         Transport t = session.getTransport("smtp");
-        t.connect("proyectofinalifes2013@gmail.com", "pepito123");
+        t.connect("rentacarPDF@gmail.com", "pepito1234");
         t.sendMessage(message, message.getAllRecipients());
 
         // Cierre.

@@ -42,7 +42,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@RegEx(validation = "[0-9]+")
 		@Named("Año") int ano,
 		@Named("Categoria") Categoria categ,
-		@RegEx(validation="[A-Za-z]+")
+		@RegEx(validation="[A-Za-z ]+")
 		@Named("Color") String color,
 		@RegEx(validation = "[0-9]+")
 		@Named("Kilometraje") int kms,

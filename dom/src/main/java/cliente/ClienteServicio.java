@@ -23,9 +23,9 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
 	public Cliente cargarCliente(
-			@RegEx(validation = "[A-Za-z]+")
+			@RegEx(validation = "[A-Za-z ]+")
 			@Named("Nombre") String nombre,
-			@RegEx(validation="[A-Za-z]+")
+			@RegEx(validation="[A-Za-z ]+")
 			@Named("Apellido") String apellido,
 			@Named("Tipo de Id Tributaria") TipoId tipo,
 			@RegEx(validation="\\d{2}-\\d{7,8}-\\d{1,2}")

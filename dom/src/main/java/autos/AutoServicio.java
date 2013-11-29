@@ -25,12 +25,31 @@ import marca.Marca;
 
 @Named("Flota")
 public class AutoServicio extends AbstractFactoryAndRepository {
-
+	/**
+	 * Identificacion del nombre del icono que aparecera en la UI
+	 * @return String
+	 */
 	public String iconName(){
 		return "auto";
 	}
 	
-	// {{ 
+	/**
+	 * Metodo mediante el cual se carga el Vehiculo con todas sus propiedades.
+	 * 
+	 * @param patente
+	 * @param marca
+	 * @param modelo
+	 * @param ano
+	 * @param categ
+	 * @param color
+	 * @param kms
+	 * @param baul
+	 * @param combustible
+	 * @param fechaCompra
+	 * @param seguro
+	 * 
+	 * @return Auto
+	 */
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Auto")
 	public Auto cargarAuto(
@@ -55,9 +74,29 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		final String ownedBy = currentUserName();
 		return elAuto(patente.toUpperCase(),marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
 	}
-	// }}
-	// {{
-	@Hidden // for use by fixtures
+	
+	/**
+	 * 
+	 * Metodo en el cual se setean las propiedades del Vehiculo y se persiste.
+	 * Se controla que la patente ingresada no exista ya en nuestro sistema.
+	 * 
+	 * @param patente
+	 * @param marca
+	 * @param modelo
+	 * @param ano
+	 * @param categ
+	 * @param color
+	 * @param kms
+	 * @param baul
+	 * @param combustible
+	 * @param fechaCompra
+	 * @param seguro
+	 * @param activo
+	 * @param userName
+	 * 
+	 * @return Auto
+	 */
+	@Hidden 
 	public Auto elAuto(
 		final String patente,
 		final Marca marca, 
@@ -104,8 +143,22 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		}		
 		return auto;
     }
-	// }}
-	//{{Validacion de ingreso de fecha de compra
+	/**
+	 * Metodo provisto por el Framework que valida el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+	 * 
+	 * @param patente
+	 * @param marca
+	 * @param modelo
+	 * @param ano
+	 * @param categ
+	 * @param color
+	 * @param kms
+	 * @param baul
+	 * @param combustible
+	 * @param fecha
+	 * @param seguro
+	 * @return
+	 */
 	public String validateCargarAuto(
 			 String patente,
 			 Marca marca, 
@@ -128,18 +181,32 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 			}
 		
 	}
-	//}}
-	//{{chises Cargar auto
+	/**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+     * 
+     * @return List<Marca>
+     */
 	public List<Marca> choices1CargarAuto(){
 		List<Marca> items = listaMarcasActivas();		
 		return items;
 	}
+	/**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+     * 
+     * @return List<Categoria>
+     */
 	public List<Categoria> choices4CargarAuto(){
 		List<Categoria> items = listaCategoriasActivas();		
 		return items;
 	}
-	//}}
-	//{{Listado de Marcas Activas
+	/**
+	 * Se retorna un listado de marcas activas
+	 * @return List<Marca>
+	 */
     protected List<Marca> listaMarcasActivas() {
         return allMatches(Marca.class, new Filter<Marca>() {
             @Override
@@ -148,8 +215,10 @@ public class AutoServicio extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}
-    //{{Listado de categorias Activas
+    /**
+     * Retorna una lista de Categorias Activas
+     * @return List<Categoria>
+     */
 	protected List<Categoria> listaCategoriasActivas() {
         return allMatches(Categoria.class, new Filter<Categoria>() {
             @Override
@@ -158,16 +227,24 @@ public class AutoServicio extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}	
-	// {{ Listado de Autos Activos
+	/**
+     * Retorna un listado de autos activos
+     * @return List<Auto> 
+     */
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "2") 
     @Named("Listado Autos Activos")
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    
-   	// }}	
-    // {{  AutoComplite
+    /**
+     * Accion de Autocompletado generada por el framework, 
+     * retorna una lista de los objetos de la entidad.
+     *
+     * @param auto
+     * 
+     * @return List<Auto>
+     */
 	@Hidden    
 	public List<Auto> autoComplete(final String auto) {
 		return allMatches(Auto.class, new Filter<Auto>() {
@@ -178,12 +255,27 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	  });				
 	}
 	
-    // {{ Helpers
+	/**
+	 * Helpers
+	 * 
+	 * Retorna un boolean que determina 
+	 * si el usuario que se le está pasando por parametro es el mismo.
+	 * 
+	 * @param t
+	 * @return boolean
+	 * 
+	 */
 	protected boolean ownedByCurrentUser(final Auto t) {
 	    return Objects.equal(t.getOwnedBy(), currentUserName());
 	}
+	/**
+	 * Helpers
+	 * 
+	 * Retorna el usuario.
+	 * 
+	 * @return String
+	 */
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
-	}
-	// }}		
+	}		
 }

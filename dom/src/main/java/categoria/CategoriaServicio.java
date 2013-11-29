@@ -22,10 +22,26 @@ import categoria.Categoria.Traccion;
 
 @Named("Categoria")
 public class CategoriaServicio extends AbstractFactoryAndRepository {
+	/**
+	 * Identificacion del nombre del icono que aparecera en la UI
+	 * @return String
+	 */
 	public String iconName(){
 		return "categoria";
 	}	
-	// {{ Carga de Categorias
+	
+	/**
+	 * Metodo mediante el cual se realiza la carga de la Categoria.
+	 * 
+	 * @param categoria
+	 * @param cantPuert
+	 * @param cantPlaz
+	 * @param caja
+	 * @param traccion
+	 * @param precio
+	 * 
+	 * @return
+	 */
 	@MemberOrder(sequence="1")
 	public Categoria cargarCategoria(
 			@RegEx(validation="[A-Za-z]+")
@@ -42,6 +58,20 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		final boolean activo= true;
 		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
 	}
+	/**
+	 * Metodo que setea las diferentes propiedades de la Categoria y lo persiste.
+	 * Corrobora que la categoria ingresada no exista ya en el sistema.
+	 * 
+	 * @param cat
+	 * @param cantPuert
+	 * @param cantPlaz
+	 * @param caja
+	 * @param traccion
+	 * @param precio
+	 * @param userName
+	 * @param activo
+	 * @return
+	 */
 	@Hidden
 	public Categoria laCategoria(
 		final String cat,
@@ -81,8 +111,11 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		}
 		return categoria;
 		}
-	// }}
-	// {{ Listado de Categorias Activas
+	
+	/**
+	 * Se retorna un listado de Categorias activas
+	 * @return List<Categoria>
+	 */
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
     @NotInServiceMenu
@@ -93,6 +126,10 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
         }
         return items;
     }
+    /**
+     * Lista de categorias activas.
+     * @return
+     */
     protected List<Categoria> listaCategorias() {
         return allMatches(Categoria.class, new Filter<Categoria>() {
             @Override
@@ -101,8 +138,11 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}	
-    // {{ Listado de Autos filtrado por Categoria
+	 /**
+	  * Listado de autos filtrado por Categoria
+	  * @param lista
+	  * @return List<Auto>
+	  */
     @MemberOrder(sequence="3") 
 	public List<Auto> listadoAutosPorCategoria(final Categoria lista) {
 		return allMatches(Auto.class, new Filter<Auto>() {
@@ -112,12 +152,26 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		}
 	  });
 	}
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link CategoriaServicio#listadoAutosPorCategoria(Categoria)}
+     * 
+     * @return List<Categoria>
+     */
     public List<Categoria> choices0ListadoAutosPorCategoria(){
     	List<Categoria> items = listaCategorias();
     	return items;
     }    
-	// }} 
-    // {{AutoComplete 
+	
+    /**
+     * Accion de Autocompletado generada por el framework, 
+     * retorna una lista de los objetos de la entidad.
+     *
+     * @param cat
+     * 
+     * @return List<Categoria>
+     */
 	@Hidden    
 	public List<Categoria> autoComplete(final String cat) {
 		return allMatches(Categoria.class, new Filter<Categoria>() {
@@ -127,13 +181,28 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		}
 	  });				
 	}
-	// }}    
-	// {{ Helpers
-	protected boolean ownedByCurrentUser(final Categoria t) {
-	    return Objects.equal(t.getOwnedBy(), currentUserName());
+	
+	/**
+	 * Helpers
+	 * 
+	 * Retorna un boolean que determina 
+	 * si el usuario que se le está pasando por parametro es el mismo.
+	 * 
+	 * @param categoria
+	 * @return boolean
+	 * 
+	 */
+	protected boolean ownedByCurrentUser(final Categoria categoria) {
+	    return Objects.equal(categoria.getOwnedBy(), currentUserName());
 	}
+	/**
+	 * Helpers
+	 * 
+	 * Retorna el usuario.
+	 * 
+	 * @return String
+	 */
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
-	}
-	//}}	
+	}	
 }

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -25,22 +24,36 @@ import com.googlecode.wickedcharts.highcharts.options.SeriesType;
 import com.googlecode.wickedcharts.highcharts.options.Title;
 import com.googlecode.wickedcharts.highcharts.options.VerticalAlignment;
 import com.googlecode.wickedcharts.highcharts.options.series.SimpleSeries;
-
 import categoria.Categoria;
-
 import alquiler.Alquiler.EstadoAlquiler;
 import autos.Auto;
 import disponibles.AutoPorFecha;
-import disponibles.DisponibleServicio;
 import estadistica.Estadistica.Mes;
 
 @Named("Estadisticas")
 public class EstadisticaServicio extends AbstractFactoryAndRepository {
-	
+	/**
+	 * Identificacion del nombre del icono que aparecera en la UI
+	 * @return String
+	 */
 	public String iconName(){
 		return "estadistica";
 	}	
 	
+   /**
+    * Metodo que trae estadisticas por periodo de alquileres,
+    * puede seleccionarse por mes, por categoria, o ambas
+    * en un a&ntilde;o determinado.
+    * Se calculan los totales de alquileres ya sea por mes o por categoria.
+    * 
+    * Se retorna una lista de estadisticas.
+    * 
+    * @param ano
+    * @param mes
+    * @param categoria
+    * 
+    * @return List<Estadistica>
+    */
    @Hidden
    public List<Estadistica> estadistica(
 			@Named("Año") String ano,
@@ -150,7 +163,13 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}		
 		return listaEstadistica;		
 	}
- 
+    /**
+     * Metodo que realiza la estadistica anual por vehiculo en un a&ntilde;o determinado.
+     * Se determina la cantidad de alquileres por mes. 
+     * 
+     * @param ano
+     * @return List<Estadistica>
+     */
 	@Hidden
 	public List<Estadistica> estadisticaAnual(String ano) {
 		
@@ -189,52 +208,72 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}			
 		return listaEstadistica;
 	}
-	
-	// {{ Calculo de diferencia de dias entre fechas.
-	protected int calculoDias(final LocalDate a1, final LocalDate a2) {
-		long inicio = a1.toDate().getTime();
-		long fin = a2.toDate().getTime();
+	/**
+	 * Metodo que retorna la diferencia entre el dia desde y el dia hasta,
+	 * para realizar calculos.
+	 * 
+	 * @param fechaDesde
+	 * @param fechaHasta
+	 * 
+	 * @return int
+	 */ 
+	protected int calculoDias(final LocalDate fechaDesde, final LocalDate fechaHasta) {
+		long inicio = fechaDesde.toDate().getTime();
+		long fin = fechaHasta.toDate().getTime();
 		long diferencia = fin - inicio;
 		long resultado = diferencia / (24 * 60 * 60 * 1000);
 		return (int) resultado;
 	}
-	// }}
-	
-	//{{ Listado de autos
+
+	/**
+	 * Retorna un listado de vehiculos activos.
+	 * @return List<Auto>
+	 */
 	@Programmatic
 	public List<Auto> listaAutos() {
 		return allMatches(QueryDefault.create(Auto.class, "listadoAutosActivos"));
 	}
-	// }}
-	
-	//{{ Listado de estadisticas 
+	/**
+	 * Retorna un listado de estadisticas.
+	 * @return List<Estadistica>
+	 */
 	@Programmatic
 	public List<Estadistica> traerEstadisticas() {
 		return allMatches(QueryDefault.create(Estadistica.class, "listarEstadisticas"));
 	}
-	// }}
-	
+ 
+	/**
+	 * Retorna un listado de estadisticas por un vehiculo determinado por la patente.
+	 * @param patente
+	 * @return List<Estadistica>
+	 */
 	@Programmatic
-	// {{ Listado de Estadisticas por Auto 
-		public List<Estadistica> listaEstadisticaPorAuto(String patente){
-			return allMatches(QueryDefault.create(Estadistica.class, "listaEstadisticasPorAuto","auto",patente));
-			
-		}
-	//	}}
+	public List<Estadistica> listaEstadisticaPorAuto(String patente){
+		return allMatches(QueryDefault.create(Estadistica.class, "listaEstadisticasPorAuto","auto",patente));	
+	}
 	
-    // {{ Listado de Autos filtrado por Categoria
+    /**
+     * Retorna un listado de vehiculos filtrado por la Categoria.
+     * @param categoria
+     * @return List<Auto>
+     */
 	@Programmatic
-	public List<Auto> listaAutosCate(final Categoria lista) {
+	public List<Auto> listaAutosCate(final Categoria categoria) {
 		return allMatches(Auto.class, new Filter<Auto>() {
 		@Override
 		public boolean accept(Auto t){
-		return  lista.equals(t.getCategoria())&& t.getActivo();
+		return  categoria.equals(t.getCategoria())&& t.getActivo();
 		}
 	  });
 	}
-	// }}
-	
-	// {{ Existencia de alquileres
+	/**
+	 * Consulta si existen alquileres en la fecha estipulada.
+	 * Retorna una lista de vehiculos con el estado de alquiler que tiene en ese momento especifico.
+	 * 
+	 * @param fecha
+	 * @param patente
+	 * @return AutoPorFecha
+	 */
 	@Hidden
 	public AutoPorFecha existeAlquiler(final LocalDate fecha,
 			final String patente) {
@@ -247,11 +286,19 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 			}
 		});
 	}
-	// }}
-	
+	/**
+	 * Metodo que dependiendo de la seleccion del usuario en {@link EstadisticaServicio#estadistica} 
+	 * devuelve la fecha de inicio con los parametros que brinda el usuario.
+	 * 
+	 * Se genera la fecha en LocalDate, ya que es pasado como String y una Enumeracion
+	 * 
+	 * @param mes
+	 * @param ano
+	 * @return LocalDate
+	 */
 	protected LocalDate diaInicio(final Mes mes, final String ano){
 		LocalDate fechaAux=null;
-		
+
 		switch(mes){ 
 		case ENERO:fechaAux=new LocalDate(ano+"-01-01");break;
 		case FEBRERO:fechaAux=new LocalDate(ano+"-02-01");break;
@@ -268,6 +315,16 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}
 		return fechaAux;
 	}
+	/**
+	 * Metodo que dependiendo de la seleccion del usuario en {@link EstadisticaServicio#estadistica(String, Mes, Categoria)}
+	 * devuelve la fecha de fin con los parametros que brinda el usuario.
+	 * 
+	 * Se genera la fecha en LocalDate, ya que es pasado como String y una Enumeracion
+	 * 
+	 * @param mes
+	 * @param ano
+	 * @return LocalDate
+	 */
 	protected LocalDate diaFin(final Mes mes, final String ano){
 		LocalDate fechaAux=null;
 		
@@ -287,6 +344,14 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}
 		return fechaAux;
 	}
+	/**
+	 * Metodo que dependiendo de la seleccion del usuario en {@link EstadisticaServicio#estadisticaAnual(String)}
+	 * devuelve el mes con los parametros que brinda el usuario.
+	 * 
+	 * @param fecha
+	 * @param ano
+	 * @return LocalDate
+	 */
 	protected LocalDate verFechaFinal(final LocalDate fecha, String ano){
 		LocalDate fechaAux = null;
 
@@ -306,7 +371,16 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 		}
 		return fechaAux;
 	}	
-	
+	/**
+	 * Metodo que devuelve un grafico de WickedCharts 
+	 * para representar la consulta de alquileres por periodo.
+	 * 
+	 * @param ano
+	 * @param mes
+	 * @param categoria
+	 * 
+	 * @return WickedChart
+	 */
     @Named("Consulta Por Periodo")
     @MemberOrder(sequence="1") 
     public WickedChart crearGraficoPeriodo(
@@ -368,7 +442,15 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         }
         return new WickedChart(options);
     }
-	// {{ Choices de Año
+      /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link EstadisticaServicio#crearGraficoPeriodo}
+     * 
+     * Retorna una lista de a&ntilde;os.
+     * 
+     * @return List<String>
+     */
     public List<String> choices0CrearGraficoPeriodo(){
     	Calendar cal= Calendar.getInstance();
     	int anoActual= cal.get(Calendar.YEAR);    	
@@ -380,7 +462,15 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     	}
     	return lista;
     }
-	// {{ Choices de Categoria
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link EstadisticaServicio#crearGraficoPeriodo}
+     * 
+     * Retorna una lista de Categorias activas.
+     * 
+     * @return List<Categoria>
+     */
 	public List<Categoria> choices2CrearGraficoPeriodo(){
 		List<Categoria> items = listaCategoriasActivas();		
 		return items;
@@ -393,15 +483,21 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
             }
         });
     }
-    // }}	
-	
+  
+   /**
+   * Metodo que devuelve un grafico de WickedCharts 
+   * para representar la consulta anual de alquileres.
+   * 
+   * @param ano
+   * 
+   * @return WickedChart
+   */
     @Named("Consulta Anual")
     @MemberOrder(sequence="2") 
     public WickedChart crearGraficoAnual(
 			@Named("Año") String ano) {
     	
     	estadisticaAnual(ano);
-    	
     	
         Options options = new Options();
 
@@ -429,7 +525,6 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         List<Auto> listaAutos=listaAutos();
         List<Estadistica> listaEst=null;
         
-	        //Si solo se escoje Año.
 	        if(ano!=null){		        	
 		        for(Auto a : listaAutos) {   
 		        	listaEst = listaEstadisticaPorAuto(a.getPatente());
@@ -448,7 +543,16 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         
         return new WickedChart(options);
     }    
-	// {{ Choices de Año
+    
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link EstadisticaServicio#crearGraficoAnual}
+     * 
+     * Retorna una lista de a&ntilde;os.
+     * 
+     * @return List<String>
+     */
     public List<String> choices0CrearGraficoAnual(){
     	Calendar cal= Calendar.getInstance();
     	int anoActual= cal.get(Calendar.YEAR);    	
@@ -460,10 +564,4 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     	}
     	return lista;
     }    
-	@SuppressWarnings("unused")
-	private DisponibleServicio dispServ;
-    @Hidden
-    public void inyectarAdicionalServicio(DisponibleServicio dispServ){
-    	this.dispServ=dispServ;
-    }
 }

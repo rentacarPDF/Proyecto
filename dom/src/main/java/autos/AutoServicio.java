@@ -144,7 +144,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		return auto;
     }
 	/**
-	 * Metodo provisto por el Framework que valida el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+	 * Metodo provisto por el Framework que valida el metodo 
+	 * {@link AutoServicio#cargarAuto}
 	 * 
 	 * @param patente
 	 * @param marca
@@ -157,7 +158,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	 * @param combustible
 	 * @param fecha
 	 * @param seguro
-	 * @return
+	 * 
+	 * @return String
 	 */
 	public String validateCargarAuto(
 			 String patente,
@@ -184,7 +186,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	/**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.
-     * Choices para el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+     * Choices para el metodo {@link AutoServicio#cargarAuto}
      * 
      * @return List<Marca>
      */
@@ -195,7 +197,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	/**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.
-     * Choices para el metodo {@link AutoServicio#cargarAuto(String, Marca, String, int, Categoria, String, int, int, TipoCombustible, Date, Seguro)}
+     * Choices para el metodo {@link AutoServicio#cargarAuto}
      * 
      * @return List<Categoria>
      */
@@ -265,8 +267,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Auto t) {
-	    return Objects.equal(t.getOwnedBy(), currentUserName());
+	protected boolean ownedByCurrentUser(final Auto auto) {
+	    return Objects.equal(auto.getOwnedBy(), currentUserName());
 	}
 	/**
 	 * Helpers

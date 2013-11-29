@@ -40,7 +40,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	 * @param traccion
 	 * @param precio
 	 * 
-	 * @return
+	 * @return Categoria
 	 */
 	@MemberOrder(sequence="1")
 	public Categoria cargarCategoria(
@@ -70,7 +70,8 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	 * @param precio
 	 * @param userName
 	 * @param activo
-	 * @return
+	 * 
+	 * @return Categoria
 	 */
 	@Hidden
 	public Categoria laCategoria(

@@ -110,22 +110,8 @@ public class Estadistica {
     	this.cantAlq=cantAlq;
     }
     // }}
-    
-   	// {{ Seleccion Categoria
-   	private boolean seleccionCat;
-   	@Hidden
-   	@MemberOrder(sequence="5")
-   	@DescribedAs("SeleccionCategoria")
-   	public boolean getSeleccionCategoria() {
-   		return seleccionCat; 
-   	}   	
-   	public void setSeleccionCategoria(final boolean seleccionCat){
-   		this.seleccionCat=seleccionCat; 
-   	}	
-    // }}  
-   	   	
-   	//}}
-    
+    	   	
+   	//}}    
     @SuppressWarnings("unused")
 	private DomainObjectContainer container;    
     public void injectDomainObjectContainer(final DomainObjectContainer container) {

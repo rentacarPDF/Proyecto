@@ -2,17 +2,33 @@ package mails;
 
 import java.util.ArrayList;
 import java.util.Properties;
-
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.apache.isis.applib.annotation.Hidden;
 
-
+/**
+ * 
+ * Clase que env&iacute;a Emails a nuestros Clientes cuando se efectua un alquiler.
+ *
+ */
 public class Mail {
+/**
+ * Metodo que env&iacute;a Emails a los Clientes
+ * 
+ * En el se configuran las propiedades de conexi&oacute;n,
+ * se configura el puerto y el servidor del correo.  
+ * Se prepara la sesi&oacute;n para enviar el mensaje y se cierra la sesi&oacute;n.
+ * 
+ * @param apellidoCliente
+ * @param nombreCliente
+ * @param lista
+ * @param totalPago
+ * @param correo
+ */
+	
 @Hidden	
 public void enviaMails(String apellidoCliente,String nombreCliente,ArrayList<String> lista,String totalPago,String correo){
 	try

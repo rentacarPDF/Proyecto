@@ -230,11 +230,32 @@ public class AutoServicio extends AbstractFactoryAndRepository {
         });
     }
 	/**
+	 * Busqueda de Auto.
+	 * Se retorna una lista de Autos.
+	 * 
+	 * @param auto
+	 * 
+	 * @return List<Auto>
+	 */
+	@MemberOrder(sequence = "2")
+	@Named("Buscar Auto")
+	public List<Auto> busquedaAuto(final Auto auto) {
+		return allMatches(Auto.class, new Filter<Auto>() {
+		@Override
+		public boolean accept(final Auto t) {		
+		return t.getPatente().equals(auto.getPatente()); 
+		}
+	  });				
+	}
+	public List<Auto> choices0BusquedaAuto(){
+		return listadoAutosActivos();
+	}
+	/**
      * Retorna un listado de autos activos
      * @return List<Auto> 
      */
     @ActionSemantics(Of.SAFE)
-	@MemberOrder(sequence = "2") 
+	@MemberOrder(sequence = "3") 
     @Named("Listado Autos Activos")
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));

@@ -390,7 +390,7 @@ public class Alquiler {
      */
     public String disableRemoveFromAutos(AutoPorFecha auto){
         if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.EN_PROCESO) {
-        	return autos.size()>0? null: "No existe Autos para este Alquiler";
+        	return autos.size()>1? null: "Debe quedar al menos un auto para mantener el Alquiler";
         }
         else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
     }

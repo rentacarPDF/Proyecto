@@ -33,7 +33,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	@MemberOrder(sequence = "1") 
 	@Named("Cargar Adicional")
 	public Adicional cargar(
-			@RegEx(validation="[A-Za-z]+")
+			@RegEx(validation="[A-Za-z ]+")
 			@Named("Nombre") String nombre,
 			@Optional
 			@MultiLine

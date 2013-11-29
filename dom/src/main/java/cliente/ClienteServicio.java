@@ -22,6 +22,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	}
 	// {{ Carga de clientes
 	@MemberOrder(sequence = "1")
+	@Named("Cargar Cliente")
 	public Cliente cargarCliente(
 			@RegEx(validation = "[A-Za-z ]+")
 			@Named("Nombre") String nombre,
@@ -75,9 +76,27 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		return cliente;
 	} 
 	// }}
+	
+	// {{ 
+	@MemberOrder(sequence = "2")
+	@Named("Buscar Cliente")
+	public List<Cliente> busquedaCliente(final Cliente cliente) {
+		return allMatches(Cliente.class, new Filter<Cliente>() {
+		@Override
+		public boolean accept(final Cliente t) {		
+		return t.getNumeroIdent().equals(cliente.getNumeroIdent()); 
+		}
+	  });				
+	}
+	public List<Cliente> choices0BusquedaCliente(){
+		return listadoClienteActivos();
+	}
+	// }}
+	
 	// {{ Listado de Clientes Activos
 	@ActionSemantics(Of.SAFE)
-	@MemberOrder(sequence = "2")
+	@MemberOrder(sequence = "3")
+	@Named("Listado Clientes")
 	public List<Cliente> listadoClienteActivos() {
 		List<Cliente> items = listaClientes();
 		if (items.isEmpty()) {
@@ -93,7 +112,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			}
 		});
 	}
-	// }}
+	// }}	
 	
 	// {{
 	@Hidden    

@@ -71,7 +71,6 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 								est.setPatente(auto.getPatente());
 								est.setModeloAuto(auto.getModelo());
 								est.setCategoria(auto.getCategoria());
-								est.setSeleccionCategoria(false);
 								est.setMes(mes.toString());
 							}
 							if (existeAlquiler(fechaAux, est.getPatente()) != null) {
@@ -91,7 +90,6 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 					for (int i = 0; i <= calculoDias(fechaInicio, hastaAux); i++) {				
 						int suma=0;				
 						est.setCategoria(categoria);	
-						est.setSeleccionCategoria(true);
 						est.setMes(mes.toString());
 						if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
 							suma=est.getCantAlq();

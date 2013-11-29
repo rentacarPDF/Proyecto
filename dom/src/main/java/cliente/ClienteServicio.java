@@ -10,17 +10,29 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import com.google.common.base.Objects;
-
 import cliente.Cliente.TipoId;
-
-
 
 @Named("Cliente")
 public class ClienteServicio extends AbstractFactoryAndRepository {
+	/**
+	 * Identificacion del nombre del icono que aparecera en la UI
+	 * @return String
+	 */
 	public String iconName(){
 		return "cliente";
 	}
-	// {{ Carga de clientes
+	/**
+	 * Se realiza la carga de los Clientes, con todos sus atributos.
+	 * 
+	 * @param nombre
+	 * @param apellido
+	 * @param tipo
+	 * @param numeroId
+	 * @param numeroTel
+	 * @param mail
+	 * 
+	 * @return Cliente
+	 */
 	@MemberOrder(sequence = "1")
 	@Named("Cargar Cliente")
 	public Cliente cargarCliente(
@@ -39,6 +51,21 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		final boolean activo = true;
 		return elCliente(nombre.toUpperCase(), apellido.toUpperCase(), tipo, numeroId, numeroTel, mail, ownedBy, activo);
 	}	
+	/**
+	 * Metodo que setea las diferentes propiedades del Cliente.
+	 * Se corrobora que no exista ya un cliente con ese numero de Identificacion Tributaria en nuestro sistema.
+	 * Se persiste.
+	 * 
+	 * @param nombre
+	 * @param apellido
+	 * @param tipo
+	 * @param numeroId
+	 * @param numeroTel
+	 * @param mail
+	 * @param userName
+	 * @param activo
+	 * @return Cliente
+	 */
 	@Hidden
 	public Cliente elCliente(
 			final String nombre, 
@@ -75,9 +102,15 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		}
 		return cliente;
 	} 
-	// }}
 	
-	// {{ 
+	/**
+	 * Busqueda de Clientes.
+	 * Se retorna una lista de Clientes.
+	 * 
+	 * @param cliente
+	 * 
+	 * @return List<Cliente>
+	 */
 	@MemberOrder(sequence = "2")
 	@Named("Buscar Cliente")
 	public List<Cliente> busquedaCliente(final Cliente cliente) {
@@ -88,12 +121,22 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		}
 	  });				
 	}
+	 /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link ClienteServicio#busquedaCliente(Cliente)}
+     * 
+     * @return List<Cliente>
+	 */
 	public List<Cliente> choices0BusquedaCliente(){
 		return listadoClienteActivos();
 	}
-	// }}
 	
-	// {{ Listado de Clientes Activos
+	/**
+	 * Se retorna un listado de Clientes Activos
+	 * 
+	 * @return List<Cliente>
+	 */
 	@ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "3")
 	@Named("Listado Clientes")
@@ -104,6 +147,10 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		}
 		return items;
 	}
+	/**
+	 * Lista de clientes activos.
+	 * @return List<Cliente>
+	 */
 	protected List<Cliente> listaClientes() {
 		return allMatches(Cliente.class, new Filter<Cliente>() {
 			@Override
@@ -112,9 +159,14 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			}
 		});
 	}
-	// }}	
-	
-	// {{
+	/**
+     * Accion de Autocompletado generada por el framework, 
+     * retorna una lista de los objetos de la entidad.
+     *
+     * @param cliente
+     * 
+     * @return List<Cliente>
+     */
 	@Hidden    
 	public List<Cliente> autoComplete(final String cliente) {
 		return allMatches(Cliente.class, new Filter<Cliente>() {
@@ -124,13 +176,27 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		}
 	  });				
 	}
-	// }}
-	// {{ Helpers
-	protected boolean ownedByCurrentUser(final Cliente t) {
-		return Objects.equal(t.getOwnedBy(), currentUserName());
+	/**
+	 * Helpers
+	 * 
+	 * Retorna un boolean que determina 
+	 * si el usuario que se le está pasando por parametro es el mismo.
+	 * 
+	 * @param cliente
+	 * @return boolean
+	 * 
+	 */ 
+	protected boolean ownedByCurrentUser(final Cliente cliente) {
+		return Objects.equal(cliente.getOwnedBy(), currentUserName());
 	}
+	/**
+	 * Helpers
+	 * 
+	 * Retorna el usuario.
+	 * 
+	 * @return String
+	 */
 	protected String currentUserName() {
 		return getContainer().getUser().getName();
 	}
-	// }}
 }

@@ -2,6 +2,7 @@ package historiales;
 
 import java.util.Collections;
 import java.util.List;
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
@@ -91,6 +92,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 * @return List<AutoPorFecha>
 	 */
     
+	
 	@SuppressWarnings("unchecked")
 	public List<AutoPorFecha> historialPorAuto(final Auto patente ) 
 	 { List<AutoPorFecha> items = historialPorAutoMetodo(patente);
@@ -111,4 +113,74 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	     return items;
 	  
 	 }
+	
+	 /**
+     * Lista de Autos activos.
+     * @return
+     */
+    protected List<Auto> listaAuto() {
+        return allMatches(Auto.class, new Filter<Auto>() {
+            @Override
+            public boolean accept(final Auto t) {
+                return t.getActivo();
+            }
+        });
+    }
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link HisotorialServicio#historialPorAuto(Auto)}
+     * 
+     * @return List<Auto>
+     */
+	public List<Auto> choices0HistorialPorAuto(){
+		List<Auto> items=listaAuto();
+		return items;
+	}
+	 /**
+     * Lista de Categorias activas.
+     * @return
+     */
+    protected List<Categoria> listaCategorias() {
+        return allMatches(Categoria.class, new Filter<Categoria>() {
+            @Override
+            public boolean accept(final Categoria t) {
+                return t.getActivo();
+            }
+        });
+    }
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link HisotorialServicio#historialPorCategoria(Categoria)}
+     * 
+     * @return List<Categoria>
+     */
+	public List<Categoria> choices0HistorialPorCategoria(){
+		List<Categoria> items=listaCategorias();
+		return items;
+	}
+	 /**
+     * Lista de Categorias activas.
+     * @return
+     */
+    protected List<Cliente> listaClientes() {
+        return allMatches(Cliente.class, new Filter<Cliente>() {
+            @Override
+            public boolean accept(final Cliente t) {
+                return t.getActivo();
+            }
+        });
+    }
+    /**
+     * Choices provisto por el Framework
+     * que habilita una serie de opciones para un metodo.
+     * Choices para el metodo {@link HisotorialServicio#historialPorCliente(Cliente)}
+     * 
+     * @return List<Cliente>
+     */
+	public List<Cliente> choices0HistorialPorCliente(){
+		List<Cliente> items=listaClientes();
+		return items;
+	}
 }

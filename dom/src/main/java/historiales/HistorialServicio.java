@@ -71,6 +71,11 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 		 }
 		});
 	 }
+	/**
+	 * Se retorna un historial de vehiculos alquilados por una Categoria en especifica ordenada por fecha ascendetemente.
+	 * @param categoria
+	 * @return List<AutoPorFecha>
+	 */
 	@SuppressWarnings("unchecked")
 	public List<AutoPorFecha> historialPorCategoria(final Categoria categoria) 
 	 { List<AutoPorFecha> items = historialPorCategoriaMetodo(categoria);
@@ -78,7 +83,14 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	     return items;
 	  
 	 }
-	//ordenado por fecha
+	/**
+	 * Se retorna un historial de alquileres de un vehiculo en especifico ordenado por fecha ascendentemente.
+	 * 
+	 * @param patente
+	 * 
+	 * @return List<AutoPorFecha>
+	 */
+    
 	@SuppressWarnings("unchecked")
 	public List<AutoPorFecha> historialPorAuto(final Auto patente ) 
 	 { List<AutoPorFecha> items = historialPorAutoMetodo(patente);
@@ -86,7 +98,12 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	     return items;
 	  
 	 }
-	//ordenado por fecha
+	/**
+	 * 
+	 * Se retorna un historial de vehiculos alquilados por un Cliente en especifico ordenado por fecha ascendentemente.
+	 * @param cliente
+	 * @return List<AutoPorFecha>
+	 */
 	@SuppressWarnings("unchecked")
 	public List<AutoPorFecha> historialPorCliente(final Cliente cliente ) 
 	 { List<AutoPorFecha> items = historialPorClienteMetodo(cliente);

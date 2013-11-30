@@ -1,8 +1,9 @@
 package historiales;
 
+import java.util.Collections;
 import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.filter.Filter;
 import categoria.Categoria;
@@ -31,8 +32,8 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 * 
 	 * @return List<AutoPorFecha>
 	 */
-	@MemberOrder(sequence = "1")
-	 public List<AutoPorFecha> historialPorAuto(final Auto patente) 
+	@Hidden
+	 public List<AutoPorFecha> historialPorAutoMetodo(final Auto patente) 
 	 { 
 		return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
 		 @Override 
@@ -47,7 +48,8 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 * @param cliente
 	 * @return List<AutoPorFecha>
 	 */
-	public List<AutoPorFecha> historialPorCliente(final Cliente cliente) 
+	@Hidden
+	public List<AutoPorFecha> historialPorClienteMetodo(final Cliente cliente) 
 	 { return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
@@ -60,12 +62,36 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
 	 * @param categoria
 	 * @return List<AutoPorFecha>
 	 */
-	public List<AutoPorFecha> historialPorCategoria(final Categoria categoria) 
+	@Hidden
+	public List<AutoPorFecha> historialPorCategoriaMetodo(final Categoria categoria) 
 	 { return allMatches(AutoPorFecha.class, new Filter<AutoPorFecha>(){ 
 		 @Override 
 		 public boolean accept(final AutoPorFecha auto) 
 		 {  return auto.getCategoria().equals(categoria) && auto.getAlquiler().getEstado()==EstadoAlquiler.CERRADO;  
 		 }
 		});
+	 }
+	@SuppressWarnings("unchecked")
+	public List<AutoPorFecha> historialPorCategoria(final Categoria categoria) 
+	 { List<AutoPorFecha> items = historialPorCategoriaMetodo(categoria);
+	     Collections.sort(items,new AutoPorFecha());
+	     return items;
+	  
+	 }
+	//ordenado por fecha
+	@SuppressWarnings("unchecked")
+	public List<AutoPorFecha> historialPorAuto(final Auto patente ) 
+	 { List<AutoPorFecha> items = historialPorAutoMetodo(patente);
+	     Collections.sort(items,new AutoPorFecha());
+	     return items;
+	  
+	 }
+	//ordenado por fecha
+	@SuppressWarnings("unchecked")
+	public List<AutoPorFecha> historialPorCliente(final Cliente cliente ) 
+	 { List<AutoPorFecha> items = historialPorClienteMetodo(cliente);
+	     Collections.sort(items,new AutoPorFecha());
+	     return items;
+	  
 	 }
 }

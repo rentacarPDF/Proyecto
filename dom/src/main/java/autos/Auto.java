@@ -305,17 +305,16 @@ public class Auto {
    	 */
    	public void setActivo(boolean activo){
    		this.activo=activo; 
-   	}	
-    
+   	}    
    	/**
    	 * Accion provista por el Framework para remover el objeto Vehiculo.
    	 */
     @Named("Borrar")
    	public void remove(){
    		setActivo(false);
+   		container.informUser("El registro a sido eliminado");
    	}   	       
    
-    @SuppressWarnings("unused")
     private DomainObjectContainer container;
     /**
      *  {{ injected: DomainObjectContainer

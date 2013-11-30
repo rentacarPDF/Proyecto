@@ -106,12 +106,12 @@ public class Marca {
    	@Named("Borrar")
    	public void remove(){
    		setActivo(false);   
-   		container.warnUser("Se elimino el registro");
+   		container.informUser("El registro a sido eliminado");
    	}   	
  
     private DomainObjectContainer container;
     /**
-     *  {{ injected: DomainObjectContainer
+     *  injected: DomainObjectContainer
      */
     public void setDomainObjectContainer(final DomainObjectContainer container){
         this.container = container;

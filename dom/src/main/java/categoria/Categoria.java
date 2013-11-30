@@ -197,7 +197,7 @@ public class Categoria {
    		return activo; 
    	}  
    	/**
-   	 * Se setea la categoria .
+   	 * Se setea la categoria.
    	 * @param activo
    	 */
    	public void setActivo(final boolean activo) {
@@ -210,11 +210,12 @@ public class Categoria {
    	@Named("Borrar")
     public void remove() {
         setActivo(false);
+        container.informUser("El registro a sido eliminado");
 	}		
 	
     private DomainObjectContainer container;
 	/**
-	 * {{ injected: DomainObjectContainer
+	 * injected: DomainObjectContainer
 	 * @return DomainObjectContainer
 	 */
     protected DomainObjectContainer getContainer() {

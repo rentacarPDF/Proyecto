@@ -199,17 +199,18 @@ public class Cliente {
 	@Named("Borrar")
 	public void remove() {
 		setActivo(false);
+		container.informUser("El registro a sido eliminado");
 	}
 	
 	private DomainObjectContainer container;
 	/**
-	 *  {{ injected: DomainObjectContainer
+	 *  injected: DomainObjectContainer
 	 */
 	protected DomainObjectContainer getContainer() {
 		return container;
 	}
 	/**
-	 *  {{ injected: DomainObjectContainer
+	 *  injected: DomainObjectContainer
 	 */
 	public void setDomainObjectContainer(final DomainObjectContainer container) {
 		this.container = container;

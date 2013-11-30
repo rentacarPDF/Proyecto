@@ -1,7 +1,6 @@
 package twitter;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
@@ -64,25 +63,6 @@ public class Twit {
 				container.warnUser("Ha ocurrido un problema--");
 			}
 	}
-        
-    private String ownedBy;
-    /**
-     * Retorna el usuario.
-     * @return String
-     */
-	@Hidden 
-	public String getOwnedBy() {
-	    return ownedBy;	
-	}
-	/**
-	 * Se setea el usuario.
-	 * @param ownedBy
-	 */
-	public void setOwnedBy(final String ownedBy){
-	    this.ownedBy = ownedBy;	
-	}	
-	
-
     private DomainObjectContainer container;
     /**
      * // {{ injected: DomainObjectContainer

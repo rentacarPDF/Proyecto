@@ -48,21 +48,21 @@ public class Cliente {
 		return buf.toString();
 	}
 	
-	private String ownedBy;
+	private String usuario;
 	/**
 	 * Retorna el nombre de usuario.
 	 * @return String
 	 */
 	@Hidden
-	public String getOwnedBy() {
-		return ownedBy;
+	public String getUsuario() {
+		return usuario;
 	}
 	/**
 	 * Se setea el nombre de usuario.
-	 * @param ownedBy
+	 * @param usuario
 	 */
-	public void setOwnedBy(final String ownedBy) {
-		this.ownedBy = ownedBy;
+	public void setUsuario(final String usuario) {
+		this.usuario = usuario;
 	}
 	
 	private String nombre;

@@ -20,7 +20,7 @@ import javax.jdo.annotations.VersionStrategy;
 @javax.jdo.annotations.Query(
 		name="listado_marcas",
 		language="JDQL",
-		value="SELECT FROM dom.utilidades.Marca WHERE ownedBy == :ownedBy")})
+		value="SELECT FROM dom.utilidades.Marca WHERE usuario == :usuario")})
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
 @ObjectType("MARCA")
 @AutoComplete(repository=MarcaServicio.class, action="autoComplete")
@@ -45,22 +45,22 @@ public class Marca {
 		return buf.toString(); 
 	}
 	
-	private String ownedBy;
+	private String usuario;
 	/**
 	 * Retorna el nombre del usuario.
 	 * No se muestra en la UI
 	 * @return String
 	 */
 	@Hidden
-	public String getOwnedBy() {
-	    return ownedBy;	
+	public String getUsuario() {
+	    return usuario;	
 	}
 	/**
 	 * Se setea el nombre del usuario.
-	 * @param ownedBy
+	 * @param usuario
 	 */
-	public void setOwnedBy(final String ownedBy){
-	    this.ownedBy = ownedBy; 
+	public void setUsuario(final String usuario){
+	    this.usuario = usuario; 
 	}	    
 	
 	private String nombre;

@@ -54,9 +54,9 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			@Named("Tipo de traccion") Traccion traccion,
 			@RegEx(validation = "[0-9]+")
 			@Named("Precio de la categoria")String precio)
-	{   final String ownedBy = currentUserName();
+	{   final String usuario = currentUserName();
 		final boolean activo= true;
-		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,ownedBy,activo);
+		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,usuario,activo);
 	}
 	/**
 	 * Metodo que setea las diferentes propiedades de la Categoria y lo persiste.
@@ -100,7 +100,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			categoria.setCaja(caja);
 			categoria.setTraccion(traccion);
 			categoria.setPrecio(precio);
-			categoria.setOwnedBy(userName);
+			categoria.setUsuario(userName);
 			categoria.setActivo(true);
 			persist(categoria);
 		}
@@ -193,8 +193,8 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Categoria categoria) {
-	    return Objects.equal(categoria.getOwnedBy(), currentUserName());
+	protected boolean usuarioCurrentUser(final Categoria categoria) {
+	    return Objects.equal(categoria.getUsuario(), currentUserName());
 	}
 	/**
 	 * Helpers

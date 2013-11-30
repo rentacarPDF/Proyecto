@@ -144,21 +144,21 @@ public class Adicional {
    	public void remove(){
    		setActivo(false);
    	}   	 
-    private String ownedBy;
+    private String usuario;
     /**
      * Retorna el nombre del usuario
      * @return String
      */
 	@Hidden 
-	public String getOwnedBy() {
-	    return ownedBy;	
+	public String getUsuario() {
+	    return usuario;	
 	}
 	/**
 	 * Setea el nombre del usuario
 	 * @param ownedBy
 	 */
-	public void setOwnedBy(final String ownedBy){
-	    this.ownedBy = ownedBy;	
+	public void setUsuario(final String usuario){
+	    this.usuario = usuario;	
 	}	
 	 
     @SuppressWarnings("unused")

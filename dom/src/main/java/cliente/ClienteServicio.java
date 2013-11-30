@@ -47,9 +47,9 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			@Named("Numero de Telefono") int numeroTel,
 			@RegEx(validation = "(\\w+\\-)*(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
 			@Named("Correo Electrónico") String mail){
-		final String ownedBy = currentUserName();
+		final String usuario = currentUserName();
 		final boolean activo = true;
-		return elCliente(nombre.toUpperCase(), apellido.toUpperCase(), tipo, numeroId, numeroTel, mail, ownedBy, activo);
+		return elCliente(nombre.toUpperCase(), apellido.toUpperCase(), tipo, numeroId, numeroTel, mail, usuario, activo);
 	}	
 	/**
 	 * Metodo que setea las diferentes propiedades del Cliente.
@@ -91,7 +91,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			cliente.setNumeroIdent(numeroId);
 			cliente.setNumeroTel(numeroTel);
 			cliente.setEmail(mail);
-			cliente.setOwnedBy(userName);
+			cliente.setUsuario(userName);
 			cliente.setActivo(true);
 			persistIfNotAlready(cliente);			
 			
@@ -186,8 +186,8 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	 * @return boolean
 	 * 
 	 */ 
-	protected boolean ownedByCurrentUser(final Cliente cliente) {
-		return Objects.equal(cliente.getOwnedBy(), currentUserName());
+	protected boolean usuarioCurrentUser(final Cliente cliente) {
+		return Objects.equal(cliente.getUsuario(), currentUserName());
 	}
 	/**
 	 * Helpers

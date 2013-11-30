@@ -72,21 +72,21 @@ public class Auto {
 		this.patente=patente; 
 	} 	
 		
-	private String ownedBy;
+	private String usuario;
 	/**
 	 * Retorno de nombre del usuario
 	 * @return String
 	 */
 	@Hidden 
-	public String getOwnedBy() {
-	    return ownedBy;	
+	public String getUsuario() {
+	    return usuario;	
 	}
 	/**
 	 * Seteo del nombre del usuario
-	 * @param ownedBy
+	 * @param usuario
 	 */
-	public void setOwnedBy(final String ownedBy){
-	    this.ownedBy = ownedBy;	
+	public void setUsuario(final String usuario){
+	    this.usuario = usuario;	
 	}	
  
 	@Persistent

@@ -31,8 +31,8 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 			@RegEx(validation = "[A-Za-z]+")
 			@Named("Marca") String marca) { 
 		final boolean activo=true;
-		final String ownedBy = currentUserName();
-		return laMarca(marca.toUpperCase(), activo, ownedBy); 
+		final String usuario = currentUserName();
+		return laMarca(marca.toUpperCase(), activo, usuario); 
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 		{
 		aux.setNombre(marca);
 		aux.setActivo(activo);
-		aux.setOwnedBy(userName);
+		aux.setUsuario(userName);
 		persist(aux);
 		}
 		else{
@@ -138,8 +138,8 @@ public class MarcaServicio extends AbstractFactoryAndRepository {
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Marca marca)	{
-		return Objects.equal(marca.getOwnedBy(), currentUserName()); 
+	protected boolean usuarioCurrentUser(final Marca marca)	{
+		return Objects.equal(marca.getUsuario(), currentUserName()); 
 	}
 	/**
 	 * Helpers

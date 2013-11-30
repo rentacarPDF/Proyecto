@@ -71,8 +71,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		@Named("Fecha de Compra") Date fechaCompra,
 		@Named("Compañía de Seguro")Seguro seguro) { 
 		final boolean activo=true;
-		final String ownedBy = currentUserName();
-		return elAuto(patente.toUpperCase(),marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, ownedBy);
+		final String usuario = currentUserName();
+		return elAuto(patente.toUpperCase(),marca,modelo.toUpperCase(),ano,categ,color.toUpperCase(),kms,baul,combustible,fechaCompra,seguro,activo, usuario);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 			auto.setFechaCompra(fechaCompra);
 			auto.setSeguro(seguro);
 			auto.setActivo(activo);
-			auto.setOwnedBy(userName);
+			auto.setUsuario(userName);
 			persistIfNotAlready(auto);
 		}
 		else {
@@ -288,8 +288,8 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Auto auto) {
-	    return Objects.equal(auto.getOwnedBy(), currentUserName());
+	protected boolean usuarioCurrentUser(final Auto auto) {
+	    return Objects.equal(auto.getUsuario(), currentUserName());
 	}
 	/**
 	 * Helpers

@@ -59,20 +59,20 @@ public class Categoria {
         return buf.toString();
 	}     
   
-    private String ownedBy;
+    private String usuario;
     /**
      * Retorna el nombre del usuario.
      */
     @Hidden	
-	public String getOwnedBy() {
-	    return ownedBy;
+	public String getUsuario() {
+	    return usuario;
 	}
     /**
      * Se setea el nombre del usuario.
-     * @param ownedBy
+     * @param usuario
      */
-	public void setOwnedBy(final String ownedBy) {
-	    this.ownedBy = ownedBy;
+	public void setUsuario(final String usuario) {
+	    this.usuario = usuario;
 	}  
     
 	private String categoria;

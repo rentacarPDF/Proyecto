@@ -618,21 +618,21 @@ public class Alquiler {
 		}
 	}
 	
-	private String ownedBy;
+	private String usuario;
 	/**
 	 * Propiedad que retorna el usuario.
 	 * @return String
 	 */
 	@Hidden 
-	public String getOwnedBy() {
-	    return ownedBy;	
+	public String getUsuario() {
+	    return usuario;	
 	}
 	/**
 	 * Propiedad que setea el usuario.
-	 * @param ownedBy
+	 * @param usuario
 	 */
-	public void setOwnedBy(final String ownedBy){
-	    this.ownedBy = ownedBy;	
+	public void setUsuario(final String usuario){
+	    this.usuario = usuario;	
 	}	
 	/**
 	 * Accion que pasa el estado del Alquiler a: EN PROCESO

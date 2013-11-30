@@ -40,12 +40,12 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     @MemberOrder(sequence="1")
     public Alquiler reservar(
             @Named("Cliente") Cliente cliente ) {
-    		final String ownedBy = currentUserName();
+    		final String usuario = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
             Mail mail=new Mail();
             persistIfNotAlready(alquiler);
             List<Disponible> disponibilidad = listaAutosReservados();
-            return crear(alquiler,disponibilidad,cliente,ownedBy,mail);
+            return crear(alquiler,disponibilidad,cliente,usuario,mail);
     }
     /**
      * 
@@ -73,7 +73,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setNombreCliente(cliente.getNombre());
     			alquiler.setApellidoCliente(cliente.getApellido());
     			alquiler.setEstado(EstadoAlquiler.RESERVADO);
-    			alquiler.setOwnedBy(userName);
+    			alquiler.setUsuario(userName);
     			
     			ArrayList<String> listaReservas=new ArrayList<String>();
     			for (Disponible disp:disponibilidad){
@@ -154,8 +154,8 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Alquiler t) {
-	    return Objects.equal(t.getOwnedBy(), currentUserName());
+	protected boolean usuarioCurrentUser(final Alquiler t) {
+	    return Objects.equal(t.getUsuario(), currentUserName());
 	}
 	/**
 	 * Helpers

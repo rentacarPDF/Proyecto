@@ -42,8 +42,8 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			@RegEx(validation = "[0-9]+")
 			@Named("Precio") String precio){
 			final boolean activo=true;
-			final String ownedBy = currentUserName();
-			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,ownedBy);
+			final String usuario = currentUserName();
+			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,usuario);
 	}
 	/**
 	 * Se persiste y setea cada una de las propiedades del Adicional
@@ -69,7 +69,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			adic.setDescripcion(descrip);
 			adic.setPrecio(precio);
 			adic.setActivo(activo);
-			adic.setOwnedBy(userName);
+			adic.setUsuario(userName);
 			persistIfNotAlready(adic);
 			return adic;
 	}
@@ -109,8 +109,8 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	 * @return boolean
 	 * 
 	 */
-	protected boolean ownedByCurrentUser(final Adicional t) {
-	    return Objects.equal(t.getOwnedBy(), currentUserName());
+	protected boolean usuarioCurrentUser(final Adicional t) {
+	    return Objects.equal(t.getUsuario(), currentUserName());
 	}
 	/**
 	 * Helpers

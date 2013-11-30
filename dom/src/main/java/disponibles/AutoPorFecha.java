@@ -1,5 +1,7 @@
 package disponibles;
 
+import java.util.Comparator;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -20,6 +22,7 @@ import categoria.Categoria;
  * @see Categoria
  *
  */
+@SuppressWarnings("rawtypes")
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
 @javax.jdo.annotations.Version(strategy=VersionStrategy.VERSION_NUMBER, column="VERSION")
@@ -31,7 +34,7 @@ import categoria.Categoria;
 @AutoComplete(repository=DisponibleServicio.class,action="autosAlquilados")
 @Audited
 
-public class AutoPorFecha {
+public class AutoPorFecha implements Comparator{
 	 /**
 	 * Identificacion del nombre del icono que aparecera en la UI
 	 * 
@@ -144,5 +147,13 @@ public class AutoPorFecha {
 	private DomainObjectContainer container;    
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
     	this.container=container;
-    } 
+    }
+
+	@Override
+	public int compare(Object o1, Object o2) {
+		AutoPorFecha fecha1 = (AutoPorFecha)o1; 
+        AutoPorFecha fecha2 = (AutoPorFecha)o2; 
+        return fecha1.getFecha(). 
+                compareTo(fecha2.getFecha()); 
+	} 
 }

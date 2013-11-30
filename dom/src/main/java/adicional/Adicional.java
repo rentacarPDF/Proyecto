@@ -143,6 +143,7 @@ public class Adicional {
      */
    	public void remove(){
    		setActivo(false);
+   		container.informUser("El registro a sido eliminado");
    	}   	 
     private String usuario;
     /**
@@ -161,7 +162,6 @@ public class Adicional {
 	    this.usuario = usuario;	
 	}	
 	 
-    @SuppressWarnings("unused")
 	private DomainObjectContainer container;
     /**
 	 * injected: DomainObjectContainer

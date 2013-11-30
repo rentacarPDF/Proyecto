@@ -601,7 +601,7 @@ public class Alquiler {
 		for (AutoPorFecha auto:getAutos()){
 			container.removeIfNotAlready(auto);
 		}
-		container.informUser("Alquiler número: "+getNumero()+" a sido borrado");
+		container.informUser("Alquiler número: "+getNumero()+" a sido eliminado");
         container.removeIfNotAlready(this);		
 	}
 	/**

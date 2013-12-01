@@ -118,6 +118,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	 */
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
+    @Named("Listado Categorias")
     public List<Categoria> categoriaActivos() {
         List<Categoria> items = listaCategorias();
         if(items.isEmpty()) {

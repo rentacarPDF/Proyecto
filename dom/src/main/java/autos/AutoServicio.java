@@ -15,8 +15,6 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
 import categoria.Categoria;
 import com.google.common.base.Objects;
-
-
 import autos.Auto;
 import autos.Auto.Seguro;
 import autos.Auto.TipoCombustible;
@@ -256,7 +254,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
      */
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "3") 
-    @Named("Listado Vehiculos")
+    @Named("Listado de Vehiculos")
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    

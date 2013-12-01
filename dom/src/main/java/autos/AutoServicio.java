@@ -51,7 +51,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 	 * @return Auto
 	 */
 	@MemberOrder(sequence = "1") 
-	@Named("Cargar Auto")
+	@Named("Cargar Vehiculo")
 	public Auto cargarAuto(
 		@RegEx(validation="[A-Za-z]{3}\\d{3}")
 		@Named("Patente") String patente,
@@ -139,7 +139,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		}
 		else {
 			auto = null;		 
-			getContainer().warnUser("EN EL SISTEMA YA SE ENCUENTRA UN AUTO CON ESTE DOMINIO");
+			getContainer().warnUser("EN EL SISTEMA YA SE ENCUENTRA UN VEHICULO CON ESTE DOMINIO");
 		}		
 		return auto;
     }
@@ -230,15 +230,15 @@ public class AutoServicio extends AbstractFactoryAndRepository {
         });
     }
 	/**
-	 * Busqueda de Auto.
-	 * Se retorna una lista de Autos.
+	 * Busqueda de Vehiculo.
+	 * Se retorna una lista de vehiculos.
 	 * 
 	 * @param auto
 	 * 
 	 * @return List<Auto>
 	 */
 	@MemberOrder(sequence = "2")
-	@Named("Buscar Auto")
+	@Named("Buscar Vehiculo")
 	public List<Auto> busquedaAuto(final Auto auto) {
 		return allMatches(Auto.class, new Filter<Auto>() {
 		@Override
@@ -251,12 +251,12 @@ public class AutoServicio extends AbstractFactoryAndRepository {
 		return listadoAutosActivos();
 	}
 	/**
-     * Retorna un listado de autos activos
+     * Retorna un listado de vehiculos activos
      * @return List<Auto> 
      */
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "3") 
-    @Named("Listado Autos")
+    @Named("Listado Vehiculos")
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    

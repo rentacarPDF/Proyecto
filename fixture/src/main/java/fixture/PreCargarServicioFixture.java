@@ -50,9 +50,9 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	createMarcaForUser("CITROEN");
 	    	getContainer().informUser("Se han instalado correctamente las Marcas");
 	    	//Se instalan Categorias
-	    	createCategoriaForUser("A", 2, 2, Caja.AUTOMATICA, Traccion.CUATROx2, "20");
-	    	createCategoriaForUser("B", 4, 4, Caja.MANUAL, Traccion.CUATROx2, "50");
-	    	createCategoriaForUser("C", 6, 4, Caja.MANUAL, Traccion.CUATROx4, "100");
+	    	createCategoriaForUser("A", 2, 2, Caja.AUTOMATICA, Traccion.CUATROx2, "200");
+	    	createCategoriaForUser("B", 4, 4, Caja.MANUAL, Traccion.CUATROx2, "250");
+	    	createCategoriaForUser("C", 5, 4, Caja.MANUAL, Traccion.CUATROx4, "350");
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
 	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");

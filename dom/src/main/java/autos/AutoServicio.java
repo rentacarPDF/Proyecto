@@ -256,7 +256,7 @@ public class AutoServicio extends AbstractFactoryAndRepository {
      */
     @ActionSemantics(Of.SAFE)
 	@MemberOrder(sequence = "3") 
-    @Named("Listado Autos Activos")
+    @Named("Listado Autos")
     public List<Auto> listadoAutosActivos(){
     	return allMatches(QueryDefault.create(Auto.class,"listadoAutosActivos"));
     }    

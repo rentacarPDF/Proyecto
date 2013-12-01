@@ -9,7 +9,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 
@@ -119,7 +118,6 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 	 */
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "2")
-    @NotInServiceMenu
     public List<Categoria> categoriaActivos() {
         List<Categoria> items = listaCategorias();
         if(items.isEmpty()) {

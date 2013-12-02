@@ -8,7 +8,7 @@ Como marco de trabajo para la gestión y el desarrollo del software, como así t
 El diseño y modelado del proyecto se realizó a través de DDD (Domain-Driven Design).
 El lenguaje de programación que utilizamos es Java, como herramienta de gestión y construcción del proyecto se utiliza Maven con el fin de controlar las dependencias, componentes externos y el orden de construcción del proyecto. Además para controlar las versiones del código fuente se utilizó la herramienta de control de versiones GIT. 
 
-El framework utilizado es [Apache Isis](http://isis/apache.org)' y para almacenar los datos se utilizó Postgres-Sql.
+El framework utilizado es [Apache Isis](http://isis.apache.org/)' y para almacenar los datos se utilizó Postgres-Sql.
 
 Además de contar con un repositorio online en GitHub para el manejo del proyecto en forma distribuida.
 

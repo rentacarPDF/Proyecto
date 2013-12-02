@@ -40,19 +40,21 @@ public class PreCargarServicioFixture extends AbstractService{
 	    //{{installFor 
 	    private void installFor(final String user) {
 	    	//Se instalan Marcas
-	    	createMarcaForUser("FORD");
+	    	createMarcaForUser("CHEVROLET");
+	    	createMarcaForUser("CITROEN");
 	    	createMarcaForUser("FIAT");
-	    	createMarcaForUser("VOLKSWAGEN");
-	    	createMarcaForUser("PEUGEOT");
+	    	createMarcaForUser("FORD");
 	    	createMarcaForUser("NISSAN");
+	    	createMarcaForUser("PEUGEOT");
 	    	createMarcaForUser("RENAULT");
 	    	createMarcaForUser("TOYOTA");
-	    	createMarcaForUser("CITROEN");
+	    	createMarcaForUser("VOLKSWAGEN");
 	    	getContainer().informUser("Se han instalado correctamente las Marcas");
 	    	//Se instalan Categorias
-	    	createCategoriaForUser("A", 2, 2, Caja.AUTOMATICA, Traccion.CUATROx2, "200");
-	    	createCategoriaForUser("B", 4, 4, Caja.MANUAL, Traccion.CUATROx2, "250");
-	    	createCategoriaForUser("C", 5, 4, Caja.MANUAL, Traccion.CUATROx4, "350");
+	    	createCategoriaForUser("A", 2, 4, Caja.AUTOMATICA, Traccion.CUATROx2, "200");
+	    	createCategoriaForUser("B", 4, 5, Caja.MANUAL, Traccion.CUATROx2, "250");
+	    	createCategoriaForUser("C", 5, 5, Caja.MANUAL, Traccion.CUATROx2, "350");
+	    	createCategoriaForUser("D", 4, 5, Caja.MANUAL, Traccion.CUATROx4, "550");
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
 	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");

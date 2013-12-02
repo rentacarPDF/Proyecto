@@ -8,6 +8,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -55,12 +56,13 @@ public class AutoPorFecha implements Comparator{
 		return buf.toString();	
 	}
 	
-    private LocalDate fecha;
-    @Named("Fecha")
+    private LocalDate fecha;    
     /**
      * Retorno de la fecha
      * @return LocalDate
      */
+    @Disabled
+    @Named("Fecha")
     public LocalDate getFecha() {
             return fecha;
     }
@@ -108,12 +110,13 @@ public class AutoPorFecha implements Comparator{
     	this.categoria=categoria;
     }
    
-    private Alquiler alquiler;
-    @Named("Estado Alquiler")
+    private Alquiler alquiler;    
     /**
      * Retorno del Estado del Alquiler
      * @return Alquiler
      */
+    @Named("Estado Alquiler")
+    @Disabled
     public Alquiler getAlquiler(){
     	return alquiler;
     }
@@ -148,8 +151,16 @@ public class AutoPorFecha implements Comparator{
     public void injectDomainObjectContainer(final DomainObjectContainer container) {
     	this.container=container;
     }
-
+    /**
+     * Metodo comparador de fechas.
+     * 
+     * @param o1
+     * @param o2
+     * 
+     * @return int
+     */
 	@Override
+	@Hidden
 	public int compare(Object o1, Object o2) {
 		AutoPorFecha fecha1 = (AutoPorFecha)o1; 
         AutoPorFecha fecha2 = (AutoPorFecha)o2; 

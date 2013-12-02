@@ -53,18 +53,18 @@ public class RecibirMailServicio extends AbstractFactoryAndRepository{
             folder.open(Folder.READ_ONLY);
             Message[] mensajes = folder.getMessages();
             // Se obtienen los mensajes.
-            String mensajeNuevos = mensajes.length == 1 ? "HAY NUEVO MENSAJES!" : "HAY:"+mensajes.length;
+            String mensajeNuevos = mensajes.length != 0 ? "hay "+mensajes.length+" mensajes nuevos":" No hay mensajes nuevos.!" ;
         	// Se escribe from y subject de cada mensaje
             for (Message mensaje : mensajes){	//de:
             	final Recibe mensajeC = newTransientInstance(Recibe.class);
-                //"Subject:"=asunto
-            	mensajeC.setMailRemitente(mensaje.getFrom()[0].toString());
-                mensajeC.setAsunto(mensaje.getSubject()); 
+                //"Subject:"=asunto 	
+                mensajeC.setAsunto(mensaje.getSubject());
+                mensajeC.setMailRemitente(mensaje.getFrom()[0].toString());
                 listaJavaMail.add(mensajeC);
             } 
             folder.close(false);
             store.close();
-            getContainer().warnUser("cantidad de mensajes nuevos :"+ mensajeNuevos);
+            getContainer().warnUser("Revise su casilla de e-mail "+ mensajeNuevos);
         }
         catch (Exception e){
             e.printStackTrace();

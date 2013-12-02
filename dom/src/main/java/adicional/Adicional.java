@@ -156,7 +156,7 @@ public class Adicional {
 	}
 	/**
 	 * Setea el nombre del usuario
-	 * @param ownedBy
+	 * @param usuario
 	 */
 	public void setUsuario(final String usuario){
 	    this.usuario = usuario;	

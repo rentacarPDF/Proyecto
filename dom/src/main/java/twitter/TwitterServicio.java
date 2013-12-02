@@ -36,7 +36,6 @@ public class TwitterServicio extends AbstractFactoryAndRepository{
 	 * y maneja la autenticacion de la cuenta.
 	 * 
 	 * @param tweet
-	 * @param userName
 	 * @throws TwitterException
 	 */
 	@Hidden

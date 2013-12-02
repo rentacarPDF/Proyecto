@@ -122,7 +122,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
     /**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.
-     * Choices para el metodo {@link HisotorialServicio#historialPorAuto(Auto)}
+     * Choices para el metodo {@link HistorialServicio#historialPorAuto}
      * 
      * @return List<Auto>
      */
@@ -145,7 +145,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
     /**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.
-     * Choices para el metodo {@link HisotorialServicio#historialPorCategoria(Categoria)}
+     * Choices para el metodo {@link HistorialServicio#historialPorCategoria}
      * 
      * @return List<Categoria>
      */
@@ -168,7 +168,7 @@ public class HistorialServicio extends AbstractFactoryAndRepository {
     /**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.
-     * Choices para el metodo {@link HisotorialServicio#historialPorCliente(Cliente)}
+     * Choices para el metodo {@link HistorialServicio#historialPorCliente}
      * 
      * @return List<Cliente>
      */

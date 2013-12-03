@@ -55,7 +55,7 @@ public class Alquiler {
 		if(getEstado() == EstadoAlquiler.ALQUILADO){
 			return "enproceso";
 		}else{
-			if(getEstado() == EstadoAlquiler.FINALIZADO){
+			if(getEstado() == EstadoAlquiler.CERRADO){
 				return "cerrado";
 			}else
 			{
@@ -71,7 +71,7 @@ public class Alquiler {
 	 * Enumeracion que determina los posibles estados en los cuales pasa un Alquiler.
 	 */
 	public static enum EstadoAlquiler{
-		RESERVADO, ALQUILADO, FINALIZADO;
+		RESERVADO, ALQUILADO, CERRADO;
 	}	
 	/**
 	 * Enumeracion que determina los posibles medios de pago.
@@ -241,7 +241,7 @@ public class Alquiler {
 			return "El Alquiler debe estar FINALIZADO";
 		}
 		else {
-			return getEstado()==EstadoAlquiler.FINALIZADO? null:"El Alquiler esta CERRADO no se puede editar";
+			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
 		}
 	}
 	
@@ -277,7 +277,7 @@ public class Alquiler {
 			return "El Alquiler debe estar FINALIZADO";
 		}
 		else {
-			return getEstado()==EstadoAlquiler.FINALIZADO? null:"El Alquiler esta CERRADO no se puede editar";
+			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
 		}
 	}	
  
@@ -387,7 +387,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.ALQUILADO) {
         	return autos.size()>1? null: "Debe quedar al menos un auto para mantener el Alquiler";
         }
-        else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
+        else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
     }
     /**
      * Accion que agrega los autos a la lista.
@@ -467,7 +467,7 @@ public class Alquiler {
         else {           
                if( getEstado() == EstadoAlquiler.RESERVADO){
             	   return "El Alquiler debe estar EN PROCESO";
-               }else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
+               }else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
         }       
     }
     /**
@@ -511,7 +511,7 @@ public class Alquiler {
         else {           
         	if (getEstado() == EstadoAlquiler.RESERVADO){
         		return "No existe Adicionales para este Alquiler";
-        	}else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
+        	}else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
         }			          
     }
     /**
@@ -609,7 +609,7 @@ public class Alquiler {
 			return null;
 		}
 		else {
-			return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede borrar":"El Alquiler esta CERRADO no se puede borrar";
+			return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede borrar":"El Alquiler esta CERRADO no se puede borrar";
 		}
 	}
 	
@@ -657,7 +657,7 @@ public class Alquiler {
 	 */    
     @MemberOrder(name="Estado",sequence="3")
 	public Alquiler finalizado(){
-		setEstado(EstadoAlquiler.FINALIZADO);
+		setEstado(EstadoAlquiler.CERRADO);
 		return this;
 	}
     /**
@@ -670,7 +670,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.ALQUILADO) {
                 return null;
         }
-        else return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
+        else return getEstado() == EstadoAlquiler.CERRADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
     }
     
     private DomainObjectContainer container;

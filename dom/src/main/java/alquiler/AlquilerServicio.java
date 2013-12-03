@@ -16,7 +16,7 @@ import alquiler.Alquiler.EstadoAlquiler;
 import cliente.Cliente;
 import disponibles.AutoPorFecha;
 import disponibles.Disponible;
-import mails.Mail;
+
 
 @Named("Alquileres")
 public class AlquilerServicio extends AbstractFactoryAndRepository{
@@ -42,15 +42,15 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
             @Named("Cliente") Cliente cliente ) {
     		final String usuario = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
-            Mail mail=new Mail();
+            //Mail mail=new Mail();
             persistIfNotAlready(alquiler);
             List<Disponible> disponibilidad = listaAutosReservados();
-            return crear(alquiler,disponibilidad,cliente,usuario,mail);
+            return crear(alquiler,disponibilidad,cliente,usuario);
     }
     /**
      * 
      * Metodo que setea todas las propiedades que tiene la entidad Alquiler
-     * creado en el metodo {@link AlquilerServicio#reservar(Cliente)}.
+     * creado en el metodo {@link AlquilerServicio#reservar}.
      * 
      * @param alquiler
      * @param disponibilidad
@@ -64,8 +64,8 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     		final Alquiler alquiler,
     		final List<Disponible> disponibilidad,
     		final Cliente cliente,	
-    		final String userName,
-    		final Mail mail
+    		final String userName
+    		//final Mail mail
     		){
     		if(disponibilidad.size()>0){
     			alquiler.setClienteId(cliente);
@@ -91,11 +91,18 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     				getContainer().removeIfNotAlready(disp);
     				
     			}
-    		mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
+    		//mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
     		}
     	return alquiler;
 	}
-  
+
+    @Hidden
+    public Alquiler reservar2(Alquiler alquiler, Cliente cliente ) {
+    		final String usuario = currentUserName();
+            List<Disponible> disponibilidad = listaAutosReservados();
+            return crear(alquiler,disponibilidad,cliente,usuario);
+    }
+    
     /**
      * Choices provisto por el Framework
      * que habilita una serie de opciones para un metodo.

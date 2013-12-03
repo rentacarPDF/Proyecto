@@ -22,10 +22,16 @@ import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.MemberGroups;
+import org.joda.time.LocalDate;
+
 import adicional.Adicional;
 import com.google.common.collect.Lists;
+
+
 import cliente.Cliente;
 import disponibles.AutoPorFecha;
+import disponibles.Disponible;
+import disponibles.DisponibleServicio;
 
 /**
  * Entidad que representa el Alquiler de Autos
@@ -365,7 +371,7 @@ public class Alquiler {
      * @param auto
      */
     @Named("Borrar")
-    @MemberOrder(name="Autos",sequence="1")
+    @MemberOrder(name="Autos",sequence="2")
     public Alquiler removeFromAutos(final AutoPorFecha auto) {
             autos.remove(auto);
             container.removeIfNotAlready(auto);
@@ -373,6 +379,20 @@ public class Alquiler {
             calculoTotal();
             return this;            
     }
+    /**
+     * Choices provisto por el Framework, 
+     * que habilita una serie de opciones para una Propiedad/Accion.
+     * Choices para la accion {@link alquiler.Alquiler#removeFromAutos(AutoPorFecha)}
+     * 
+     * @see alquiler.Alquiler#removeFromAutos(AutoPorFecha)
+     * 
+     * @return List<disponibles.AutoPorFecha>
+     * 
+     */
+    public List<AutoPorFecha> choices0RemoveFromAutos() {
+
+    	return Lists.newArrayList(getAutos());
+    }          
     /**
      * Accion provista por el Framework.
      * Deshabilita la opcion de borrar un elemento de la lista de Autos.
@@ -386,6 +406,46 @@ public class Alquiler {
         }
         else return "El Alquiler esta CERRADO no se pueden eliminar vehiculos";
     }
+    //// ----------
+    @Named("Ver disponibilidad")
+    @MemberOrder(name="Autos",sequence="1")
+    public List<Disponible> disponibilidad(){    	
+    	// Pasar bien las fechas
+    	// y el auto!
+    	
+		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
+		AutoPorFecha adic=container.newTransientInstance(AutoPorFecha.class);
+		//int a=listaAutos.size();
+	
+		// Armar metodo con fechas y auto!
+		for (AutoPorFecha auto:listaAutos){
+			adic.setCategoria(auto.getCategoria());		
+			
+		}
+    	
+    	LocalDate fechaAlquiler= new LocalDate("2013-12-21");
+		//LocalDate fechaAlquiler=	listaAutos.get(a).getFecha();
+		LocalDate fechaDevolucion= fechaAlquiler.plusDays(10); 
+		
+		List<Disponible> listaAutosDisponibles = servDisp.entreFechas(fechaAlquiler, fechaDevolucion, adic.getCategoria());
+		
+		
+		//servAlq.crear(this, listaAutosDisponibles, this.getClienteId(), this.getUsuario());
+				
+    	return listaAutosDisponibles;
+    }
+    
+    @Named("Añadir")
+    @MemberOrder(name="Autos",sequence="2")
+    public Alquiler agregaAutos(){    	
+    	//servAlq.cargar(this,listaAutosDisponibles,clienteId,usuario);
+    	servAlq.reservar2(this,this.clienteId);
+    	
+    	return this;
+    }
+    
+    
+ 
     /**
      * Accion que agrega los autos a la lista.
      * @param auto
@@ -400,21 +460,7 @@ public class Alquiler {
     	calculoSubTotal();
     	calculoTotal();
     }
-    /**
-     * Choices provisto por el Framework, 
-     * que habilita una serie de opciones para una Propiedad/Accion.
-     * Choices para la accion {@link alquiler.Alquiler#removeFromAutos(AutoPorFecha)}
-     * 
-     * @see alquiler.Alquiler#removeFromAutos(AutoPorFecha)
-     * 
-     * @return List<disponibles.AutoPorFecha>
-     * 
-     */
-    public List<AutoPorFecha> choices0RemoveFromAutos() {
-        return Lists.newArrayList(getAutos());
-    }        
 
-    
  	@Persistent(mappedBy="alquiler")	
  	private List<Adicional> adicionales= new ArrayList<Adicional>();
  	/**
@@ -668,4 +714,24 @@ public class Alquiler {
     public void setDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
     }
+    
+	
+	private DisponibleServicio servDisp;
+	/**
+	 * Se inyecta el servicio disponible.
+	 * 
+	 * @param serv
+	 */
+	public void injectDisponiblesServicio(final DisponibleServicio serv) {
+		this.servDisp = serv;
+	}
+	private AlquilerServicio servAlq;
+	/**
+	 * Se inyecta el servicio disponible.
+	 * 
+	 * @param serv
+	 */
+	public void injectDisponiblesServicio(final AlquilerServicio serv) {
+		this.servAlq = serv;
+	}
 }

@@ -237,14 +237,11 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableTipoPago(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
-			return "El Alquiler debe estar FINALIZADO";
+		if (getEstado()==EstadoAlquiler.RESERVADO){
+			return null;
 		}
-		else {
-			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
-		}
+		else return getEstado()==EstadoAlquiler.CERRADO?"El Alquiler esta CERRADO no se puede editar":"El vehiculo esta Alquilado no se puede editar el Tipo de Pago";
 	}
-	
 	
 	private int factura;
 	/**
@@ -274,7 +271,7 @@ public class Alquiler {
 	 */
 	public String disableNumeroFactura(){
 		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
-			return "El Alquiler debe estar FINALIZADO";
+			return "El Alquiler debe estar CERRADO";
 		}
 		else {
 			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
@@ -387,7 +384,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.ALQUILADO) {
         	return autos.size()>1? null: "Debe quedar al menos un auto para mantener el Alquiler";
         }
-        else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
+        else return "El Alquiler esta CERRADO no se pueden eliminar vehiculos";
     }
     /**
      * Accion que agrega los autos a la lista.
@@ -461,15 +458,11 @@ public class Alquiler {
      * @return String
      */
     public String disableAgregar(Adicional adicional){
-        if(getEstado() == EstadoAlquiler.ALQUILADO) {
-            return null;
-        }
-        else {           
-               if( getEstado() == EstadoAlquiler.RESERVADO){
-            	   return "El Alquiler debe estar EN PROCESO";
-               }else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
-        }       
-    }
+    	 if(getEstado() == EstadoAlquiler.RESERVADO) {
+             return null;
+         }
+         else return getEstado()==EstadoAlquiler.ALQUILADO?"El Alquiler esta ALQUILADO no se pueden agregar autos":"El Alquiler esta CERRADO no se puede editar";        
+     }
     /**
      * Accion provista por el Framework que permite
      * agregar elementos a la lista Adicionales a un Alquiler.
@@ -605,12 +598,9 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableBorrarAlquiler(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
+		if (getEstado()==EstadoAlquiler.RESERVADO){
 			return null;
-		}
-		else {
-			return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede borrar":"El Alquiler esta CERRADO no se puede borrar";
-		}
+		}else return getEstado()==EstadoAlquiler.ALQUILADO? "El Vehiculo esta ALQUILADO no se puede borrar el Alquiler":"El Alquiler esta CERRADO no se puede borrar";
 	}
 	
 	private String usuario;
@@ -630,47 +620,45 @@ public class Alquiler {
 	    this.usuario = usuario;	
 	}	
 	/**
-	 * Accion que pasa el estado del Alquiler a: EN PROCESO
+	 * Accion que pasa el estado del Alquiler a: ALQUILADO
 	 * @return Alquiler
 	 */
 	@MemberOrder(name="Estado",sequence="2")
-	public Alquiler enProceso(){
+	public Alquiler alquilado(){
 		setEstado(EstadoAlquiler.ALQUILADO);		   	
 		return this;
 	}
 	/**
 	 * Accion provista por el Framework que deshabilita
-	 * la transicion del estado del Alquiler a: EN PROCESO.
+	 * la transicion del estado del Alquiler a: ALQUILADO
 	 * 
 	 * @return String
 	 */
-    public String disableEnProceso() {
+    public String disableAlquilado() {
         if(getEstado() == EstadoAlquiler.RESERVADO) {
-                return null;
-        }
-        else return getEstado() == EstadoAlquiler.ALQUILADO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
+            return null;
+        }else return getEstado() == EstadoAlquiler.ALQUILADO? "El Alquiler ya se encuentra ALQUILADO":"El Alquiler debe estar RESERVADO para pasar a ALQUILADO";               
     }
     
     /**
-	 * Accion que pasa el estado del Alquiler a: FINALIZADO
+	 * Accion que pasa el estado del Alquiler a: CERRADO
 	 * @return Alquiler
 	 */    
     @MemberOrder(name="Estado",sequence="3")
-	public Alquiler finalizado(){
+	public Alquiler cerrado(){
 		setEstado(EstadoAlquiler.CERRADO);
 		return this;
 	}
     /**
 	 * Accion provista por el Framework que deshabilita
-	 * la transicion del estado del Alquiler a: FINALIZADO.
+	 * la transicion del estado del Alquiler a: CERRADO.
 	 * 
 	 * @return String
 	 */
-    public String disableFinalizado() {
+    public String disableCerrado() {
         if(getEstado() == EstadoAlquiler.ALQUILADO) {
-                return null;
-        }
-        else return getEstado() == EstadoAlquiler.CERRADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
+            return null;
+        }else return getEstado() == EstadoAlquiler.CERRADO? "El Alquiler ya se encuentra CERRADO":"El Alquiler debe estar ALQUILADO para poder CERRARLO";
     }
     
     private DomainObjectContainer container;

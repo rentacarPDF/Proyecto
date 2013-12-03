@@ -52,7 +52,7 @@ public class Alquiler {
 	 * 
 	 */
 	public String iconName(){
-		if(getEstado() == EstadoAlquiler.EN_PROCESO){
+		if(getEstado() == EstadoAlquiler.ALQUILADO){
 			return "enproceso";
 		}else{
 			if(getEstado() == EstadoAlquiler.FINALIZADO){
@@ -71,7 +71,7 @@ public class Alquiler {
 	 * Enumeracion que determina los posibles estados en los cuales pasa un Alquiler.
 	 */
 	public static enum EstadoAlquiler{
-		RESERVADO, EN_PROCESO, FINALIZADO;
+		RESERVADO, ALQUILADO, FINALIZADO;
 	}	
 	/**
 	 * Enumeracion que determina los posibles medios de pago.
@@ -237,7 +237,7 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableTipoPago(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
 			return "El Alquiler debe estar FINALIZADO";
 		}
 		else {
@@ -273,7 +273,7 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableNumeroFactura(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
 			return "El Alquiler debe estar FINALIZADO";
 		}
 		else {
@@ -384,7 +384,7 @@ public class Alquiler {
      * @return String
      */
     public String disableRemoveFromAutos(AutoPorFecha auto){
-        if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.EN_PROCESO) {
+        if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.ALQUILADO) {
         	return autos.size()>1? null: "Debe quedar al menos un auto para mantener el Alquiler";
         }
         else return getEstado()==EstadoAlquiler.FINALIZADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";          			          
@@ -461,7 +461,7 @@ public class Alquiler {
      * @return String
      */
     public String disableAgregar(Adicional adicional){
-        if(getEstado() == EstadoAlquiler.EN_PROCESO) {
+        if(getEstado() == EstadoAlquiler.ALQUILADO) {
             return null;
         }
         else {           
@@ -505,7 +505,7 @@ public class Alquiler {
      * @return String
      */
     public String disableRemoveFromAdicionales(Adicional adicional){
-        if(getEstado() == EstadoAlquiler.EN_PROCESO) {
+        if(getEstado() == EstadoAlquiler.ALQUILADO) {
         	return adicionales.size()>0? null: "No existe Adicionales para este Alquiler";
         }
         else {           
@@ -605,7 +605,7 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableBorrarAlquiler(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.EN_PROCESO){
+		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
 			return null;
 		}
 		else {
@@ -635,7 +635,7 @@ public class Alquiler {
 	 */
 	@MemberOrder(name="Estado",sequence="2")
 	public Alquiler enProceso(){
-		setEstado(EstadoAlquiler.EN_PROCESO);		   	
+		setEstado(EstadoAlquiler.ALQUILADO);		   	
 		return this;
 	}
 	/**
@@ -648,7 +648,7 @@ public class Alquiler {
         if(getEstado() == EstadoAlquiler.RESERVADO) {
                 return null;
         }
-        else return getEstado() == EstadoAlquiler.EN_PROCESO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
+        else return getEstado() == EstadoAlquiler.ALQUILADO? "El Alquiler ya se encuentra EN PROCESO":"El Alquiler debe estar RESERVADO para pasar a EN PROCESO";               
     }
     
     /**
@@ -667,7 +667,7 @@ public class Alquiler {
 	 * @return String
 	 */
     public String disableFinalizado() {
-        if(getEstado() == EstadoAlquiler.EN_PROCESO) {
+        if(getEstado() == EstadoAlquiler.ALQUILADO) {
                 return null;
         }
         else return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";

@@ -51,10 +51,10 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	createMarcaForUser("VOLKSWAGEN");
 	    	getContainer().informUser("Se han instalado correctamente las Marcas");
 	    	//Se instalan Categorias
-	    	createCategoriaForUser("A", 2, 4, Caja.AUTOMATICA, Traccion.CUATROx2, "200");
-	    	createCategoriaForUser("B", 4, 5, Caja.MANUAL, Traccion.CUATROx2, "250");
-	    	createCategoriaForUser("C", 5, 5, Caja.MANUAL, Traccion.CUATROx2, "350");
-	    	createCategoriaForUser("D", 4, 5, Caja.MANUAL, Traccion.CUATROx4, "550");
+	    	createCategoriaForUser("3 Puertas", 3, 2, Caja.MANUAL, Traccion.CUATROx2, "200");
+	    	createCategoriaForUser("4 Puertas", 4, 5, Caja.MANUAL, Traccion.CUATROx2, "250");
+	    	createCategoriaForUser("5 Puertas", 5, 5, Caja.MANUAL, Traccion.CUATROx2, "350");
+	    	createCategoriaForUser("Pick Up 4x4", 4, 5, Caja.MANUAL, Traccion.CUATROx4, "550");
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
 	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");

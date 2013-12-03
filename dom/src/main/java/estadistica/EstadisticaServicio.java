@@ -282,7 +282,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
 			public boolean accept(AutoPorFecha auto) {
 				return auto.getFecha().equals(fecha)
 						&& auto.getPatente().equals(patente) && 
-						auto.getAlquiler().getEstado()==EstadoAlquiler.CERRADO;
+						auto.getAlquiler().getEstado()==EstadoAlquiler.FINALIZADO;
 			}
 		});
 	}

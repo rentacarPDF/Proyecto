@@ -48,35 +48,30 @@ public class Alquiler {
 	 * Identificacion del nombre del icono que aparecera en la UI
 	 * 
 	 * El icono a mostrarse depende del estado de la reserva: 
-	 * CERRADO, EN PROCESO, FINALIZADO o RESERVADO.
+	 * RESERVADO, ALQUILADO, CERRADO
 	 * 
 	 */
 	public String iconName(){
-		
-		if(getEstado() == EstadoAlquiler.CERRADO){
-			return "cerrado";
-		}else {
-			if(getEstado() == EstadoAlquiler.EN_PROCESO){
-				return "enproceso";
-			}else{
-				if(getEstado() == EstadoAlquiler.FINALIZADO){
-					return "finalizado";
-				}else
-				{
-					if(getEstado() == EstadoAlquiler.RESERVADO){
-						return "reservado";
-					}else{
-						return "alquiler";
-					}
+		if(getEstado() == EstadoAlquiler.EN_PROCESO){
+			return "enproceso";
+		}else{
+			if(getEstado() == EstadoAlquiler.FINALIZADO){
+				return "cerrado";
+			}else
+			{
+				if(getEstado() == EstadoAlquiler.RESERVADO){
+					return "reservado";
+				}else{
+					return "alquiler";
 				}
 			}
-		} 
+		}			
 	}
 	/**
 	 * Enumeracion que determina los posibles estados en los cuales pasa un Alquiler.
 	 */
 	public static enum EstadoAlquiler{
-		RESERVADO, EN_PROCESO, FINALIZADO, CERRADO;
+		RESERVADO, EN_PROCESO, FINALIZADO;
 	}	
 	/**
 	 * Enumeracion que determina los posibles medios de pago.
@@ -676,25 +671,6 @@ public class Alquiler {
                 return null;
         }
         else return getEstado() == EstadoAlquiler.FINALIZADO? "El Alquiler ya se encuentra FINALIZADO":"El Alquiler debe estar EN PROCESO para FINALIZARLO";
-    }
-    
-    /**
-   	 * Accion que pasa el estado del Alquiler a: CERRADO
-   	 * @return Alquiler
-   	 */   
-	@MemberOrder(name="Estado",sequence="4")
-	public Alquiler cerrado(){
-		setEstado(EstadoAlquiler.CERRADO);
-		return this;
-	}
-	/**
-	 * Accion provista por el Framework que deshabilita
-	 * la transicion del estado del Alquiler a: CERRADO.
-	 * 
-	 * @return String
-	 */
-    public String disableCerrado() {
-        return (getEstado() == EstadoAlquiler.EN_PROCESO||getEstado()==EstadoAlquiler.RESERVADO)?"El Alquiler debe estar FINALIZADO para poder CERRARLO":null;   
     }
     
     private DomainObjectContainer container;

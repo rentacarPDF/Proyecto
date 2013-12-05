@@ -15,6 +15,7 @@ import org.joda.time.LocalDate;
 
 
 import categoria.Categoria;
+import alquiler.Alquiler;
 import autos.Auto;
 
 @Named("Disponibles")
@@ -80,7 +81,62 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 		}
 		return listaAutosDisponibles;
 	}
+	
+	@MemberOrder(sequence = "1")
+	@Named("Entre fechas por Categoria")
+	@Programmatic
+	public List<Disponible> entreFechasPlusAlquiler(
+			@Named("Fecha de alquiler:") LocalDate fechaAlquiler,
+			@Optional
+			@Named("Fecha de devolución:") LocalDate fechaDevolucion,
+			@Named("Categoria") Categoria categoria,
+			@Optional
+			@Named("Alquiler") Alquiler alquiler) {
+		
+		if(alquiler!=null){ 
+			getContainer().informUser(alquiler.getNumero().toString());
+			
+		}
+		
+		
+		List<Disponible> listaAutosDisponibles = new ArrayList<Disponible>();
+		final List<Auto> autos = listaAutos();
+		LocalDate fechaAux = fechaAlquiler;
+		LocalDate hastaAux = (fechaDevolucion != null) ? fechaDevolucion : fechaAlquiler;
 
+		for (int i = 0; i <= calculoDias(fechaAlquiler, hastaAux); i++) {
+			for (Auto auto : autos) {
+				Disponible disp = newTransientInstance(Disponible.class);
+				if (existeAlquiler(fechaAux, auto.getPatente()) != null) {
+					AutoPorFecha autoFecha = existeAlquiler(fechaAux,
+							auto.getPatente());
+					if (autoFecha.getCategoria().equals(categoria)) {
+						disp.setPatente(autoFecha.getPatente());
+						disp.setCategoria(autoFecha.getCategoria());
+						disp.setAlquiler(autoFecha.getAlquiler());
+						disp.setModeloAuto(autoFecha.getModeloAuto());
+						disp.setAlquilerQueLlama(alquiler);
+						disp.setFecha(fechaAux);
+						persistIfNotAlready(disp);
+						listaAutosDisponibles.add(disp);
+					}
+				} else {
+					if (auto.getCategoria().equals(categoria)) {
+						disp.setPatente(auto.getPatente());
+						disp.setModeloAuto(auto.getModelo());
+						disp.setCategoria(auto.getCategoria());
+						disp.setAlquilerQueLlama(alquiler);
+						disp.setFecha(fechaAux);
+						persistIfNotAlready(disp);
+						listaAutosDisponibles.add(disp);
+					}
+				}
+			}
+			fechaAux = fechaAlquiler.plusDays(i + 1);
+		}
+		return listaAutosDisponibles;
+	}
+	
 	
 	 /**
      * Choices provisto por el Framework
@@ -189,5 +245,26 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 				return auto.getPatente().contains(patente);
 			}
 		});
+	}
+	
+	
+	/**
+	 * Lista de disponibilidad
+	 * @return List<Disponible>
+	 */
+	@Programmatic
+    public List<Disponible> listaDisponibilidad(){
+    	return allMatches(QueryDefault.create(Disponible.class, "Disponibles"));
+    }
+	
+	/**
+	 * Elimina la lista de disponibilidad.
+	 */
+	@Programmatic
+	 public void eliminarDisponibilidad(){
+			List<Disponible> lista=listaDisponibilidad();
+			for(Disponible d:lista){
+				remove(d);
+			}		
 	}
 }

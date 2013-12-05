@@ -151,6 +151,19 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     public List<Alquiler> listaAlquileres() {
             return allMatches(QueryDefault.create(Alquiler.class, "traerAlquileres"));
     }
+    
+    
+    public Alquiler buscarAlquiler(final Alquiler alquiler) {
+        return uniqueMatch(Alquiler.class,new Filter<Alquiler>() {
+        	public boolean accept(final Alquiler a){
+        		return a.equals(alquiler);
+        	}
+		});
+    }
+    
+    public List<Alquiler> choices0BuscarAlquiler(){
+    	return listaAlquileres();
+    }
     /**
 	 * Helpers
 	 * 
@@ -163,7 +176,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	 */
 	protected boolean usuarioCurrentUser(final Alquiler t) {
 	    return Objects.equal(t.getUsuario(), currentUserName());
-	}
+	}		
 	/**
 	 * Helpers
 	 * 

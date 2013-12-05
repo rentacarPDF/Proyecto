@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.MemberGroups;
 import org.joda.time.LocalDate;
-
 import adicional.Adicional;
 import com.google.common.collect.Lists;
 
@@ -410,42 +409,16 @@ public class Alquiler {
     @Named("Ver disponibilidad")
     @MemberOrder(name="Autos",sequence="1")
     public List<Disponible> disponibilidad(){    	
-    	// Pasar bien las fechas
-    	// y el auto!
     	
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
-		AutoPorFecha adic=container.newTransientInstance(AutoPorFecha.class);
-		//int a=listaAutos.size();
-	
-		// Armar metodo con fechas y auto!
-		for (AutoPorFecha auto:listaAutos){
-			adic.setCategoria(auto.getCategoria());		
-			
-		}
-    	
-    	LocalDate fechaAlquiler= new LocalDate("2013-12-21");
-		//LocalDate fechaAlquiler=	listaAutos.get(a).getFecha();
+		
+		LocalDate fechaAlquiler= new LocalDate(listaAutos.get(listaAutos.size()-1).getFecha().toString());		
 		LocalDate fechaDevolucion= fechaAlquiler.plusDays(10); 
 		
-		List<Disponible> listaAutosDisponibles = servDisp.entreFechas(fechaAlquiler, fechaDevolucion, adic.getCategoria());
-		
-		
-		//servAlq.crear(this, listaAutosDisponibles, this.getClienteId(), this.getUsuario());
-				
+		List<Disponible> listaAutosDisponibles = servDisp.entreFechasPlusAlquiler(fechaAlquiler, fechaDevolucion, listaAutos.get(0).getCategoria(),this);
+						
     	return listaAutosDisponibles;
-    }
-    
-    @Named("Añadir")
-    @MemberOrder(name="Autos",sequence="2")
-    public Alquiler agregaAutos(){    	
-    	//servAlq.cargar(this,listaAutosDisponibles,clienteId,usuario);
-    	servAlq.reservar2(this,this.clienteId);
-    	
-    	return this;
-    }
-    
-    
- 
+    }     
     /**
      * Accion que agrega los autos a la lista.
      * @param auto
@@ -725,6 +698,7 @@ public class Alquiler {
 	public void injectDisponiblesServicio(final DisponibleServicio serv) {
 		this.servDisp = serv;
 	}
+	@SuppressWarnings("unused")
 	private AlquilerServicio servAlq;
 	/**
 	 * Se inyecta el servicio disponible.

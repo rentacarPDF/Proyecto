@@ -6,12 +6,14 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.joda.time.LocalDate;
 import categoria.Categoria;
 import alquiler.Alquiler;
+import alquiler.AlquilerServicio;
 
 /**
  * 
@@ -165,13 +167,16 @@ public class Disponible {
 	 * @return Disponible
 	 */
 	@Named("Seleccionar")
+	@MemberOrder(sequence="1")
 	@Bulk
 	public Disponible reserva() {
+			
 		if (getAlquiler() == null) {
 			if (isEstaSeleccionada())
 				setEstaSeleccionada(false);
 			else
 				setEstaSeleccionada(true);
+			
 		}
 		return this;
 	}
@@ -210,15 +215,15 @@ public class Disponible {
 	}
 
 	@SuppressWarnings("unused")
-	private DisponibleServicio servicio;
+	private DisponibleServicio servDisp;
 
 	/**
 	 * Se inyecta el servicio disponible.
 	 * 
 	 * @param serv
 	 */
-	public void injectDisponiblesServicio(final DisponibleServicio serv) {
-		this.servicio = serv;
+	public void injectDisponiblesServicio(final DisponibleServicio servDisp) {
+		this.servDisp = servDisp;
 	}
 
 	@SuppressWarnings("unused")
@@ -228,4 +233,40 @@ public class Disponible {
 			final DomainObjectContainer container) {
 		this.container = container;
 	}
+	
+	
+	//Prueba
+	@Named("Agregar dias")
+	@MemberOrder(sequence="2")
+	@Bulk
+	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
+	public void agregar(){
+   		servAlq.reservar2(alquilerQueLlama,alquilerQueLlama.getClienteId());
+   		
+   		servAlq.buscarAlquiler(getAlquiler());   		
+		//return aux; 
+	}
+
+	
+	//PRUEBA
+	private Alquiler alquilerQueLlama;
+	@Hidden
+	public Alquiler getAlquilerQueLlama(){
+		return alquilerQueLlama;
+	}
+	public void setAlquilerQueLlama(final Alquiler alquilerQueLlama){
+		this.alquilerQueLlama=alquilerQueLlama;
+	}
+	
+	
+	private AlquilerServicio servAlq;
+	/**
+	 * Se inyecta el servicio disponible.
+	 * 
+	 * @param serv
+	 */
+	public void injectDisponiblesServicio(final AlquilerServicio serv) {
+		this.servAlq = serv;
+	}
+	
 }

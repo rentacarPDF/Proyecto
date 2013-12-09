@@ -232,25 +232,24 @@ public class Disponible {
 	public void injectDomainObjectContainer(
 			final DomainObjectContainer container) {
 		this.container = container;
-	}
-	
+	}	
 	
 	//Prueba
 	@Named("Agregar dias")
 	@MemberOrder(sequence="2")
 	@Bulk
 	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
-	public void agregar(){
-   		servAlq.reservar2(alquilerQueLlama,alquilerQueLlama.getClienteId());
+	public Alquiler agregar(){		
+   		Alquiler alq=alquilerQueLlama;		
+   		servAlq.reservar2(alq,alq.getClienteId());				
    		
-   		servAlq.buscarAlquiler(getAlquiler());   		
-		//return aux; 
+   		return servAlq.buscarAlquiler(alq); 
 	}
-
 	
 	//PRUEBA
 	private Alquiler alquilerQueLlama;
 	@Hidden
+	
 	public Alquiler getAlquilerQueLlama(){
 		return alquilerQueLlama;
 	}

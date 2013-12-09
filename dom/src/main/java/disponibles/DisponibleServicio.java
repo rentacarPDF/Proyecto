@@ -44,6 +44,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			@Optional
 			@Named("Fecha de devolución:") LocalDate fechaDevolucion,
 			@Named("Categoria") Categoria categoria) {
+		eliminarDisponibilidad();
 		List<Disponible> listaAutosDisponibles = new ArrayList<Disponible>();
 		final List<Auto> autos = listaAutos();
 		LocalDate fechaAux = fechaAlquiler;
@@ -94,10 +95,9 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			@Named("Alquiler") Alquiler alquiler) {
 		
 		if(alquiler!=null){ 
-			getContainer().informUser(alquiler.getNumero().toString());
-			
+			getContainer().informUser(alquiler.getNumero().toString());			
 		}
-		
+		eliminarDisponibilidad();
 		
 		List<Disponible> listaAutosDisponibles = new ArrayList<Disponible>();
 		final List<Auto> autos = listaAutos();
@@ -111,14 +111,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 					AutoPorFecha autoFecha = existeAlquiler(fechaAux,
 							auto.getPatente());
 					if (autoFecha.getCategoria().equals(categoria)) {
-						disp.setPatente(autoFecha.getPatente());
-						disp.setCategoria(autoFecha.getCategoria());
-						disp.setAlquiler(autoFecha.getAlquiler());
-						disp.setModeloAuto(autoFecha.getModeloAuto());
-						disp.setAlquilerQueLlama(alquiler);
-						disp.setFecha(fechaAux);
-						persistIfNotAlready(disp);
-						listaAutosDisponibles.add(disp);
+						
 					}
 				} else {
 					if (auto.getCategoria().equals(categoria)) {
@@ -221,7 +214,8 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 	 * @param patente
 	 * @return AutoPorFecha
 	 */
-	private AutoPorFecha existeAlquiler(final LocalDate fecha,
+	@Hidden
+	public  AutoPorFecha existeAlquiler(final LocalDate fecha,
 			final String patente) {
 		return uniqueMatch(AutoPorFecha.class, new Filter<AutoPorFecha>() {
 			@Override

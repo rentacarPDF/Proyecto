@@ -1,6 +1,6 @@
 package alquiler;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -11,11 +11,13 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
+
 import com.google.common.base.Objects;
 import alquiler.Alquiler.EstadoAlquiler;
 import cliente.Cliente;
 import disponibles.AutoPorFecha;
 import disponibles.Disponible;
+import disponibles.DisponibleServicio;
 
 
 @Named("Alquileres")
@@ -75,20 +77,22 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setEstado(EstadoAlquiler.RESERVADO);
     			alquiler.setUsuario(userName);
     			
-    			ArrayList<String> listaReservas=new ArrayList<String>();
+    			
     			for (Disponible disp:disponibilidad){
     				if (disp.isEstaSeleccionada()){
     					AutoPorFecha autoF=newTransientInstance(AutoPorFecha.class);
+    					if ( servDisp.existeAlquiler(disp.getFecha(), disp.getPatente()) == null){ 
     					autoF.setFecha(disp.getFecha());
     					autoF.setCategoria(disp.getCategoria());
     					autoF.setPatente(disp.getPatente());
     					autoF.setAlquiler(alquiler);
     					autoF.setModeloAuto(disp.getModeloAuto());
-    					listaReservas.add("\n"+"Patente:"+disp.getPatente()+"\n"+"Modelo: "+disp.getModeloAuto()+" "+"Fecha: "+disp.getFecha().toString());
+    					
     					alquiler.addToAutos(autoF);    					
-    					persistIfNotAlready(autoF);    					
+    					persistIfNotAlready(autoF);
+    					}
     				}  
-    				getContainer().removeIfNotAlready(disp);
+    				//getContainer().removeIfNotAlready(disp);
     				
     			}
     		//mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
@@ -98,6 +102,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 
     @Hidden
     public Alquiler reservar2(Alquiler alquiler, Cliente cliente ) {
+    		System.out.println("Reservarrrr 2:"  + alquiler);
     		final String usuario = currentUserName();
             List<Disponible> disponibilidad = listaAutosReservados();
             return crear(alquiler,disponibilidad,cliente,usuario);
@@ -154,6 +159,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     
     
     public Alquiler buscarAlquiler(final Alquiler alquiler) {
+    	System.out.println("Filter : " + alquiler);
         return uniqueMatch(Alquiler.class,new Filter<Alquiler>() {
         	public boolean accept(final Alquiler a){
         		return a.equals(alquiler);
@@ -187,4 +193,13 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	protected String currentUserName() {
 	    return getContainer().getUser().getName();
 	}	
+	private DisponibleServicio servDisp;
+	/**
+	 * Se inyecta el servicio disponible.
+	 * 
+	 * @param serv
+	 */
+	public void injectDisponiblesServicio(final DisponibleServicio serv) {
+		this.servDisp = serv;
+	}
 }

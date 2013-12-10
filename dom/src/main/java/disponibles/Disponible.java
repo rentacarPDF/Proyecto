@@ -174,8 +174,7 @@ public class Disponible {
 			if (isEstaSeleccionada())
 				setEstaSeleccionada(false);
 			else
-				setEstaSeleccionada(true);
-			
+				setEstaSeleccionada(true);			
 		}
 		return this;
 	}
@@ -217,13 +216,11 @@ public class Disponible {
 	@MemberOrder(sequence="2")
 	@Bulk
 	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
-	public Alquiler agregar(){		
-   		Alquiler alq=alquilerQueLlama;		
-   						
-   		
-   		return servAlq.reservar2(alq,alq.getClienteId());
+	public Alquiler agregar(){				
+   		container.informUser("Se agregaron días al Alquiler número: " + alquilerQueLlama.getNumero());	   		
+   		return servAlq.reservar2(alquilerQueLlama,alquilerQueLlama.getClienteId());
 	}
-	
+    
 	private Alquiler alquilerQueLlama;
 	@Hidden	
 	public Alquiler getAlquilerQueLlama(){
@@ -255,7 +252,6 @@ public class Disponible {
 		this.servDisp = servDisp;
 	}
 
-	@SuppressWarnings("unused")
 	private DomainObjectContainer container;
 
 	public void injectDomainObjectContainer(

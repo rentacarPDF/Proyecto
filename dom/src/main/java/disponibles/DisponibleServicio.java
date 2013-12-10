@@ -93,10 +93,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 			@Named("Categoria") Categoria categoria,
 			@Optional
 			@Named("Alquiler") Alquiler alquiler) {
-		
-		if(alquiler!=null){ 
-			getContainer().informUser(alquiler.getNumero().toString());			
-		}
+
 		eliminarDisponibilidad();
 		
 		List<Disponible> listaAutosDisponibles = new ArrayList<Disponible>();

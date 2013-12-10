@@ -74,9 +74,13 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     			alquiler.setFecha(LocalDate.now().toDate());
     			alquiler.setNombreCliente(cliente.getNombre());
     			alquiler.setApellidoCliente(cliente.getApellido());
-    			alquiler.setEstado(EstadoAlquiler.RESERVADO);
     			alquiler.setUsuario(userName);
     			
+    			if (alquiler.getEstado()==null){
+    				alquiler.setEstado(EstadoAlquiler.RESERVADO);
+    			}if (alquiler.getEstado()==EstadoAlquiler.RESERVADO){
+    				alquiler.setEstado(EstadoAlquiler.RESERVADO);
+    			}else alquiler.setEstado(EstadoAlquiler.ALQUILADO);   			
     			
     			for (Disponible disp:disponibilidad){
     				if (disp.isEstaSeleccionada()){
@@ -92,8 +96,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     					persistIfNotAlready(autoF);
     					}
     				}  
-    				//getContainer().removeIfNotAlready(disp);
-    				
+    				//getContainer().removeIfNotAlready(disp);    				
     			}
     		//mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
     		}

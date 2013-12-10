@@ -101,8 +101,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	}
 
     @Hidden
-    public Alquiler reservar2(Alquiler alquiler, Cliente cliente ) {
-    		System.out.println("Reservarrrr 2:"  + alquiler);
+    public Alquiler reservar2(Alquiler alquiler, Cliente cliente ) {    		
     		final String usuario = currentUserName();
             List<Disponible> disponibilidad = listaAutosReservados();
             return crear(alquiler,disponibilidad,cliente,usuario);
@@ -156,10 +155,10 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     public List<Alquiler> listaAlquileres() {
             return allMatches(QueryDefault.create(Alquiler.class, "traerAlquileres"));
     }
-    
-    
+    @Named("Buscar Alquiler")
+    @MemberOrder(sequence="3")
+    @Hidden
     public Alquiler buscarAlquiler(final Alquiler alquiler) {
-    	System.out.println("Filter : " + alquiler);
         return uniqueMatch(Alquiler.class,new Filter<Alquiler>() {
         	public boolean accept(final Alquiler a){
         		return a.equals(alquiler);

@@ -169,8 +169,7 @@ public class Disponible {
 	@Named("Seleccionar")
 	@MemberOrder(sequence="1")
 	@Bulk
-	public Disponible reserva() {
-			
+	public Disponible reserva() {			
 		if (getAlquiler() == null) {
 			if (isEstaSeleccionada())
 				setEstaSeleccionada(false);
@@ -213,6 +212,36 @@ public class Disponible {
 	public void setModeloAuto(final String modelo) {
 		this.modelo = modelo;
 	}
+	
+	@Named("Agregar dias")
+	@MemberOrder(sequence="2")
+	@Bulk
+	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
+	public Alquiler agregar(){		
+   		Alquiler alq=alquilerQueLlama;		
+   						
+   		
+   		return servAlq.reservar2(alq,alq.getClienteId());
+	}
+	
+	private Alquiler alquilerQueLlama;
+	@Hidden	
+	public Alquiler getAlquilerQueLlama(){
+		return alquilerQueLlama;
+	}
+	public void setAlquilerQueLlama(final Alquiler alquilerQueLlama){
+		this.alquilerQueLlama=alquilerQueLlama;
+	}	
+	
+	private AlquilerServicio servAlq;
+	/**
+	 * Se inyecta el servicio disponible.
+	 * 
+	 * @param serv
+	 */
+	public void injectDisponiblesServicio(final AlquilerServicio serv) {
+		this.servAlq = serv;
+	}	
 
 	@SuppressWarnings("unused")
 	private DisponibleServicio servDisp;
@@ -233,39 +262,4 @@ public class Disponible {
 			final DomainObjectContainer container) {
 		this.container = container;
 	}	
-	
-	//Prueba
-	@Named("Agregar dias")
-	@MemberOrder(sequence="2")
-	@Bulk
-	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
-	public Alquiler agregar(){		
-   		Alquiler alq=alquilerQueLlama;		
-   		servAlq.reservar2(alq,alq.getClienteId());				
-   		
-   		return servAlq.buscarAlquiler(alq); 
-	}
-	
-	//PRUEBA
-	private Alquiler alquilerQueLlama;
-	@Hidden
-	
-	public Alquiler getAlquilerQueLlama(){
-		return alquilerQueLlama;
-	}
-	public void setAlquilerQueLlama(final Alquiler alquilerQueLlama){
-		this.alquilerQueLlama=alquilerQueLlama;
-	}
-	
-	
-	private AlquilerServicio servAlq;
-	/**
-	 * Se inyecta el servicio disponible.
-	 * 
-	 * @param serv
-	 */
-	public void injectDisponiblesServicio(final AlquilerServicio serv) {
-		this.servAlq = serv;
-	}
-	
 }

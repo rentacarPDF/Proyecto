@@ -405,7 +405,7 @@ public class Alquiler {
         }
         else return "El Alquiler esta CERRADO no se pueden eliminar vehiculos";
     }
-    //// ----------
+    
     @Named("Ver disponibilidad")
     @MemberOrder(name="Autos",sequence="1")
     public List<Disponible> disponibilidad(){    	
@@ -419,6 +419,19 @@ public class Alquiler {
 						
     	return listaAutosDisponibles;
     }     
+    /**
+     * Accion provista por el Framework.
+     * Deshabilita la opcion de agregar un elemento a la lista de Autos.
+     * 
+     * @param auto
+     * @return String
+     */
+    public String disableDisponibilidad(){
+        if(getEstado() == EstadoAlquiler.RESERVADO || getEstado() == EstadoAlquiler.ALQUILADO) {
+        	return null;
+        }
+        else return "El Alquiler esta CERRADO no se pueden agregar vehiculos";
+    }
     /**
      * Accion que agrega los autos a la lista.
      * @param auto
@@ -594,8 +607,7 @@ public class Alquiler {
 	 */
 	public void setApellidoCliente(String apellido) {
 		this.apellido = apellido;
-	}
-	
+	}	
 	
 	/**
 	 * Accion que permite el borrado del Alquiler
@@ -686,12 +698,11 @@ public class Alquiler {
      */ 
     public void setDomainObjectContainer(final DomainObjectContainer container) {
         this.container = container;
-    }
-    
+    }   
 	
 	private DisponibleServicio servDisp;
 	/**
-	 * Se inyecta el servicio disponible.
+	 * Se inyecta el servicio de Disponible
 	 * 
 	 * @param serv
 	 */
@@ -701,7 +712,7 @@ public class Alquiler {
 	@SuppressWarnings("unused")
 	private AlquilerServicio servAlq;
 	/**
-	 * Se inyecta el servicio disponible.
+	 * Se inyecta el servicio de Alquiler.
 	 * 
 	 * @param serv
 	 */

@@ -493,7 +493,7 @@ public class Alquiler {
     	 if(getEstado() == EstadoAlquiler.RESERVADO) {
              return null;
          }
-         else return getEstado()==EstadoAlquiler.ALQUILADO?"El Alquiler esta ALQUILADO no se pueden agregar autos":"El Alquiler esta CERRADO no se puede editar";        
+         else return getEstado()==EstadoAlquiler.ALQUILADO?"El vehiculo esta ALQUILADO no se pueden agregar adicionales":"El Alquiler esta CERRADO no se puede editar";        
      }
     /**
      * Accion provista por el Framework que permite
@@ -530,13 +530,11 @@ public class Alquiler {
      * @return String
      */
     public String disableRemoveFromAdicionales(Adicional adicional){
-        if(getEstado() == EstadoAlquiler.ALQUILADO) {
+        if(getEstado() == EstadoAlquiler.RESERVADO) {
         	return adicionales.size()>0? null: "No existe Adicionales para este Alquiler";
         }
         else {           
-        	if (getEstado() == EstadoAlquiler.RESERVADO){
-        		return "No existe Adicionales para este Alquiler";
-        	}else return getEstado()==EstadoAlquiler.CERRADO? "El Alquiler esta FINALIZADO no se puede editar":"El Alquiler esta CERRADO no se puede editar";
+        	return getEstado()==EstadoAlquiler.ALQUILADO? "El vehiculo se encuentra en poder del cliente, no se puede editar":"El Alquiler esta CERRADO no se puede editar";
         }			          
     }
     /**

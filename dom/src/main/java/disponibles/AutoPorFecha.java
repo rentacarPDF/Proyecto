@@ -9,6 +9,7 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -53,7 +54,7 @@ public class AutoPorFecha implements Comparator {
 	@Named("Auto")
 	public String title() {
 		final TitleBuffer buf = new TitleBuffer();
-		buf.append(getPatente());
+		buf.append(getFecha());
 		return buf.toString();
 	}
 
@@ -65,6 +66,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return LocalDate
 	 */
 	@Disabled
+	@Hidden
 	@Named("Fecha")
 	public LocalDate getFecha() {
 		return fecha;
@@ -87,6 +89,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return String
 	 */
 	@Disabled
+	@MemberOrder(sequence= "1")
 	@Named("Auto")
 	public String getPatente() {
 		return auto;
@@ -109,6 +112,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return Categoria
 	 */
 	@Disabled
+	@MemberOrder(sequence= "2")
 	@Named("Categoria")
 	public Categoria getCategoria() {
 		return categoria;
@@ -130,6 +134,7 @@ public class AutoPorFecha implements Comparator {
 	 * 
 	 * @return Alquiler
 	 */
+	@MemberOrder(sequence= "3")
 	@Named("Estado Alquiler")
 	@Disabled
 	public Alquiler getAlquiler() {
@@ -153,6 +158,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return String
 	 */
 	@Disabled
+	@MemberOrder(sequence= "4")
 	@Named("Modelo")
 	public String getModeloAuto() {
 		return modelo;

@@ -2,6 +2,8 @@ package fixture;
 
 
 
+import java.math.BigDecimal;
+
 import marca.Marca;
 import marca.MarcaServicio;
 import org.apache.isis.applib.AbstractService;
@@ -51,10 +53,14 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	createMarcaForUser("VOLKSWAGEN");
 	    	getContainer().informUser("Se han instalado correctamente las Marcas");
 	    	//Se instalan Categorias
-	    	createCategoriaForUser("3 Puertas", 3, 2, Caja.MANUAL, Traccion.CUATROx2, "200");
-	    	createCategoriaForUser("4 Puertas", 4, 5, Caja.MANUAL, Traccion.CUATROx2, "250");
-	    	createCategoriaForUser("5 Puertas", 5, 5, Caja.MANUAL, Traccion.CUATROx2, "350");
-	    	createCategoriaForUser("Pick Up 4x4", 4, 5, Caja.MANUAL, Traccion.CUATROx4, "550");
+	    	BigDecimal b1=new BigDecimal("200");
+	    	BigDecimal b2=new BigDecimal("250");
+	    	BigDecimal b3=new BigDecimal("350");
+	    	BigDecimal b4=new BigDecimal("550");
+	    	createCategoriaForUser("3 Puertas", 3, 2, Caja.MANUAL, Traccion.CUATROx2, b1);
+	    	createCategoriaForUser("4 Puertas", 4, 5, Caja.MANUAL, Traccion.CUATROx2, b2);
+	    	createCategoriaForUser("5 Puertas", 5, 5, Caja.MANUAL, Traccion.CUATROx2, b3);
+	    	createCategoriaForUser("Pick Up 4x4", 4, 5, Caja.MANUAL, Traccion.CUATROx4, b4);
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
 	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");
@@ -74,7 +80,7 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	return marcaServicio.cargarMarca(marca);
 	    }
 	    //Metodo que instancia el Servicio de Categoria y se crean los objetos.
-	    private Categoria createCategoriaForUser(final String categoria,final int cantPuert,final int cantPlaz,final Caja caja,final Traccion traccion,final String precio){
+	    private Categoria createCategoriaForUser(final String categoria,final int cantPuert,final int cantPlaz,final Caja caja,final Traccion traccion,final BigDecimal precio){
 	    	
 	    	return categoriaServicio.cargarCategoria(categoria, cantPuert, cantPlaz, caja, traccion, precio);
 	    }

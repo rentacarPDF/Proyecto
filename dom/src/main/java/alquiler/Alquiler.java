@@ -172,7 +172,7 @@ public class Alquiler {
             this.fecha = fecha;
     }
  
-	private String  precio;
+	private BigDecimal  precio;
 	/**
 	 * Retorna el precio del Alquiler en Neto y solamente correspondiente al valor
 	 * de la categoria del Auto.
@@ -183,14 +183,14 @@ public class Alquiler {
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos del Alquiler",sequence="3")
-	public String getPrecioAlquiler(){
+	public BigDecimal getPrecioAlquiler(){
 		return precio;
 	}
     /**
      *  Se setea el precio del Alquiler en Neto.
      *  @param precio
      */
-	public void setPrecioAlquiler(final String precio){
+	public void setPrecioAlquiler(final BigDecimal precio){
 		this.precio=precio;
 	}	
 	
@@ -209,11 +209,11 @@ public class Alquiler {
 		BigDecimal sum=new BigDecimal("0");		
 		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
 		for (AutoPorFecha auto:listaAutos){
-			BigDecimal aux=new BigDecimal(auto.getCategoria().getPrecio());
+			BigDecimal aux=(auto.getCategoria().getPrecio());
 			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
 			sum=sum.add(aux);
 		}		
-		setPrecioAlquiler(sum.toString());
+		setPrecioAlquiler(sum);
 		return this;
 	}	
 	
@@ -336,7 +336,7 @@ public class Alquiler {
 		BigDecimal total=new BigDecimal(listaAutos.size());		
 		total.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
-		BigDecimal precioAlq=new BigDecimal(getPrecioAlquiler());		
+		BigDecimal precioAlq=getPrecioAlquiler();		
 		precioAlq.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
 		total= precioAlq.add(suma);

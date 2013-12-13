@@ -1,5 +1,6 @@
 package categoria;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 			@Named("Tipo de caja")Caja caja,
 			@Named("Tipo de traccion") Traccion traccion,
 			@RegEx(validation = "[0-9]+")
-			@Named("Precio de la categoria")String precio)
+			@Named("Precio de la categoria")BigDecimal precio)
 	{   final String usuario = currentUserName();
 		final boolean activo= true;
 		return laCategoria(categoria.toUpperCase(),cantPuert,cantPlaz,caja,traccion,precio,usuario,activo);
@@ -79,7 +80,7 @@ public class CategoriaServicio extends AbstractFactoryAndRepository {
 		final int cantPlaz,
 		final Caja caja,
 		final Traccion traccion,
-		final String precio,
+		final BigDecimal precio,
 		final String userName,
 		boolean activo)
 		{

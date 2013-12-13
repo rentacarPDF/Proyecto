@@ -1,5 +1,7 @@
 package categoria;
 
+import java.math.BigDecimal;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -190,7 +192,7 @@ public class Categoria {
 		this.traccion = traccion;
 	}
 
-	private String precio;
+	private BigDecimal precio;
 
 	/**
 	 * Retorna el precio definido para la Categoria.
@@ -200,7 +202,7 @@ public class Categoria {
 	@DescribedAs("El precio de la categoria.")
 	@Named("Precio")
 	@MemberOrder(sequence = "6")
-	public String getPrecio() {
+	public BigDecimal getPrecio() {
 		return precio;
 	}
 
@@ -209,7 +211,7 @@ public class Categoria {
 	 * 
 	 * @param precio
 	 */
-	public void setPrecio(final String precio) {
+	public void setPrecio(final BigDecimal precio) {
 		this.precio = precio;
 	}
 

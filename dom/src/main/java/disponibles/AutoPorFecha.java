@@ -1,5 +1,6 @@
 package disponibles;
 
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 
 import javax.jdo.annotations.IdentityType;
@@ -54,7 +55,8 @@ public class AutoPorFecha implements Comparator {
 	@Named("Auto")
 	public String title() {
 		final TitleBuffer buf = new TitleBuffer();
-		buf.append(getFecha());
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		buf.append(formato.format(getFecha().toDate()));
 		return buf.toString();
 	}
 
@@ -112,7 +114,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return Categoria
 	 */
 	@Disabled
-	@MemberOrder(sequence= "2")
+	@MemberOrder(sequence= "3")
 	@Named("Categoria")
 	public Categoria getCategoria() {
 		return categoria;
@@ -134,7 +136,7 @@ public class AutoPorFecha implements Comparator {
 	 * 
 	 * @return Alquiler
 	 */
-	@MemberOrder(sequence= "3")
+	@MemberOrder(sequence= "4")
 	@Named("Estado Alquiler")
 	@Disabled
 	public Alquiler getAlquiler() {
@@ -158,7 +160,7 @@ public class AutoPorFecha implements Comparator {
 	 * @return String
 	 */
 	@Disabled
-	@MemberOrder(sequence= "4")
+	@MemberOrder(sequence= "2")
 	@Named("Modelo")
 	public String getModeloAuto() {
 		return modelo;

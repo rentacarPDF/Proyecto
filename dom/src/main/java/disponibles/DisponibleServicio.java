@@ -61,7 +61,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 						disp.setCategoria(autoFecha.getCategoria());
 						disp.setAlquiler(autoFecha.getAlquiler());
 						disp.setModeloAuto(autoFecha.getModeloAuto());
-
+						disp.setDesdePorFechas(true);
 						disp.setFecha(fechaAux);
 						persistIfNotAlready(disp);
 						listaAutosDisponibles.add(disp);
@@ -71,7 +71,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 						disp.setPatente(auto.getPatente());
 						disp.setModeloAuto(auto.getModelo());
 						disp.setCategoria(auto.getCategoria());
-
+						disp.setDesdePorFechas(true);	
 						disp.setFecha(fechaAux);
 						persistIfNotAlready(disp);
 						listaAutosDisponibles.add(disp);
@@ -116,6 +116,7 @@ public class DisponibleServicio extends AbstractFactoryAndRepository {
 						disp.setModeloAuto(auto.getModelo());
 						disp.setCategoria(auto.getCategoria());
 						disp.setAlquilerQueLlama(alquiler);
+						disp.setDesdePorFechas(false);
 						disp.setFecha(fechaAux);
 						persistIfNotAlready(disp);
 						listaAutosDisponibles.add(disp);

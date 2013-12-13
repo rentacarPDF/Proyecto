@@ -119,7 +119,18 @@ public class Disponible {
 	public void setFecha(final LocalDate fecha) {
 		this.fecha = fecha;
 	}
-
+	
+	private boolean desdePorFechas = false;
+	
+	@Hidden
+	public boolean getDesdePorFechas() {
+		return desdePorFechas;
+	}
+	
+	public void setDesdePorFechas(boolean desdePorFechas) {
+		this.desdePorFechas = desdePorFechas;
+	}
+	
 	private Categoria categoria;
 
 	/**
@@ -170,25 +181,28 @@ public class Disponible {
 	@MemberOrder(sequence="1")
 	@Bulk
 	public Disponible reserva() {			
-		if (getAlquiler() == null) {
-			if (isEstaSeleccionada())
-				setEstaSeleccionada(false);
-			else
-				setEstaSeleccionada(true);			
+		if(getDesdePorFechas()== true){
+			if (getAlquiler() == null) {
+				if (isEstaSeleccionada())
+					setEstaSeleccionada(false);
+				else
+					setEstaSeleccionada(true);			
+			}
 		}
-		return this;
+			return this;
 	}
-
 	/**
 	 * Metodo provisto por el framework que deshabilita la opcion de poder
-	 * editar la reserva.
+	 * editar la reserva.n 
 	 * 
 	 * Chequea si la reserva ya está seleccionada.
 	 * 
 	 * @return String
 	 */
 	public String disableReserva() {
-		return seleccionar ? "Ya esta seleccionada!" : null;
+		if(getDesdePorFechas()== true){
+			return null;
+		}else return "Esta accion no esta disponible";
 	}
 
 	private String modelo;
@@ -216,11 +230,26 @@ public class Disponible {
 	@MemberOrder(sequence="2")
 	@Bulk
 	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
-	public Alquiler agregar(){				
-   		container.informUser("Se agregaron días al Alquiler número: " + alquilerQueLlama.getNumero());	   		
-   		return servAlq.reservar2(alquilerQueLlama,alquilerQueLlama.getClienteId());
+	public Alquiler agregar(){
+		if(getDesdePorFechas() == false) {			
+			if (getAlquiler() == null) {
+				if (isEstaSeleccionada())
+					setEstaSeleccionada(false);
+				else
+					setEstaSeleccionada(true);			
+			}
+			container.informUser("Se agregaron días al Alquiler número: " + alquilerQueLlama.getNumero());                           
+	        servAlq.reservar2(alquilerQueLlama,alquilerQueLlama.getClienteId());
+	    }    
+		return getAlquilerQueLlama();
+		
 	}
-    
+	public String disableAgregar(){
+		if (getDesdePorFechas()==false){
+			return null;
+		}else return "Esta accion no esta habilitada en este momento";
+	}
+	
 	private Alquiler alquilerQueLlama;
 	@Hidden	
 	public Alquiler getAlquilerQueLlama(){

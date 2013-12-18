@@ -92,29 +92,7 @@ public class Alquiler {
     public String title(){
             return getEstado().toString();        
     }
-
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long numero;
-    /**
-     * Se retorna el n&uacute;mero del Alquiler.
-     * 
-     * @return Long 
-     */
-    @Disabled
-    @Named("Nro Alquiler")
-    @MemberOrder(name="Datos del Alquiler",sequence="1")
-    public Long getNumero() {
-            return numero;
-    }
-    /**
-     * Se setea el n&uacute;mero del Alquiler.
-     * @param numero
-     */
-    public void setNumero(final Long numero) {
-            this.numero = numero;
-    }
-   
+ 
     private String nombreEstado;
     @Named("Estado")
     @NotPersisted
@@ -141,12 +119,33 @@ public class Alquiler {
     public void setEstado(final EstadoAlquiler estado){
             this.estado = estado;
     }
-    
+
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long numero;
+    /**
+     * Se retorna el n&uacute;mero del Alquiler.
+     * 
+     * @return Long 
+     */
+    @Disabled
+    @Named("Nro Alquiler")
+    @MemberOrder(name="Datos del Alquiler",sequence="1")
+    public Long getNumero() {
+            return numero;
+    }
+    /**
+     * Se setea el n&uacute;mero del Alquiler.
+     * @param numero
+     */
+    public void setNumero(final Long numero) {
+            this.numero = numero;
+    }
     /**
      * Fecha en la cual se realiza el alquiler.
      * @return String
      */
-    @Named("Fecha")
+    @Named("Fecha Reserva")
     @MemberOrder(name="Datos del Alquiler",sequence="2")
     public String getFechaString() {
             if(getFecha() != null) {
@@ -171,51 +170,55 @@ public class Alquiler {
     public void setFecha(final Date fecha) {
             this.fecha = fecha;
     }
- 
-	private BigDecimal  precio;
-	/**
-	 * Retorna el precio del Alquiler en Neto y solamente correspondiente al valor
-	 * de la categoria del Auto.
-	 * 
-	 * @return String
-	 */
-    @Named("Precio")
-    @Disabled
-    @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Datos del Alquiler",sequence="3")
-	public BigDecimal getPrecioAlquiler(){
-		return precio;
+
+	private BigDecimal senaMinima;
+	@MemberOrder(name="Datos del Alquiler",sequence="3")
+	@Named("Seña Mínima")
+	@Disabled
+	public BigDecimal getSenaMinima(){
+		return senaMinima;
 	}
-    /**
-     *  Se setea el precio del Alquiler en Neto.
-     *  @param precio
-     */
-	public void setPrecioAlquiler(final BigDecimal precio){
-		this.precio=precio;
-	}	
-	
-	/**
-	 * M&eacute;todo que calcula el subtotal del Alquiler.
-	 * Se calcula el precio por la categoria de cada auto 
-	 * y la cantidad de d&iacute;as. 
-	 * Se realiza una sumatoria de lo antes mencionado.
-	 * 
-	 * @return alquiler.Alquiler
-	 */
-	@Hidden
-	public Alquiler calculoSubTotal(){
-		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
+	public void setSenaMinima(final BigDecimal senaMinima){
+		this.senaMinima=senaMinima;
+	}
+	public Alquiler calculoSenaMinima(){
+		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());	
 		
-		BigDecimal sum=new BigDecimal("0");		
+		BigDecimal porc=new BigDecimal("0.20");		
+		BigDecimal sum=new BigDecimal("0");
 		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
+		BigDecimal calc=new BigDecimal("0");
+		calc.setScale(5, BigDecimal.ROUND_HALF_UP);
 		for (AutoPorFecha auto:listaAutos){
 			BigDecimal aux=(auto.getCategoria().getPrecio());
 			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
 			sum=sum.add(aux);
 		}		
-		setPrecioAlquiler(sum);
+		calc=sum.multiply(porc);
+		setSenaMinima(calc);
+		
 		return this;
-	}	
+	}
+	
+	private BigDecimal sena;
+	@MemberOrder(name="Datos del Alquiler",sequence="4")
+	@Named("Seña")
+	public BigDecimal getSena(){
+		return sena;
+	}
+	public void setSena(final BigDecimal sena){
+		this.sena=sena;
+	}
+	
+	private boolean voucher;
+	@MemberOrder(name="Datos del Alquiler",sequence="5")
+	@Named("Voucher")
+	public boolean isVoucher(){
+		return voucher;
+	}
+	public void setVoucher(final boolean voucher){
+		this.voucher=voucher;
+	}
 	
 	private TipoPago tipoPago;
 	/**
@@ -282,8 +285,29 @@ public class Alquiler {
 			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
 		}
 	}	
- 
-	private String precioTot;
+	private BigDecimal  precio;
+	/**
+	 * Retorna el precio del Alquiler en Neto y solamente correspondiente al valor
+	 * de la categoria del Auto.
+	 * 
+	 * @return String
+	 */
+    @Named("Precio Reserva")
+    @Disabled
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos de Factura",sequence="3")
+	public BigDecimal getPrecioAlquiler(){
+		return precio;
+	}
+    /**
+     *  Se setea el precio del Alquiler en Neto.
+     *  @param precio
+     */
+	public void setPrecioAlquiler(final BigDecimal precio){
+		this.precio=precio;
+	}	
+	
+	private BigDecimal precioTot;
 	/**
 	 * Se retorna la sumatoria del precio Neto
 	 *  m&aacute;s los adicionales.
@@ -297,16 +321,39 @@ public class Alquiler {
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="3")
-	public String getPrecioTotal(){
+	public BigDecimal getPrecioTotal(){
 		return precioTot;
 	}
     /**
      * Se setea el precio total calculado.
      * @param precioTot
      */
-	public void setPrecioTotal(final String precioTot){
+	public void setPrecioTotal(final BigDecimal precioTot){
 		this.precioTot=precioTot;
 	}	
+	/**
+	 * M&eacute;todo que calcula el subtotal del Alquiler.
+	 * Se calcula el precio por la categoria de cada auto 
+	 * y la cantidad de d&iacute;as. 
+	 * Se realiza una sumatoria de lo antes mencionado.
+	 * 
+	 * @return alquiler.Alquiler
+	 */
+	@Hidden
+	public Alquiler calculoSubTotal(){
+		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
+		
+		BigDecimal sum=new BigDecimal("0");		
+		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
+		for (AutoPorFecha auto:listaAutos){
+			BigDecimal aux=(auto.getCategoria().getPrecio());
+			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
+			sum=sum.add(aux);
+		}		
+		setPrecioAlquiler(sum);
+		return this;
+	}	
+	
 	/**
 	 * Se calcula el precio total, que es la sumatoria de los precios de las categorias de los autos,
 	 * mas los adicionales, por la cantidad de dias.
@@ -340,7 +387,7 @@ public class Alquiler {
 		precioAlq.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
 		total= precioAlq.add(suma);
-		setPrecioTotal(total.toString());
+		setPrecioTotal(total);
 		
 		return this;		
 	}	
@@ -519,7 +566,7 @@ public class Alquiler {
     @Named("Borrar")
     @MemberOrder(name="Adicionales",sequence="2")
     public Alquiler removeFromAdicionales(final Adicional adic) {
-    		adicionales.remove(adic);            
+    		adicionales.remove(adic);  
             calculoTotal();
             return this;
     }

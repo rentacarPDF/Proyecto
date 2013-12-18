@@ -172,8 +172,9 @@ public class Alquiler {
     }
 
 	private BigDecimal senaMinima;
+	@Hidden(where=Where.ALL_TABLES)
 	@MemberOrder(name="Datos del Alquiler",sequence="3")
-	@Named("Seña Mínima")
+	@Named("Seña Mínima (20%)")
 	@Disabled
 	public BigDecimal getSenaMinima(){
 		return senaMinima;
@@ -181,26 +182,22 @@ public class Alquiler {
 	public void setSenaMinima(final BigDecimal senaMinima){
 		this.senaMinima=senaMinima;
 	}
-	public Alquiler calculoSenaMinima(){
-		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());	
-		
+	@Hidden
+	public Alquiler calculoSenaMinima(){		
 		BigDecimal porc=new BigDecimal("0.20");		
-		BigDecimal sum=new BigDecimal("0");
-		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
-		BigDecimal calc=new BigDecimal("0");
-		calc.setScale(5, BigDecimal.ROUND_HALF_UP);
-		for (AutoPorFecha auto:listaAutos){
-			BigDecimal aux=(auto.getCategoria().getPrecio());
-			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
-			sum=sum.add(aux);
-		}		
+		BigDecimal sum=new BigDecimal("0");		
+		sum=this.getPrecioAlquiler();
+		sum.setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal calc=new BigDecimal("0");		
 		calc=sum.multiply(porc);
+		calc.setScale(2, BigDecimal.ROUND_HALF_UP);
 		setSenaMinima(calc);
 		
 		return this;
 	}
 	
 	private BigDecimal sena;
+	@Hidden(where=Where.ALL_TABLES)
 	@MemberOrder(name="Datos del Alquiler",sequence="4")
 	@Named("Seña")
 	public BigDecimal getSena(){
@@ -211,8 +208,9 @@ public class Alquiler {
 	}
 	
 	private boolean voucher;
+	@Hidden(where=Where.ALL_TABLES)
 	@MemberOrder(name="Datos del Alquiler",sequence="5")
-	@Named("Voucher")
+	@Named("Voucher de Garantía")
 	public boolean isVoucher(){
 		return voucher;
 	}
@@ -351,6 +349,7 @@ public class Alquiler {
 			sum=sum.add(aux);
 		}		
 		setPrecioAlquiler(sum);
+		calculoSenaMinima();
 		return this;
 	}	
 	

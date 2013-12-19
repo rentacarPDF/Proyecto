@@ -186,7 +186,7 @@ public class Alquiler {
 	public Alquiler calculoSenaMinima(){		
 		BigDecimal porc=new BigDecimal("0.20");		
 		BigDecimal sum=new BigDecimal("0");		
-		sum=this.getPrecioAlquiler();
+		sum=this.getPrecioReserva();
 		sum.setScale(2, BigDecimal.ROUND_HALF_UP);
 		BigDecimal calc=new BigDecimal("0");		
 		calc=sum.multiply(porc);
@@ -283,35 +283,55 @@ public class Alquiler {
 			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
 		}
 	}	
-	private BigDecimal  precio;
+	private BigDecimal  precioRes;
 	/**
 	 * Retorna el precio del Alquiler en Neto y solamente correspondiente al valor
 	 * de la categoria del Auto.
 	 * 
-	 * @return String
+	 * @return BigDecimal
 	 */
     @Named("Precio Reserva")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="3")
-	public BigDecimal getPrecioAlquiler(){
-		return precio;
+	public BigDecimal getPrecioReserva(){
+		return precioRes;
 	}
     /**
      *  Se setea el precio del Alquiler en Neto.
      *  @param precio
      */
-	public void setPrecioAlquiler(final BigDecimal precio){
-		this.precio=precio;
-	}	
+	public void setPrecioReserva(final BigDecimal precioRes){
+		this.precioRes=precioRes;
+	}
+	private BigDecimal  precioAdic;
+	/**
+	 * 
+	 * 
+	 * @return BigDecimal
+	 */
+    @Named("Precio Adicional/Extra")
+    @Disabled
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Datos de Factura",sequence="4")
+	public BigDecimal getPrecioAdicional(){
+		return precioAdic;
+	}
+    /**
+     *  
+     *  @param precio
+     */
+	public void setPrecioAdicional(final BigDecimal precioAdic){
+		this.precioAdic=precioAdic;
+	}
 	
 	private BigDecimal precioTot;
 	/**
 	 * Se retorna la sumatoria del precio Neto
 	 *  m&aacute;s los adicionales.
 	 *  
-	 * @see alquiler.Alquiler#getPrecioAlquiler()
-	 * @see alquiler.Alquiler#calculoSubTotal()
+	 * @see alquiler.Alquiler#getPrecioReserva()
+	 * @see alquiler.Alquiler#calculoPrecioReserva()
 	 * 
 	 * @return String
 	 */
@@ -338,7 +358,7 @@ public class Alquiler {
 	 * @return alquiler.Alquiler
 	 */
 	@Hidden
-	public Alquiler calculoSubTotal(){
+	public Alquiler calculoPrecioReserva(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());		
 		
 		BigDecimal sum=new BigDecimal("0");		
@@ -348,8 +368,13 @@ public class Alquiler {
 			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
 			sum=sum.add(aux);
 		}		
-		setPrecioAlquiler(sum);
+		setPrecioReserva(sum);
 		calculoSenaMinima();
+		return this;
+	}	
+	@Hidden
+	public Alquiler calculoPrecioAdicional(){
+
 		return this;
 	}	
 	
@@ -359,7 +384,7 @@ public class Alquiler {
 	 * @return Alquiler
 	 */
 	@Hidden
-	public Alquiler calculoTotal(){
+	public Alquiler calculoPrecioTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());
 		List<Adicional> listaAdicionales=Lists.newArrayList(getAdicionales());
 		
@@ -382,7 +407,7 @@ public class Alquiler {
 		BigDecimal total=new BigDecimal(listaAutos.size());		
 		total.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
-		BigDecimal precioAlq=getPrecioAlquiler();		
+		BigDecimal precioAlq=getPrecioReserva();		
 		precioAlq.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
 		total= precioAlq.add(suma);
@@ -420,8 +445,8 @@ public class Alquiler {
     public Alquiler removeFromAutos(final AutoPorFecha auto) {
             autos.remove(auto);
             container.removeIfNotAlready(auto);
-            calculoSubTotal();
-            calculoTotal();
+            calculoPrecioReserva();
+            calculoPrecioTotal();
             return this;            
     }
     /**
@@ -489,8 +514,8 @@ public class Alquiler {
     	}
     	auto.setAlquiler(this);
     	autos.add(auto);
-    	calculoSubTotal();
-    	calculoTotal();
+    	calculoPrecioReserva();
+    	calculoPrecioTotal();
     }
 
  	@Persistent(mappedBy="alquiler")	
@@ -554,7 +579,7 @@ public class Alquiler {
     	}    	
     	adic.setAlquiler(this);
     	adicionales.add(adic);
-    	calculoTotal();
+    	calculoPrecioTotal();
     } 
     /**
      * Accion provista por el Framework que permite
@@ -566,7 +591,7 @@ public class Alquiler {
     @MemberOrder(name="Adicionales",sequence="2")
     public Alquiler removeFromAdicionales(final Adicional adic) {
     		adicionales.remove(adic);  
-            calculoTotal();
+            calculoPrecioTotal();
             return this;
     }
     /**

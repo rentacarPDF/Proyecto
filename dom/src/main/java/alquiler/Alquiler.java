@@ -184,14 +184,18 @@ public class Alquiler {
 	}
 	@Hidden
 	public Alquiler calculoSenaMinima(){		
-		BigDecimal porc=new BigDecimal("0.20");		
+		BigDecimal porc=new BigDecimal("20");		
 		BigDecimal sum=new BigDecimal("0");		
 		sum=this.getPrecioReserva();
 		sum.setScale(2, BigDecimal.ROUND_HALF_UP);
 		BigDecimal calc=new BigDecimal("0");		
 		calc=sum.multiply(porc);
 		calc.setScale(2, BigDecimal.ROUND_HALF_UP);
-		setSenaMinima(calc);
+		BigDecimal porcentaje=new BigDecimal("100");
+		BigDecimal calculo=new BigDecimal("0");
+		calculo.setScale(2, BigDecimal.ROUND_HALF_UP);
+		calculo=calc.divide(porcentaje);		
+		setSenaMinima(calculo);
 		
 		return this;
 	}
@@ -290,7 +294,7 @@ public class Alquiler {
 	 * 
 	 * @return BigDecimal
 	 */
-    @Named("Precio Reserva")
+    @Named("Precio Autos")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="3")
@@ -310,7 +314,7 @@ public class Alquiler {
 	 * 
 	 * @return BigDecimal
 	 */
-    @Named("Precio Adicional/Extra")
+    @Named("Precio Adicionales")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Datos de Factura",sequence="4")
@@ -333,12 +337,12 @@ public class Alquiler {
 	 * @see alquiler.Alquiler#getPrecioReserva()
 	 * @see alquiler.Alquiler#calculoPrecioReserva()
 	 * 
-	 * @return String
+	 * @return BigDecimal
 	 */
     @Named("Precio Total")
     @Disabled
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Datos de Factura",sequence="3")
+    @MemberOrder(name="Datos de Factura",sequence="5")
 	public BigDecimal getPrecioTotal(){
 		return precioTot;
 	}
@@ -374,17 +378,6 @@ public class Alquiler {
 	}	
 	@Hidden
 	public Alquiler calculoPrecioAdicional(){
-
-		return this;
-	}	
-	
-	/**
-	 * Se calcula el precio total, que es la sumatoria de los precios de las categorias de los autos,
-	 * mas los adicionales, por la cantidad de dias.
-	 * @return Alquiler
-	 */
-	@Hidden
-	public Alquiler calculoPrecioTotal(){
 		List<AutoPorFecha> listaAutos=Lists.newArrayList(getAutos());
 		List<Adicional> listaAdicionales=Lists.newArrayList(getAdicionales());
 		
@@ -398,20 +391,23 @@ public class Alquiler {
 		lista.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
 		for (Adicional adic:listaAdicionales){
-			BigDecimal pAdic=new BigDecimal(adic.getPrecio());		
-			pAdic.setScale(5, BigDecimal.ROUND_HALF_UP);			
-			
+			BigDecimal pAdic=new BigDecimal(adic.getPrecio());// Pasar Precio Adic a BG	
+			pAdic.setScale(5, BigDecimal.ROUND_HALF_UP);				
 			aux= pAdic.multiply(lista);			
 			suma=suma.add(aux);
 		}
-		BigDecimal total=new BigDecimal(listaAutos.size());		
-		total.setScale(5, BigDecimal.ROUND_HALF_UP);
+		setPrecioAdicional(suma);		
+		return this;
+	}	
+	
+	/**
+	 * Se calcula el precio total, que es la sumatoria de los precios de las categorias de los autos,
+	 * mas los adicionales, por la cantidad de dias.
+	 * @return Alquiler
+	 */
+	@Hidden
+	public Alquiler calculoPrecioTotal(){
 		
-		BigDecimal precioAlq=getPrecioReserva();		
-		precioAlq.setScale(5, BigDecimal.ROUND_HALF_UP);
-		
-		total= precioAlq.add(suma);
-		setPrecioTotal(total);
 		
 		return this;		
 	}	
@@ -579,6 +575,7 @@ public class Alquiler {
     	}    	
     	adic.setAlquiler(this);
     	adicionales.add(adic);
+    	calculoPrecioAdicional();
     	calculoPrecioTotal();
     } 
     /**
@@ -591,6 +588,7 @@ public class Alquiler {
     @MemberOrder(name="Adicionales",sequence="2")
     public Alquiler removeFromAdicionales(final Adicional adic) {
     		adicionales.remove(adic);  
+    		calculoPrecioAdicional();
             calculoPrecioTotal();
             return this;
     }

@@ -184,18 +184,13 @@ public class Alquiler {
 	}
 	@Hidden
 	public Alquiler calculoSenaMinima(){		
-		BigDecimal porc=new BigDecimal("20");		
-		BigDecimal sum=new BigDecimal("0");		
-		sum=this.getPrecioReserva();
-		sum.setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal porc=new BigDecimal("20");
+		BigDecimal divisor=new BigDecimal("100");
 		BigDecimal calc=new BigDecimal("0");		
-		calc=sum.multiply(porc);
+		calc=(getPrecioReserva().multiply(porc)).divide(divisor);
 		calc.setScale(2, BigDecimal.ROUND_HALF_UP);
-		BigDecimal porcentaje=new BigDecimal("100");
-		BigDecimal calculo=new BigDecimal("0");
-		calculo.setScale(2, BigDecimal.ROUND_HALF_UP);
-		calculo=calc.divide(porcentaje);		
-		setSenaMinima(calculo);
+				
+		setSenaMinima(calc);
 		
 		return this;
 	}
@@ -407,7 +402,10 @@ public class Alquiler {
 	 */
 	@Hidden
 	public Alquiler calculoPrecioTotal(){
-		
+		BigDecimal suma=new BigDecimal("0");		
+		suma.setScale(5, BigDecimal.ROUND_HALF_UP);		
+		suma=(getPrecioReserva().add(getPrecioAdicional())).subtract(getSena());
+		setPrecioTotal(suma);
 		
 		return this;		
 	}	
@@ -723,7 +721,8 @@ public class Alquiler {
 	 */
 	@MemberOrder(name="Estado",sequence="2")
 	public Alquiler alquilado(){
-		setEstado(EstadoAlquiler.ALQUILADO);		   	
+		setEstado(EstadoAlquiler.ALQUILADO);
+		calculoPrecioTotal();
 		return this;
 	}
 	/**

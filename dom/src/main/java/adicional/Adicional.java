@@ -1,5 +1,7 @@
 package adicional;
 
+import java.math.BigDecimal;
+
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
@@ -92,16 +94,16 @@ public class Adicional {
 		this.descripcion = descripcion;
 	}
 
-	private String precio;
+	private BigDecimal precio;
 
 	/**
 	 * Retorna el precio por d&iacute;a del Adicional
 	 * 
-	 * @return String
+	 * @return BigDecimal
 	 */
 	@Named("Precio x dia")
 	@MemberOrder(sequence = "3")
-	public String getPrecio() {
+	public BigDecimal getPrecio() {
 		return precio;
 	}
 
@@ -110,7 +112,7 @@ public class Adicional {
 	 * 
 	 * @param precio
 	 */
-	public void setPrecio(final String precio) {
+	public void setPrecio(final BigDecimal precio) {
 		this.precio = precio;
 	}
 

@@ -1,5 +1,6 @@
 package adicional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
@@ -40,7 +41,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 			@MaxLength(100)
 			@Named("Descripcion") String descrip,
 			@RegEx(validation = "[0-9]+")
-			@Named("Precio") String precio){
+			@Named("Precio") BigDecimal precio){
 			final boolean activo=true;
 			final String usuario = currentUserName();
 			return adicional(nombre.toUpperCase(),descrip.toUpperCase(),precio,activo,usuario);
@@ -61,7 +62,7 @@ public class AdicionalServicio extends AbstractFactoryAndRepository{
 	public Adicional adicional(
 			final String nombre,
 			final String descrip,
-			final String precio,
+			final BigDecimal precio,
 			final boolean activo,
 			final String userName) {
 			Adicional adic=newTransientInstance(Adicional.class);

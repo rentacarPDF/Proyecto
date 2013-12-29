@@ -63,10 +63,14 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	createCategoriaForUser("Pick Up 4x4", 4, 5, Caja.MANUAL, Traccion.CUATROx4, b4);
 	    	getContainer().informUser("Se han instalado correctamente las Categorias");
 	    	//Se instalan Adicionales
-	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años","30");
-	    	createAdicionalForUser("Porta Sky","Porta Sky para transportar tus equipamiento para esquiar con mayor seguridad en un viaje.","70");
-	    	createAdicionalForUser("Conductor Adicional","En el caso de que haya más de un conductor, debe abonarse un seguro adicional","80");
-	    	createAdicionalForUser("Seguro Internacional","En el caso de que se quiera salir del país, debe abonar un seguro adicional con cobertura solo en paises limítrofes","120");
+	    	BigDecimal bg1=new BigDecimal("30");
+	    	BigDecimal bg2=new BigDecimal("40");
+	    	BigDecimal bg3=new BigDecimal("100");
+	    	BigDecimal bg4=new BigDecimal("200");
+	    	createAdicionalForUser("Silla de Bebe","Silla de bebé para mayor seguridad en un viaje. Para menores de 2 años",bg1);
+	    	createAdicionalForUser("Porta Sky","Porta Sky para transportar tus equipamiento para esquiar con mayor seguridad en un viaje.",bg2);
+	    	createAdicionalForUser("Conductor Adicional","En el caso de que haya más de un conductor, debe abonarse un seguro adicional",bg3);
+	    	createAdicionalForUser("Seguro Internacional","En el caso de que se quiera salir del país, debe abonar un seguro adicional con cobertura solo en paises limítrofes",bg4);
 	    	getContainer().informUser("Se han instalado correctamente los Adicionales");
 	    	getContainer().flush();
 	    }
@@ -85,7 +89,7 @@ public class PreCargarServicioFixture extends AbstractService{
 	    	return categoriaServicio.cargarCategoria(categoria, cantPuert, cantPlaz, caja, traccion, precio);
 	    }
 	    //Metodo que instancia el Servicio de Adicional y se crean los objetos.
-	    private Adicional createAdicionalForUser(final String nombre, final String descrip, final String precio){
+	    private Adicional createAdicionalForUser(final String nombre, final String descrip, final BigDecimal precio){
 	    	return adicionalServicio.cargar(nombre, descrip, precio);
 	    }
 	    //Metodo que instancia el Servicio de Cliente y se crean los objetos.

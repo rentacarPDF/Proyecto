@@ -385,10 +385,8 @@ public class Alquiler {
 		BigDecimal lista=new BigDecimal(listaAutos.size());		
 		lista.setScale(5, BigDecimal.ROUND_HALF_UP);
 		
-		for (Adicional adic:listaAdicionales){
-			BigDecimal pAdic=new BigDecimal(adic.getPrecio());// Pasar Precio Adic a BG	
-			pAdic.setScale(5, BigDecimal.ROUND_HALF_UP);				
-			aux= pAdic.multiply(lista);			
+		for (Adicional adic:listaAdicionales){				
+			aux= adic.getPrecio().multiply(lista);			
 			suma=suma.add(aux);
 		}
 		setPrecioAdicional(suma);		

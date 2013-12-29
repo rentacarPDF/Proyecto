@@ -205,7 +205,20 @@ public class Alquiler {
 	public void setSena(final BigDecimal sena){
 		this.sena=sena;
 	}
-	
+	public String disableSena(){
+		if (getEstado()==EstadoAlquiler.RESERVADO){
+			return null;
+		}
+		else return getEstado()==EstadoAlquiler.CERRADO?"El Alquiler esta CERRADO no se puede editar":"El vehiculo esta ALQUILADO no se puede editar la seña";
+	}
+	/*
+	@Named("Descontar Seña")
+	@MemberOrder(name="Datos del Alquiler",sequence="4")
+	public Alquiler descuentoSeña(){
+		calculoPrecioTotal();
+		return this;
+	}
+	*/
 	private boolean voucher;
 	@Hidden(where=Where.ALL_TABLES)
 	@MemberOrder(name="Datos del Alquiler",sequence="5")
@@ -242,10 +255,17 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableTipoPago(){
-		if (getEstado()==EstadoAlquiler.RESERVADO){
-			return null;
-		}
-		else return getEstado()==EstadoAlquiler.CERRADO?"El Alquiler esta CERRADO no se puede editar":"El vehiculo esta Alquilado no se puede editar el Tipo de Pago";
+		if (isVoucher()==true){
+			if (getEstado()==EstadoAlquiler.RESERVADO){
+				return "El vehiculo debe ALQUILARSE para elegir el tipo de pago";
+			}
+			else return getEstado()==EstadoAlquiler.CERRADO?null:"El vehiculo se abona al CERRAR el Alquiler";
+		}else {
+			if (getEstado()==EstadoAlquiler.RESERVADO){
+				return "El vehiculo debe ALQUILARSE para elegir el tipo de pago";
+			}
+			else return getEstado()==EstadoAlquiler.CERRADO?"El Alquiler ya fue abonado":null;
+		}		
 	}
 	
 	private int factura;
@@ -275,11 +295,16 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableNumeroFactura(){
-		if (getEstado()==EstadoAlquiler.RESERVADO||getEstado()==EstadoAlquiler.ALQUILADO){
-			return "El Alquiler debe estar CERRADO";
-		}
-		else {
-			return getEstado()==EstadoAlquiler.CERRADO? null:"El Alquiler esta CERRADO no se puede editar";
+		if (isVoucher()==true){
+			if (getEstado()==EstadoAlquiler.RESERVADO){
+				return "El vehiculo debe ALQUILARSE para elegir el tipo de pago";
+			}
+			else return getEstado()==EstadoAlquiler.CERRADO?null:"El vehiculo se abona al CERRAR el Alquiler";
+		}else {
+			if (getEstado()==EstadoAlquiler.RESERVADO){
+				return "El vehiculo debe ALQUILARSE para elegir el tipo de pago";
+			}
+			else return getEstado()==EstadoAlquiler.CERRADO?"El Alquiler ya fue abonado":null;
 		}
 	}	
 	private BigDecimal  precioRes;
@@ -363,9 +388,7 @@ public class Alquiler {
 		BigDecimal sum=new BigDecimal("0");		
 		sum.setScale(5, BigDecimal.ROUND_HALF_UP);
 		for (AutoPorFecha auto:listaAutos){
-			BigDecimal aux=(auto.getCategoria().getPrecio());
-			aux.setScale(5, BigDecimal.ROUND_HALF_UP);
-			sum=sum.add(aux);
+			sum=sum.add(auto.getCategoria().getPrecio());
 		}		
 		setPrecioReserva(sum);
 		calculoSenaMinima();

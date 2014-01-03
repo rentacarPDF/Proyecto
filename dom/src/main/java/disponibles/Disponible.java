@@ -86,6 +86,7 @@ public class Disponible {
 	 * @return boolean
 	 */
 	@Named("Seleccionada")
+	@MemberOrder(sequence = "5")
 	public boolean isEstaSeleccionada() {
 		return seleccionar;
 	}
@@ -107,6 +108,7 @@ public class Disponible {
 	 * @return LocalDate
 	 */
 	@Named("Fecha")
+	@MemberOrder(sequence = "1")
 	public LocalDate getFecha() {
 		return fecha;
 	}
@@ -139,6 +141,7 @@ public class Disponible {
 	 * @return Categoria
 	 */
 	@Named("Categoria")
+	@MemberOrder(sequence = "4")
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -160,6 +163,7 @@ public class Disponible {
 	 * @return Alquiler
 	 */
 	@Named("Estado Alquiler")
+	@MemberOrder(sequence = "3")
 	public Alquiler getAlquiler() {
 		return alquiler;
 	}
@@ -213,6 +217,7 @@ public class Disponible {
 	 * @return String
 	 */
 	@Named("Modelo")
+	@MemberOrder(sequence = "2")
 	public String getModeloAuto() {
 		return modelo;
 	}
@@ -229,7 +234,6 @@ public class Disponible {
 	@Named("Agregar dias")
 	@MemberOrder(sequence="2")
 	@Bulk
-	//@Hidden(Where.valueOf(alquilerQueLlama.getApellidoCliente()))
 	public Alquiler agregar(){
 		if(getDesdePorFechas() == false) {			
 			if (getAlquiler() == null) {

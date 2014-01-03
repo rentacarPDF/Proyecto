@@ -40,7 +40,7 @@ public class Disponible {
 	 */
 
 	public String iconName() {
-		return "auto";
+		return (getAlquiler() == null) ? "disponibles" : "noDisponible";
 	}
 
 	/**

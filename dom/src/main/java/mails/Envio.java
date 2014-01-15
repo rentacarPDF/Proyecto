@@ -90,15 +90,15 @@ public class Envio {
 			// A quien va dirigido
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					direccion));
-			message.setSubject("RentacarPDF - Disponibilidad");
+			message.setSubject("RentacarPDF - Consulta");
 
-			//MimeBodyPart textPart = new MimeBodyPart();
-			//textPart.setText(mensaje);
-			String firma="Gracias por elegirnos!, RentacarPDF estar&aacute; siempre a su lado...";
+			String firma="Seguimos viajando a su lado....<b>rentacarPDF.</b>";
+			
 			MimeBodyPart htmlPart = new MimeBodyPart();
-			Object html = "<p>"+mensaje.toString()+"</p> " +
-			"<p>"+firma.toString()+"</p> " +
-			"<p> <img src='http://www.gravatar.com/avatar/291161c91449c74a82d7e502958e0160.png' </img></p>";
+			// www.gravatar.com/avatar/291161c91449c74a82d7e502958e0160.png'
+			Object html = "<p style='font-size:12px;'><font color='grey'>"+mensaje.toString()+"</font></p> " +
+			"<p><img src='http://es.gravatar.com/userimage/58275124/6d3364b689fcc936b61fb0b15fcece70.png?size=200' </img></p>"+
+			"<p align=center style='font-size:12px;'><font color=#279898>"+firma.toString()+"</font></p>";
 
 			htmlPart.setContent(html, "text/html; charset=utf-8");
 
@@ -108,7 +108,7 @@ public class Envio {
 			Transport t = session.getTransport("smtp");
 			t.connect("rentacarPDF@gmail.com", "pepito1234");
 			t.sendMessage(message, message.getAllRecipients());
-
+ 
 			t.close();
 			
 		} catch (AddressException e) {

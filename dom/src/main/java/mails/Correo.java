@@ -4,7 +4,6 @@ package mails;
 
 import java.util.Date;
 import java.util.List;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
@@ -13,6 +12,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -38,7 +38,7 @@ public class Correo implements Comparable<Correo> {
 	 * @return
 	 */
 	public String title(){
-		return "Correo Electronico";
+		return "Correo";
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class Correo implements Comparable<Correo> {
 	 * @return String
 	 */
  
-	@MemberOrder(sequence = "1")
+	@MemberOrder(sequence = "2")
 	public String getEmail() {
 		return email;
 	}
@@ -67,7 +67,7 @@ public class Correo implements Comparable<Correo> {
 	 * Retorna el asunto del email
 	 * @return String
 	 */
-	@MemberOrder(sequence = "2")
+	@MemberOrder(sequence = "1")
 	public String getAsunto() {
 		return asunto;
 	}
@@ -88,7 +88,7 @@ public class Correo implements Comparable<Correo> {
 	 * 
 	 * @return String
 	 */
-	@MemberOrder(sequence = "3")
+	@Hidden(where=Where.ALL_TABLES)
 	@MultiLine(numberOfLines = 6)
 	public String getMensaje() {
 		return mensaje;
@@ -139,7 +139,7 @@ public class Correo implements Comparable<Correo> {
 	 */
 	private Date fechaActual;
 	@Named("Fecha del Correo")
-	@MemberOrder(sequence = "5")
+	@MemberOrder(sequence = "3")
 	public Date getFechaActual() {
 		return fechaActual;
 	}

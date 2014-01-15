@@ -114,7 +114,10 @@ public class Recibe {
 						actual.setFechaActual(mensaje.getSentDate());
 						
 						analizaParteDeMensaje(mensaje);
-						actual.setMensaje(contenidoMail);
+						if(contenidoMail.length()<255){
+							actual.setMensaje(contenidoMail);
+						}
+						
 						getListaMensajes().add(actual);
 						
                        }

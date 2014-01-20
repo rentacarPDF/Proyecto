@@ -12,7 +12,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
-
 import com.google.common.base.Objects;
 import alquiler.Alquiler.EstadoAlquiler;
 import cliente.Cliente;
@@ -45,7 +44,6 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
             @Named("Cliente") Cliente cliente ) {
     		final String usuario = currentUserName();
             Alquiler alquiler = newTransientInstance(Alquiler.class);
-            //Mail mail=new Mail();
             persistIfNotAlready(alquiler);
             List<Disponible> disponibilidad = listaAutosReservados();
             return crear(alquiler,disponibilidad,cliente,usuario);
@@ -99,6 +97,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
     				}  
     				//getContainer().removeIfNotAlready(disp);    				
     			}
+    		
     		//mail.enviaMails(alquiler.getApellidoCliente(),alquiler.getNombreCliente(),listaReservas, alquiler.getPrecioAlquiler(),cliente.getEmail());	
     		}
     	return alquiler;

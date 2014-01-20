@@ -1,5 +1,6 @@
 package mails;
 
+
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -95,8 +96,8 @@ public class Envio {
 			String firma="Seguimos viajando a su lado....<b>rentacarPDF.</b>";
 			
 			MimeBodyPart htmlPart = new MimeBodyPart();
-			// www.gravatar.com/avatar/291161c91449c74a82d7e502958e0160.png'
-			Object html = "<p style='font-size:12px;'><font color='grey'>"+mensaje.toString()+"</font></p> " +
+			 			
+			Object html = "<a style='font-size:12px;'>"+mensaje.toString()+"</a> " +
 			"<p><img src='http://es.gravatar.com/userimage/58275124/6d3364b689fcc936b61fb0b15fcece70.png?size=200' </img></p>"+
 			"<p align=center style='font-size:12px;'><font color=#279898>"+firma.toString()+"</font></p>";
 

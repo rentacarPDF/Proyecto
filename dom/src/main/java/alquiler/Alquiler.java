@@ -578,11 +578,15 @@ public class Alquiler {
 	 * @return String
 	 */
 	public String disableDisponibilidad() {
-		if (getEstado() == EstadoAlquiler.RESERVADO
-				|| getEstado() == EstadoAlquiler.ALQUILADO) {
-			return null;
-		} else
-			return "El Alquiler esta CERRADO no se pueden agregar vehiculos";
+		if (getEstado() == EstadoAlquiler.RESERVADO) {
+			return "Para agregar dias, debe estar en estado ALQUILADO";
+		} else {
+			if(getEstado() == EstadoAlquiler.CERRADO) {
+				return "El Alquiler esta CERRADO no se pueden agregar vehiculos";
+			}
+		return null;
+		}
+
 	}
 
 	/**
@@ -958,10 +962,11 @@ public class Alquiler {
 				+ "  "
 				+ getClienteId().getApellido()
 				+ "</b>, Usted ha realizado un Alquiler en nuestra Sucursal. <br> ¡Gracias por elegirnos!<br>";
-		
+
 		mensaje += " <h1>  Detalle de Alquiler </h1> <br>";
 
-		mensaje += "<b>Patente del Vehiculo: </b>"+listaAutos.get(0).getPatente() + "<br>";
+		mensaje += "<b>Patente del Vehiculo: </b>"
+				+ listaAutos.get(0).getPatente() + "<br>";
 		mensaje += "<b>Cantidad de dias: </b>" + listaAutos.size() + "<br>";
 		mensaje += "<b>Fecha/s: </b> <br>";
 		for (AutoPorFecha a : listaAutos) {
@@ -985,16 +990,15 @@ public class Alquiler {
 		}
 
 		mensaje += "<b>Forma de Pago: </b>" + getTipoPago() + "<br>";
-		//seña
-		mensaje += "<b>Seña minima: </b>  $" + getSenaMinima()
-				+ "<br>";
+		// seña
+		mensaje += "<b>Seña minima: </b>  $" + getSenaMinima() + "<br>";
 
 		if (getSena().intValue() != 0) {
 			mensaje += "<b> Seña:</b>  $" + getSena() + "<br>";
 		} else {
 			mensaje += "<b> Seña:</b>  No.<br>";
 		}
-		//voucher
+		// voucher
 		if (isVoucher()) {
 
 			mensaje += "<b>Voucher:</b> si <br>";

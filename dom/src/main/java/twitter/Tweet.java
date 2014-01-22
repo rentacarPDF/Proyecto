@@ -1,17 +1,24 @@
 package twitter;
 
+import java.io.File;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.crypto.NoSuchPaddingException;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersistable;
-
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
+import utiles.ArchivoUtilidad;
 /**
  * Clase que representa la Entidad Twitter en nuestro Sistema
  * Se utiliza para enviar Tweets desde la cuenta de la empresa
@@ -21,6 +28,7 @@ import twitter4j.conf.ConfigurationBuilder;
 @Named("TWITTER")
 @NotPersistable
 public class Tweet {
+	
 	/**
 	 * Identificacion del nombre del icono que aparecera en la UI
 	 * @return String
@@ -59,14 +67,32 @@ public class Tweet {
     	this.tweet=tw;
     }
     
-    @Named("Enviar Tweet")
-    public void enviarTweet(){
-		   ConfigurationBuilder cb = new ConfigurationBuilder();
+    @SuppressWarnings("static-access")
+	@Named("Enviar Tweet")
+    public void enviarTweet() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException{
+
+    	ArchivoUtilidad a=new ArchivoUtilidad();
+    	File file = new File("Twitter.txt");
+    	//Lista con las claves a encriptar
+    	List<String> listaClaves = new ArrayList<String>();
+    	
+		listaClaves.add("R6AUx0xU5kLyfdCffRnA");
+		listaClaves.add("dg65BcAnGs1BHgEnXQs0OEoGlicaDTwIcAUrRdL7bM");
+		listaClaves.add("2203705986-ra6iQvXD7Rbg5FrXZsJdTwBXqqW4n3Wz0BA79qY");
+		listaClaves.add("Qt5H8NAo2Q4lb280BpaSpIoOYYIAuVxsHsBFu3uVKYzmw");
+	    	
+		a.encryptFile(listaClaves, file);
+		//lista desencriptada	
+		List<String> listaDesencriptada = a.decryptFile(file.getAbsolutePath());
+		
+    	if(listaDesencriptada.size()!=0){
+    		
+		   ConfigurationBuilder cb = new ConfigurationBuilder();   
 		   cb.setDebugEnabled(true)
-		     .setOAuthConsumerKey("*****")
-		     .setOAuthConsumerSecret("*****")
-		     .setOAuthAccessToken("*****")
-		     .setOAuthAccessTokenSecret("*****");
+		     .setOAuthConsumerKey(listaDesencriptada.get(0))
+		     .setOAuthConsumerSecret(listaDesencriptada.get(1))
+		     .setOAuthAccessToken(listaDesencriptada.get(2))
+		     .setOAuthAccessTokenSecret(listaDesencriptada.get(3));
 		   TwitterFactory tf = new TwitterFactory(cb.build());
 		   Twitter twit = tf.getInstance();
 		   try { 
@@ -79,6 +105,7 @@ public class Tweet {
 				e.printStackTrace();
 				container.warnUser("Ha ocurrido un problema!!");
 			}
+    	}
 	}
     public String disableEnviarTweet(){
     	if (getTweet().length()>140){

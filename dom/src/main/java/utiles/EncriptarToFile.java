@@ -23,13 +23,13 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
-public class ArchivoUtilidad {
+public class EncriptarToFile {
 
 	private static Cipher encryptCipher;
 	private static Cipher decryptCipher;
 	private static final byte[] iv = { 11, 22, 33, 44, 99, 88, 77, 66 };
 
-	public ArchivoUtilidad() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
+	public EncriptarToFile() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException {
 		
 		SecretKey key = KeyGenerator.getInstance("DES").generateKey();
 		AlgorithmParameterSpec paramSpec = new IvParameterSpec(iv);

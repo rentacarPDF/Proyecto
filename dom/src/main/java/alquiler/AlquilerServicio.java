@@ -9,6 +9,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.QueryDefault;
 import org.joda.time.LocalDate;
@@ -204,4 +205,27 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 	public void injectDisponiblesServicio(final DisponibleServicio serv) {
 		this.servDisp = serv;
 	}
+	 @Hidden
+	    public List<Alquiler> listaAlquileresPorCliente(String cliente) {
+	            return allMatches(QueryDefault.create(Alquiler.class, "traerAlquileresPorApellido","apellido",cliente));
+	    }
+	@MemberOrder(sequence="4")
+    public  List<Alquiler> BusquedaPorCliente(@Named("Apellido Cliente")
+    @RegEx(validation = "[A-Za]+")
+    final String clien){
+	 final List<Alquiler> mismoNumDoc = allMatches(Alquiler.class,
+				new Filter<Alquiler>(){
+					@Override
+					public boolean accept(final Alquiler cliente){
+						return Objects.equal(cliente.getApellidoCliente(),clien);
+					}
+				});
+		if (mismoNumDoc.size() == 0){
+			getContainer().warnUser("NO SE ENCUENTRA EL CLIENTE EN LA BASE DE DATOS");
+		}else{
+			return listaAlquileresPorCliente(clien);
+		}
+		return null;
+		
+    }
 }

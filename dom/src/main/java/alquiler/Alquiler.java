@@ -44,7 +44,8 @@ import disponibles.DisponibleServicio;
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "VERSION")
 @MemberGroups({ "Estado", "Cliente", "Datos del Alquiler", "Autos",
 		"Datos de Factura" })
-@javax.jdo.annotations.Query(name = "traerAlquileres", language = "JDOQL", value = "SELECT FROM alquiler.Alquiler order by numero asc")
+@javax.jdo.annotations.Queries({@javax.jdo.annotations.Query(name = "traerAlquileres", language = "JDOQL", value = "SELECT FROM alquiler.Alquiler order by numero asc"),
+	@javax.jdo.annotations.Query(name = "traerAlquileresPorApellido", language = "JDOQL", value = "SELECT FROM alquiler.Alquiler WHERE  apellido== :apellido")})
 @AutoComplete(repository = AlquilerServicio.class, action = "autoComplete")
 @Audited
 @ObjectType("ALQUILER")

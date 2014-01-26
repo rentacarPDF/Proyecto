@@ -47,7 +47,7 @@ public class Cliente {
 	 */
 	public String title() {
 		final TitleBuffer buf = new TitleBuffer();
-		buf.append(getNumeroIdent());
+		buf.append(getNombre()+" "+getApellido());
 		return buf.toString();
 	}
 

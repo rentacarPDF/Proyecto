@@ -171,7 +171,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
      * @return List<Estadistica>
      */
 	@Hidden
-	public List<Estadistica> estadisticaAnual(String ano) {
+	public List<Estadistica> estadisticaAnual(String ano,Categoria categoria) {
 		
 		List<Estadistica> listaEstadistica = new ArrayList<Estadistica>();		
 		
@@ -179,7 +179,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
         for(Estadistica h : listaEst) {
             remove(h);
         }        
-		final List<Auto> autos = listaAutos();			
+		final List<Auto> autos = listaAutosCate(categoria);			
 		for (Auto auto : autos){				
 			for (int a = 1; a<=12; a++){
 				Estadistica est = newTransientInstance(Estadistica.class);
@@ -495,9 +495,10 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
     @Named("Consulta Anual")
     @MemberOrder(sequence="2") 
     public WickedChart crearGraficoAnual(
-			@Named("Año") String ano) {
+			@Named("Año") String ano,
+			@Named("Categoria") Categoria categoria) {
     	
-    	estadisticaAnual(ano);
+    	estadisticaAnual(ano,categoria);
     	
         Options options = new Options();
 
@@ -522,7 +523,7 @@ public class EstadisticaServicio extends AbstractFactoryAndRepository {
                 .setBorderWidth(0));
 		
         
-        List<Auto> listaAutos=listaAutos();
+        List<Auto> listaAutos=listaAutosCate(categoria);
         List<Estadistica> listaEst=null;
         
 	        if(ano!=null){		        	

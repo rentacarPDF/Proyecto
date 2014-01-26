@@ -9,6 +9,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.query.QueryDefault;
+
 import com.google.common.base.Objects;
 import cliente.Cliente.TipoId;
 
@@ -113,13 +115,24 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	 */
 	@MemberOrder(sequence = "2")
 	@Named("Buscar Cliente")
-	public List<Cliente> busquedaCliente(final Cliente cliente) {
-		return allMatches(Cliente.class, new Filter<Cliente>() {
-		@Override
-		public boolean accept(final Cliente t) {		
-		return t.getNumeroIdent().equals(cliente.getNumeroIdent()); 
-		}
-	  });				
+	public List<Cliente> busquedaCliente(@Named("Apellido del cliente") 
+	@RegEx(validation = "[A-Za]+")
+	final String clien){
+		{
+		 final List<Cliente> mismoNumDoc = allMatches(Cliente.class,
+					new Filter<Cliente>(){
+						@Override
+						public boolean accept(final Cliente cliente){
+							return Objects.equal(cliente.getApellido(),clien);
+						}
+					});
+			if (mismoNumDoc.size() == 0){
+				getContainer().warnUser("NO SE ENCUENTRA EL CLIENTE EN LA BASE DE DATOS");
+			}else{
+				return listaClientePorApellido(clien);
+			}
+			return null;
+	   }			
 	}
 	 /**
      * Choices provisto por el Framework
@@ -128,9 +141,9 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
      * 
      * @return List<Cliente>
 	 */
-	public List<Cliente> choices0BusquedaCliente(){
-		return listadoClienteActivos();
-	}
+//	public List<Cliente> choices0BusquedaCliente(){
+//		return listadoClienteActivos();
+//	}
 	
 	/**
 	 * Se retorna un listado de Clientes Activos
@@ -159,6 +172,10 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 			}
 		});
 	}
+	@Hidden
+	public List<Cliente> listaClientePorApellido(String cliente) {
+	            return allMatches(QueryDefault.create(Cliente.class, "traerClientePorApellido","apellido",cliente));
+	    }
 	/**
      * Accion de Autocompletado generada por el framework, 
      * retorna una lista de los objetos de la entidad.

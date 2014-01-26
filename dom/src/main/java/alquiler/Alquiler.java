@@ -10,6 +10,9 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.VersionStrategy;
+
+import mails.CorreoEmpresa;
+import mails.CorreoServicio;
 import mails.Envio;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Audited;
@@ -860,11 +863,14 @@ public class Alquiler {
 		setEstado(EstadoAlquiler.ALQUILADO);
 		calculoPrecioTotal();
 
+		CorreoEmpresa correoEmpresa=new CorreoEmpresa();
+		correoEmpresa=cs.buscarConfiguracionPorEmail("rentacarpdf");
 		// envio de emails cuando pasa al estado alquilado
-		Envio en = new Envio();
-		en.setProperties();
-		en.enviar(armarEmail(), this.clienteId.getEmail());
-
+		if(correoEmpresa!=null){
+			Envio en = new Envio();
+			en.setProperties(correoEmpresa);
+			en.enviar(armarEmail(), this.clienteId.getEmail());
+		}
 		return this;
 	}
 
@@ -891,11 +897,14 @@ public class Alquiler {
 	public Alquiler cerrado() {
 		setEstado(EstadoAlquiler.CERRADO);
 
-		// envio de emails cuando pasa al estado alquilado
-		Envio en = new Envio();
-		en.setProperties();
-		en.enviar(armarEmail(), this.clienteId.getEmail());
-
+		CorreoEmpresa correoEmpresa=new CorreoEmpresa();
+		correoEmpresa=cs.buscarConfiguracionPorEmail("rentacarpdf");
+		// envio de emails cuando pasa al estado cerrado
+		if(correoEmpresa!=null){
+			Envio en = new Envio();
+			en.setProperties(correoEmpresa);
+			en.enviar(armarEmail(), this.clienteId.getEmail());
+		}
 		return this;
 	}
 
@@ -945,6 +954,16 @@ public class Alquiler {
 		this.servAlq = serv;
 	}
 
+	private CorreoServicio cs;
+
+	/**
+	 * Se inyecta el servicio de Correo.
+	 * 
+	 * @param cs
+	 */
+	public void injectCorreoServicio(final CorreoServicio cs){
+		this.cs=cs;
+	}
 	/**
 	 * Se arma el email con todos los datos del Alquiler.
 	 * 

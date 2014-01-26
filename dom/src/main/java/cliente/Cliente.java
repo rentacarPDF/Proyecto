@@ -17,7 +17,8 @@ import org.apache.isis.applib.util.TitleBuffer;
  */
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
-@javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "listado_cliente", language = "JDQL", value = "SELECT * FROM dom.cliente.Cliente WHERE activo== :true ") })
+@javax.jdo.annotations.Queries({ @javax.jdo.annotations.Query(name = "listado_cliente", language = "JDQL", value = "SELECT * FROM dom.cliente.Cliente WHERE activo== :true "),
+	@javax.jdo.annotations.Query(name = "traerClientePorApellido", language = "JDOQL", value = "SELECT FROM cliente.Cliente WHERE  apellido==:apellido && activo==true")})
 @javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "VERSION")
 @ObjectType("Cliente")
 @AutoComplete(repository = ClienteServicio.class, action = "autoComplete")

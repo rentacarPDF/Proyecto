@@ -13,11 +13,14 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import utiles.EncriptarToString;
+
 public class Envio {
 
 	private Session session;
 	private Properties propiedades = new Properties();
-
+	private CorreoEmpresa correoEmp=new CorreoEmpresa();
+	private EncriptarToString enString=new EncriptarToString();
 	/**
 	 * Setea la sesion para poder enviar el correo electronico.
 	 * 
@@ -45,8 +48,10 @@ public class Envio {
 	 * Puerto, Host, Correo, etc.
 	 * 
 	 */
-	public void setProperties() {
-
+	public void setProperties(CorreoEmpresa correoEmpresa) {
+		
+		correoEmp=correoEmpresa;
+		
 		// Nombre del host de correo, es smtp.gmail.com
 		propiedades.setProperty("mail.smtp.host", "smtp.gmail.com");
 
@@ -57,8 +62,10 @@ public class Envio {
 		propiedades.setProperty("mail.smtp.port", "587");
 
 		// Nombre del usuario
+//		propiedades.setProperty("mail.smtp.user",
+//				"rentacarPDF@gmail.com");
 		propiedades.setProperty("mail.smtp.user",
-				"rentacarPDF@gmail.com");
+				correoEmp.getCorreo());
 
 		// Si requiere o no usuario y password para conectarse.
 		propiedades.setProperty("mail.smtp.auth", "true");
@@ -86,8 +93,11 @@ public class Envio {
 		MimeMessage message = new MimeMessage(getSession());
 		Multipart multiPart = new MimeMultipart("alternative");
 		try {
+//			message.setFrom(new InternetAddress(
+//					"rentacarPDF@gmail.com"));
+			
 			message.setFrom(new InternetAddress(
-					"rentacarPDF@gmail.com"));
+					correoEmp.getCorreo()));
 			// A quien va dirigido
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					direccion));
@@ -107,7 +117,12 @@ public class Envio {
 			message.setContent(multiPart);
 
 			Transport t = session.getTransport("smtp");
-			t.connect("rentacarPDF@gmail.com", "pepito1234");
+			System.out.println("### CORREO  ENVIO::: "+correoEmp.getCorreo());
+			System.out.println("### PASS ENCRIPT ENVIO::: "+correoEmp.getPass());
+			String pass=enString.decrypt(correoEmp.getPass(), cs.getKey() );
+			System.out.println("### PASS DESENCRIPT ENVIO::: "+correoEmp.getPass());
+			t.connect(correoEmp.getCorreo(),pass);
+			//t.connect(correoEmp.getCorreo(), "pepito1234");
 			t.sendMessage(message, message.getAllRecipients());
  
 			t.close();
@@ -118,5 +133,11 @@ public class Envio {
 			e.printStackTrace();
 		}
 	}
+	
+	private CorreoServicio cs=new CorreoServicio();
+	public void setInjectedCorreoServcio(CorreoServicio cs){
+		this.cs=cs;
+	}
+	
 
 }

@@ -12,6 +12,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import javax.jdo.annotations.IdentityType;
@@ -25,13 +26,31 @@ import com.google.common.base.Objects;
 @Immutable
 public class Correo implements Comparable<Correo> {
 
+	private CorreoEmpresa correoEmpresa;
+	@Hidden
+	public CorreoEmpresa getCorreoEmpresa(){
+		return correoEmpresa;
+	}
+	public void setCorreoEmpresa(CorreoEmpresa correoEmpresa){
+		this.correoEmpresa=correoEmpresa;
+	}
+	
+	private boolean respondido;
+	@Hidden(where=Where.ALL_TABLES)
+	public boolean isRespondido(){
+		return respondido;
+	}
+	public void setRespondido(boolean respondido){
+		this.respondido=respondido;
+	}
+	
 	private String email;
 	/**
 	 *  Identificacion del nombre del icono que aparecera en la UI
 	 *  @return String
 	 */
 	public String iconName() {
-		return "email";
+		return isRespondido()? "respondido": "mail";
 	}
 	/**
 	 * Titulo que aparecera en la UI
@@ -113,7 +132,8 @@ public class Correo implements Comparable<Correo> {
 			@MultiLine(numberOfLines = 6) @Named("Mensaje") String mensaje) {
 
 		Envio correo = new Envio();
-		correo.setProperties();
+		correo.setProperties(getCorreoEmpresa());
+		setRespondido(true);
 		correo.enviar(mensaje,this.getEmail());
 		container.informUser("El mensaje ha sido enviado con éxito!");
 		return this;
@@ -161,9 +181,9 @@ public class Correo implements Comparable<Correo> {
 		this.container = container;
 	}
 	
-	private BandejaDeEntrada bde; 
+	private CorreoServicio bde; 
 	public void injectServicioBandejaDeEntrada(
-			final BandejaDeEntrada bde) {
+			final CorreoServicio bde) {
 		this.bde = bde;
 	} 
 	

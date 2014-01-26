@@ -13,6 +13,8 @@ import javax.mail.Session;
 import javax.mail.Store;
 import org.apache.isis.applib.DomainObjectContainer;
 
+import utiles.EncriptarToString;
+
 public class Recibe {
 	
 	   private Session session;
@@ -21,7 +23,8 @@ public class Recibe {
        private Message[] mensajes;
        private List<Correo> listaMensajes = new ArrayList<Correo>();
        private static String contenidoMail;
-       
+       private CorreoEmpresa correoEmpresa=new CorreoEmpresa();
+       private EncriptarToString enString=new EncriptarToString();
        /**
         *Retorna la lista con los correos electrónicos nuevos
         * @return List<Correo>
@@ -58,7 +61,10 @@ public class Recibe {
        /**
         * Setea las propiedades para crear la sesión de usuario
         */
-       public void setProperties() {
+       public void setProperties(CorreoEmpresa ce) {
+    	   correoEmpresa=ce;
+    	   System.out.println("PROPIEDADES%%%%%% "+ce.getCorreo());
+    	   System.out.println("PROPIEDADES%%%%%% "+ce.getPass());
            // Deshabilitamos TLS
            propiedades.setProperty("mail.pop3.starttls.enable", "false");
 
@@ -92,8 +98,11 @@ public class Recibe {
                try {
             	  
                        store = session.getStore("pop3");
-               
-                       store.connect("pop.gmail.com","rentacarPDF@gmail.com","pepito1234");
+                       System.out.println(" %%%&& PASS DE LA BD "+correoEmpresa.getPass());
+                       String pass=enString.decrypt(correoEmpresa.getPass(),cs.getKey());
+                       System.out.println("%%%&& PASS DECRYPT "+pass);
+                       store.connect("pop.gmail.com",correoEmpresa.getCorreo(),pass);
+                       //store.connect("pop.gmail.com","rentacarPDF@gmail.com","pepito1234");
 
                        Folder folder = store.getFolder("INBOX");
        
@@ -112,7 +121,7 @@ public class Recibe {
                         actual.setEmail(mensaje.getFrom()[0].toString());
 						actual.setAsunto(mensaje.getSubject());
 						actual.setFechaActual(mensaje.getSentDate());
-						
+						actual.setCorreoEmpresa(correoEmpresa);
 						analizaParteDeMensaje(mensaje);
 						if(contenidoMail.length()<255){
 							actual.setMensaje(contenidoMail);
@@ -183,6 +192,11 @@ public class Recibe {
    
    public void injectDomainObjectContainer(DomainObjectContainer container) {
            this.container = container;
+   }
+   
+   private CorreoServicio cs=new CorreoServicio();
+   public void injectCorreoServicio(CorreoServicio cs){
+	   this.cs=cs;
    }
 
 }

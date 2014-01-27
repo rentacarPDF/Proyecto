@@ -33,6 +33,7 @@ import cliente.Cliente;
 import disponibles.AutoPorFecha;
 import disponibles.Disponible;
 import disponibles.DisponibleServicio;
+import encriptacion.EncriptaException;
 
 /**
  * Entidad que representa el Alquiler de Autos Es la clase principal de nuestro
@@ -856,9 +857,10 @@ public class Alquiler {
 	 * Accion que pasa el estado del Alquiler a: ALQUILADO
 	 * 
 	 * @return Alquiler
+	 * @throws EncriptaException 
 	 */
 	@MemberOrder(name = "Estado", sequence = "2")
-	public Alquiler alquilado() {
+	public Alquiler alquilado() throws EncriptaException {
 
 		setEstado(EstadoAlquiler.ALQUILADO);
 		calculoPrecioTotal();
@@ -866,6 +868,9 @@ public class Alquiler {
 		CorreoEmpresa correoEmpresa=new CorreoEmpresa();
 		correoEmpresa=cs.buscarConfiguracionPorEmail("rentacarpdf");
 		// envio de emails cuando pasa al estado alquilado
+		
+		System.out.println("EN ALQUILADO %%% "+correoEmpresa.getCorreo());
+		System.out.println("EN ALQUILADO %%% "+correoEmpresa.getPass());
 		if(correoEmpresa!=null){
 			Envio en = new Envio();
 			en.setProperties(correoEmpresa);
@@ -892,13 +897,16 @@ public class Alquiler {
 	 * Accion que pasa el estado del Alquiler a: CERRADO
 	 * 
 	 * @return Alquiler
+	 * @throws EncriptaException 
 	 */
 	@MemberOrder(name = "Estado", sequence = "3")
-	public Alquiler cerrado() {
+	public Alquiler cerrado() throws EncriptaException {
 		setEstado(EstadoAlquiler.CERRADO);
 
 		CorreoEmpresa correoEmpresa=new CorreoEmpresa();
 		correoEmpresa=cs.buscarConfiguracionPorEmail("rentacarpdf");
+		System.out.println("EN CERRADO %%% "+correoEmpresa.getCorreo());
+		System.out.println("EN CERRADO %%% "+correoEmpresa.getPass());
 		// envio de emails cuando pasa al estado cerrado
 		if(correoEmpresa!=null){
 			Envio en = new Envio();

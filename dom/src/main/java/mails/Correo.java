@@ -12,12 +12,12 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import com.google.common.base.Objects;
+import encriptacion.EncriptaException;
 
 @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.IDENTITY)
@@ -127,9 +127,10 @@ public class Correo implements Comparable<Correo> {
 	 * @param mensaje
 	 *            
 	 * @return Correo
+	 * @throws EncriptaException 
 	 */
 	public Correo Responder(
-			@MultiLine(numberOfLines = 6) @Named("Mensaje") String mensaje) {
+			@MultiLine(numberOfLines = 6) @Named("Mensaje") String mensaje) throws EncriptaException {
 
 		Envio correo = new Envio();
 		correo.setProperties(getCorreoEmpresa());
@@ -150,7 +151,7 @@ public class Correo implements Comparable<Correo> {
 		// Borramos el/los objeto/s seleccionado/s
 		container.removeIfNotAlready(this);
 		// Vuelvo a la bandeja de entrada
-		return bde.listaMensajesPersistidos();
+		return bde.listaMensajesPersistidos2();
 	}
 
 	/**

@@ -12,15 +12,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
-import utiles.EncriptarToString;
+import encriptacion.Encripta;
+import encriptacion.EncriptaException;
 
 public class Envio {
 
 	private Session session;
 	private Properties propiedades = new Properties();
 	private CorreoEmpresa correoEmp=new CorreoEmpresa();
-	private EncriptarToString enString=new EncriptarToString();
+	
 	/**
 	 * Setea la sesion para poder enviar el correo electronico.
 	 * 
@@ -88,8 +88,9 @@ public class Envio {
 	 * 
 	 * @param mensaje
 	 * @param direccion
+	 * @throws EncriptaException 
 	 */
-	public void enviar(String mensaje, String direccion) {
+	public void enviar(String mensaje, String direccion) throws EncriptaException {
 		MimeMessage message = new MimeMessage(getSession());
 		Multipart multiPart = new MimeMultipart("alternative");
 		try {
@@ -119,7 +120,11 @@ public class Envio {
 			Transport t = session.getTransport("smtp");
 			System.out.println("### CORREO  ENVIO::: "+correoEmp.getCorreo());
 			System.out.println("### PASS ENCRIPT ENVIO::: "+correoEmp.getPass());
-			String pass=enString.decrypt(correoEmp.getPass(), cs.getKey() );
+			
+			String clave="LAS AVES VUELAN LIBREMENTE";
+            Encripta encripta=new Encripta(clave);
+            
+			String pass=encripta.desencripta(correoEmp.getPass());
 			System.out.println("### PASS DESENCRIPT ENVIO::: "+correoEmp.getPass());
 			t.connect(correoEmp.getCorreo(),pass);
 			//t.connect(correoEmp.getCorreo(), "pepito1234");
@@ -133,11 +138,5 @@ public class Envio {
 			e.printStackTrace();
 		}
 	}
-	
-	private CorreoServicio cs=new CorreoServicio();
-	public void setInjectedCorreoServcio(CorreoServicio cs){
-		this.cs=cs;
-	}
-	
 
 }

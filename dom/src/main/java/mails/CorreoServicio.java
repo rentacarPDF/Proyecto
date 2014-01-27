@@ -1,7 +1,6 @@
 package mails;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,23 +8,16 @@ import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.jdo.annotations.Value;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.filter.Filter;
-
-import twitter.TweetConfig;
-import utiles.EncriptarToString;
-
 import com.google.common.base.Objects;
+import encriptacion.Encripta;
+import encriptacion.EncriptaException;
 
 @Named("Correo Electronico")
 public class CorreoServicio extends AbstractFactoryAndRepository {
@@ -44,16 +36,14 @@ public class CorreoServicio extends AbstractFactoryAndRepository {
 	/**
 	 * 
 	 * @return Retorna la lista de correos persistidos
+	 * @throws EncriptaException 
 	 */
 	@Named("Bandeja de Entrada")
 	@MemberOrder(sequence = "2")
-	public List<Correo> bde(@Named("Correo") CorreoEmpresa correoEmpresa) {
+	public List<Correo> bde(@Named("Correo") CorreoEmpresa correoEmpresa) throws EncriptaException {
 		System.out.println("ANTES DE LA BUSQUEDA "+correoEmpresa.getCorreo());
 		System.out.println("ANTES DE LA BUSQUEDA "+correoEmpresa.getPass());
  
-			ce=buscarConfiguracion(correoEmpresa);
-			System.out.println("DESPUES DE LA BUSQUEDA "+ce.getCorreo());
-			System.out.println("DESPUES DE LA BUSQUEDA "+ce.getPass());
 		Recibe recepcion = new Recibe();
 		recepcion.setProperties(correoEmpresa);	
 		recepcion.accion();
@@ -82,7 +72,7 @@ public class CorreoServicio extends AbstractFactoryAndRepository {
 			}
 
 		}
-			return listaMensajesPersistidos();
+			return listaMensajesPersistidos(correoEmpresa);
 		 
 	 
 	}
@@ -92,33 +82,50 @@ public class CorreoServicio extends AbstractFactoryAndRepository {
 	 * @return List<Correo>
 	 */
 	@Programmatic
-	public List<Correo> listaMensajesPersistidos() {
+	public List<Correo> listaMensajesPersistidos(final CorreoEmpresa correoEmpresa) {
 
 		return allMatches(Correo.class, new Filter<Correo>() {
 			@Override
 			public boolean accept(final Correo mensaje) {
-				return Objects.equal(mensaje.getUsuario(), usuarioActual());
+				return Objects.equal(mensaje.getCorreoEmpresa(), correoEmpresa);
+			}
+		});
+	}
+	
+	/**
+	 * Retorna los emails guardados por el usuario registrado
+	 * @return List<Correo>
+	 */
+	@Programmatic
+	public List<Correo> listaMensajesPersistidos2() {
+
+		return allMatches(Correo.class, new Filter<Correo>() {
+			@Override
+			public boolean accept(final Correo mensaje) {
+				return Objects.equal(mensaje.getCorreoEmpresa(), usuarioActual() );
 			}
 		});
 	}
 	
 	@Named("Configuracion")
 	@MemberOrder(sequence = "1")
-	public CorreoEmpresa configuracion(@Named("Correo") final String correo,
-									   @Named("Password") final String password) throws NoSuchAlgorithmException, IOException {
-	return configuracionCorreo(correo,password);
-
+	public CorreoEmpresa configuracion(
+			@Named("Correo") final String correo,
+			@Named("Password") final String password) throws NoSuchAlgorithmException, IOException, EncriptaException{
+		
+		return configuracionCorreo(correo,password);
 	}
-	private CorreoEmpresa configuracionCorreo(final String correo,final String pass) throws NoSuchAlgorithmException, IOException{
+	private CorreoEmpresa configuracionCorreo(final String correo,final String pass) throws NoSuchAlgorithmException, IOException, EncriptaException{
 		
 		CorreoEmpresa ce = newTransientInstance(CorreoEmpresa.class);
 		
-		key = KeyGenerator.getInstance("DES").generateKey();
-		EncriptarToString enString=new EncriptarToString();
-
+		//key = KeyGenerator.getInstance("DES").generateKey();
+		//EncriptarToString enString=new EncriptarToString();
+		String clave="LAS AVES VUELAN LIBREMENTE";
+		Encripta encripta=new Encripta(clave);
 		
 		ce.setCorreo(correo);
-		ce.setPass(enString.encrypt(pass,key));
+		ce.setPass(encripta.encriptaCadena(pass));
 		persistIfNotAlready(ce);
 		
 		List<String> listaStringEncriptada=listaConfiguracion(ce);
@@ -131,9 +138,7 @@ public class CorreoServicio extends AbstractFactoryAndRepository {
 			out.write((al.toString()+"\n").getBytes(Charset.forName("UTF-8")));
 		} 
 		out.close();		
-		
-		
-		
+				
 		return ce;
 	}
 	

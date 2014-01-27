@@ -1,36 +1,22 @@
 package twitter;
 
-import java.io.File;
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersistable;
-import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-
+import encriptacion.Encripta;
+import encriptacion.EncriptaException;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import utiles.EncriptarToFile;
-import utiles.EncriptarToString;
 
 /**
  * Clase que representa la Entidad Twitter en nuestro Sistema Se utiliza para
@@ -94,16 +80,14 @@ public class Tweet {
 	}
 
 	@Named("Enviar Tweet")
-	public void enviarTweet() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException{
-		TweetConfig tc=new TweetConfig();
-		tc=ts.buscarConfiguracion(getTweetConfig());
+	public void enviarTweet() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, EncriptaException{
+		String clave="LAS AVES VUELAN LIBREMENTE";
+		Encripta encripta= new Encripta(clave);
 		
-		EncriptarToString enString=new EncriptarToString();
-		
-		String consumerKey=enString.decrypt(tc.getConsumerKey(),ts.getClave());
-		String consumerSecret=enString.decrypt(tc.getConsumerSecret(),ts.getClave());
-		String AccessToken=enString.decrypt(tc.getAccessToken(),ts.getClave());
-		String AccessTokenSecret=enString.decrypt(tc.getAccessTokenSecret(),ts.getClave());
+		String consumerKey=encripta.desencripta(getTweetConfig().getConsumerKey());
+		String consumerSecret=encripta.desencripta(getTweetConfig().getConsumerSecret());
+		String AccessToken=encripta.desencripta(getTweetConfig().getAccessToken());
+		String AccessTokenSecret=encripta.desencripta(getTweetConfig().getAccessTokenSecret());
  	
 			ConfigurationBuilder cb = new ConfigurationBuilder();
 			cb.setDebugEnabled(true)
@@ -155,10 +139,6 @@ public class Tweet {
 		return mensajeCortado;
 	}
 
-	private TwitterServicio ts=new TwitterServicio();
-	public void setInjectedTwitterServicio(TwitterServicio ts) throws NoSuchAlgorithmException{
-		this.ts=ts;
-	}
 	private DomainObjectContainer container;
 
 	/**

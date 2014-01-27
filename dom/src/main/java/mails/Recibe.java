@@ -12,8 +12,8 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import org.apache.isis.applib.DomainObjectContainer;
-
-import utiles.EncriptarToString;
+import encriptacion.Encripta;
+import encriptacion.EncriptaException;
 
 public class Recibe {
 	
@@ -24,7 +24,7 @@ public class Recibe {
        private List<Correo> listaMensajes = new ArrayList<Correo>();
        private static String contenidoMail;
        private CorreoEmpresa correoEmpresa=new CorreoEmpresa();
-       private EncriptarToString enString=new EncriptarToString();
+           
        /**
         *Retorna la lista con los correos electrónicos nuevos
         * @return List<Correo>
@@ -75,7 +75,7 @@ public class Recibe {
            // Puerto 995 para conectarse.
            propiedades.setProperty("mail.pop3.port","995");
            propiedades.setProperty("mail.pop3.socketFactory.port", "995");
-           
+          
            setSession(propiedades);
        }
 
@@ -91,15 +91,20 @@ public class Recibe {
         *
         * Se encarga de conectarse al buzon del correo y bajar todos los correos.
         * Los adiciona a una lista, con la misma seran persistidos en la BD. 
+     * @throws EncriptaException 
         *
         */
-       public void accion() {
+       public void accion() throws EncriptaException {
                
                try {
             	  
                        store = session.getStore("pop3");
                        System.out.println(" %%%&& PASS DE LA BD "+correoEmpresa.getPass());
-                       String pass=enString.decrypt(correoEmpresa.getPass(),cs.getKey());
+                       
+                       String clave="LAS AVES VUELAN LIBREMENTE";
+                       Encripta encripta=new Encripta(clave);
+                       
+                       String pass=encripta.desencripta(correoEmpresa.getPass());
                        System.out.println("%%%&& PASS DECRYPT "+pass);
                        store.connect("pop.gmail.com",correoEmpresa.getCorreo(),pass);
                        //store.connect("pop.gmail.com","rentacarPDF@gmail.com","pepito1234");
@@ -192,11 +197,6 @@ public class Recibe {
    
    public void injectDomainObjectContainer(DomainObjectContainer container) {
            this.container = container;
-   }
-   
-   private CorreoServicio cs=new CorreoServicio();
-   public void injectCorreoServicio(CorreoServicio cs){
-	   this.cs=cs;
    }
 
 }

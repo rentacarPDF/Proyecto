@@ -10,34 +10,19 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-
-import marca.Marca;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.filter.Filter;
-
-import alquiler.Alquiler;
-import autos.Auto;
-
+import encriptacion.Encripta;
+import encriptacion.EncriptaException;
 import twitter4j.TwitterException;
-import utiles.EncriptarToFile;
-import utiles.EncriptarToString;
 
 @Named("TWITTER")
 public class TwitterServicio extends AbstractFactoryAndRepository{
-	
-	static SecretKey key;
 	
  
 	/**
@@ -51,32 +36,32 @@ public class TwitterServicio extends AbstractFactoryAndRepository{
 	@MemberOrder(sequence = "1") 
 	@Named("Configuracion")
 	public TweetConfig crearConfiguracion(
-			@Named("Consumer Key") String consumerKey,
-			@Named("Consumer Secret") String consumerSecret,
-			@Named("Access Token") String accessToken,
-			@Named("Access Token Secret") String accessTokenSecret,
-			@Named("Usuario") String usuario) throws TwitterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException{
+			final @Named("Consumer Key") String consumerKey,
+			final @Named("Consumer Secret") String consumerSecret,
+			final @Named("Access Token") String accessToken,
+			final @Named("Access Token Secret") String accessTokenSecret,
+			final @Named("Usuario") String usuario) throws TwitterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException, EncriptaException{
 					
 			return laConfiguracion(consumerKey,consumerSecret,accessToken,accessTokenSecret,usuario);
 	}
 	
-	@SuppressWarnings("static-access")
 	@Hidden 
 	public TweetConfig laConfiguracion(
-		final String consumerKey,
-		final String consumerSecret, 
-		final String accessToken,
-		final String accessTokenSecret,
-		final String usuario) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException{
+		@Named("ConsumerKey") final String consumerKey,
+		@Named("ConsumerSecret") final String consumerSecret, 
+		@Named("AccessToken") final String accessToken,
+		@Named("AccessTokenSecret") final String accessTokenSecret,
+		@Named("Usuario") final String usuario) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IOException, EncriptaException{
 		TweetConfig tw= newTransientInstance(TweetConfig.class);
 		
-		key = KeyGenerator.getInstance("DES").generateKey();
-		EncriptarToString enString=new EncriptarToString();
-		
-		tw.setConsumerKey(enString.encrypt(consumerKey,key));
-		tw.setConsumerSecret(enString.encrypt(consumerSecret,key));
-		tw.setAccessToken(enString.encrypt(accessToken,key));
-		tw.setAccessTokenSecret(enString.encrypt(accessTokenSecret,key));
+
+		String clave="LAS AVES VUELAN LIBREMENTE";
+		Encripta encripta = new Encripta(clave);
+ 
+		tw.setConsumerKey(encripta.encriptaCadena(consumerKey));
+		tw.setConsumerSecret(encripta.encriptaCadena(consumerSecret));
+		tw.setAccessToken(encripta.encriptaCadena(accessToken));
+		tw.setAccessTokenSecret(encripta.encriptaCadena(accessTokenSecret));
 		tw.setUsuario(usuario); 
 	
 		
@@ -108,9 +93,9 @@ public class TwitterServicio extends AbstractFactoryAndRepository{
 	@MemberOrder(sequence = "1") 
 	@Named("Enviar Tweet")
 	public Tweet crearTweet(
-			@Named("Usuario") TweetConfig usuario,
+			@Named("Usuario") final TweetConfig usuario,
 			@MultiLine
-			@Named("Tweet") String tweet) throws TwitterException{
+			@Named("Tweet") final String tweet) throws TwitterException{
 			Tweet twitter=newTransientInstance(Tweet.class);	
 			if(tweet!=null){
 				twitter.actualizarEstado(usuario,tweet);
@@ -133,24 +118,28 @@ public class TwitterServicio extends AbstractFactoryAndRepository{
 		// Persistir en el archivo
 
 		return listaConfiguracion;
-	}/**
-	 * Busqueda de Configuracion de Twitter.
-	 * Se retorna un objeto TwitterConfig, que contiene todas las claves.
+	}
+	
+	/**
+	 * Busqueda de Configuracion del Correo.
+	 * Se retorna un objeto CorreoEmpresa, que contiene el correo y clave.
+	 * Se busca por el correo.
 	 * 
-	 * @param tweet
+	 * @param correo
 	 * 
-	 * @return TweetConfig
+	 * @return CorreoEmpresa
 	 */
 	@Hidden
 	@MemberOrder(sequence = "2")
 	@Named("buscarConfig")
-    public TweetConfig buscarConfiguracion(final TweetConfig tweet) {
+    public TweetConfig buscarConfiguracionPorUsuario(final String usuario) {
 	        return uniqueMatch(TweetConfig.class,new Filter<TweetConfig>() {
 	        	public boolean accept(final TweetConfig a){
-	        		return a.equals(tweet);
+	        		return a.getUsuario().contains(usuario);
 	        	}
 			});
-	    }
+	    }	
+	
 	/**
      * Accion de Autocompletado generada por el framework, 
      * retorna una lista de los objetos de la entidad.
@@ -167,11 +156,6 @@ public class TwitterServicio extends AbstractFactoryAndRepository{
 		return t.getUsuario().contains(usuario) ; 
 		}
 	  });				
-	}
-	 
-	@Hidden
-	public static SecretKey getClave(){
-		return key;
 	}
 	
 }

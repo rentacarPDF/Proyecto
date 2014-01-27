@@ -20,8 +20,9 @@ public class CorreoEmpresa {
 	}
 	
 	public String iconName(){
-		return "mail";
+		return "config";
 	}
+	
 	private String correo;
 	@MemberOrder(sequence="1")
 	public String getCorreo(){

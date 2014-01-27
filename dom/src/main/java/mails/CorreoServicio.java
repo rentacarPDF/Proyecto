@@ -30,7 +30,7 @@ public class CorreoServicio extends AbstractFactoryAndRepository {
 	 *  @return String
 	 */
 	public String iconName() {
-		return "email";
+		return "config";
 	}
 
 	/**

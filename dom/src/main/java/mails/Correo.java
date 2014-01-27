@@ -50,7 +50,7 @@ public class Correo implements Comparable<Correo> {
 	 *  @return String
 	 */
 	public String iconName() {
-		return isRespondido()? "respondido": "mail";
+		return (isRespondido()==false)? "mail": "respondido";
 	}
 	/**
 	 * Titulo que aparecera en la UI

@@ -8,7 +8,7 @@ Como marco de trabajo para la gestión y el desarrollo del software, como así t
 El diseño y modelado del proyecto se realizó a través de DDD (Domain-Driven Design).
 El lenguaje de programación que utilizamos es Java, como herramienta de gestión y construcción del proyecto se utiliza Maven con el fin de controlar las dependencias, componentes externos y el orden de construcción del proyecto. Además para controlar las versiones del código fuente se utilizó la herramienta de control de versiones GIT. 
 
-El framework utilizado es [Apache Isis](http://isis.apache.org/)' y para almacenar los datos se utilizó Postgres-Sql.
+El framework utilizado es [Apache Isis](http://isis.apache.org/) y para almacenar los datos se utilizó Postgres-Sql.
 
 Además de contar con un repositorio online en GitHub para el manejo del proyecto en forma distribuida.
 
@@ -30,3 +30,9 @@ Además va a contar con los siguientes servicios:
 * Descargar diferentes listados en formato .xls (Apache POI).
 * Descargar gráficos de Estadísticas de Alquileres en formatos pdf o jpg utilizando la libreria JavaScript WickedCharts.
 * Visualizaciones en Calendarios utilizando el componente Wicket-full-Calendar.
+
+
+License
+========
+
+RentacarPDF is licensed under [GNU GPLv2](http://www.gnu.org/licenses/gpl-2.0.html)

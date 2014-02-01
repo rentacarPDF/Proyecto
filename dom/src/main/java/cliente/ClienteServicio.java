@@ -115,7 +115,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 	 */
 	@MemberOrder(sequence = "2")
 	@Named("Buscar Cliente")
-	public List<Cliente> busquedaCliente(@Named("Apellido del cliente") 
+	public List<Cliente> busquedaCliente(@Named("Apellido Cliente") 
 	@RegEx(validation = "[A-Za]+")
 	final String clien){
 		{
@@ -189,7 +189,7 @@ public class ClienteServicio extends AbstractFactoryAndRepository {
 		return allMatches(Cliente.class, new Filter<Cliente>() {
 		@Override
 		public boolean accept(final Cliente t) {		
-		return t.getNumeroIdent().contains(cliente) && t.getActivo(); 
+		return t.getApellido().contains(cliente) && t.getActivo(); 
 		}
 	  });				
 	}

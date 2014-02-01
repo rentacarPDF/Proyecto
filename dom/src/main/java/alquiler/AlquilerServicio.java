@@ -211,7 +211,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 		
 	@Named("BUSQUEDA POR CLIENTE")
 	@MemberOrder(sequence="4")
-    public  List<Alquiler> BusquedaPorClienteAutocomplete(@Named("Apellido Cliente")
+    public  List<Alquiler> BusquedaPorClienteAutocomplete(@Named("Cliente")
     final Cliente cliente){
 	 final List<Alquiler> mismoNumDoc = allMatches(Alquiler.class,
 				new Filter<Alquiler>(){
@@ -221,7 +221,7 @@ public class AlquilerServicio extends AbstractFactoryAndRepository{
 					}
 				});
 		if (mismoNumDoc.size() == 0){
-			getContainer().warnUser("NO SE ENCUENTRA EL CLIENTE EN LA BASE DE DATOS");
+			getContainer().warnUser("No existen alquileres del cliente");
 		}else{
 			return listaAlquileresPorCliente(cliente.getApellido());
 		}
